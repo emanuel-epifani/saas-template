@@ -1,0 +1,97 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!.next",
+      "!out",
+      "!build",
+      "!node_modules",
+      "!next-env.d.ts",
+      "!tsconfig.tsbuildinfo",
+      "!package-lock.json",
+      "!public",
+      "!drizzle"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "nursery": {
+        "useTailwindSortedClasses": {
+          "level": "warn",
+          "fix": "safe"
+        }
+      }
+    },
+    "domains": {
+      "next": "all",
+      "react": "all"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
+    },
+    "formatter": {
+      "enabled": false
+    },
+    "linter": {
+      "enabled": false
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "tailwind": {
+    "attributes": ["class", "className"],
+    "mergeFunctions": ["cn", "clsx", "cx", "tw"],
+    "variantFunctions": ["cva"]
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/app/**/{page,layout,loading,error,not-found,template,default}.{ts,tsx}",
+        "**/app/**/route.{ts,tsx}",
+        "**/app/**/opengraph-image.{ts,tsx}",
+        "**/app/**/icon.{ts,tsx}",
+        "**/app/**/sitemap.{ts,tsx}",
+        "**/app/**/manifest.{ts,tsx}",
+        "**/pages/**/*.{ts,tsx}"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    }
+  ]
+}

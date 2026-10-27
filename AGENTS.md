@@ -9,6 +9,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Tech Stack:
+
 - Framework: Next.js ^16 + React ^19
 - ORM: Drizzle
 - Auth library: Better Auth
@@ -22,24 +23,36 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Forms: React Hook Form + zodResolver — client validation reuses the same zod schemas
 - Lint & format: Biome (`biome.json`) — one tool replaces eslint+prettier; `npm run check` runs both
 
+## Next.js
+
+- Server Components by default — `"use client"` only for interactivity (state, effects, browser APIs)
+- Data: server components fetch directly (async); TanStack Query only for client-side fetching; mutations via Server Actions
+- State priority: `useState` (local) → Zustand (shared) → TanStack Query (server data) → URL (navigation state)
+- Minimal deps — ask before adding a new library
+
 ## Architecture
+
 - Feature-centric: each feature owns `app/{feature}/` (page, components/, hooks/, lib/)
+- Imports: relative `./` within a module, `@/*` absolute cross-module; files `kebab-case`
 - Big features split 3 ways: `lib/{feature}-logic.ts` (pure, no React) · `lib/{feature}-store.ts` + hooks (Zustand + React glue) · `components/*.tsx` (dumb presentation)
 - Global, NOT feature-scoped: `app/models.ts` (ALL types, no per-feature `types/`), `app/globals.css` (only stylesheet), `lib/texts.ts` (all copy, flat `as const`)
 
 ## Styling
+
 - Tailwind classes in `className` only — no `.css`/`.scss` files for components
 - UI primitives come from shadcn/ui (`components/ui/`), never hand-rolled
 - Semantic tokens only (`bg-card`, `text-muted-foreground`) — never literal colors (`bg-blue-500`, `text-[#fff]`); no `dark:` variants, the theme handles it
 - `style={{}}` only for runtime-computed values (e.g. `width: ${pct}%`)
 
 ## Project structure
+
 - `app/` — App Router: routes, layouts, globals.css only
 - `lib/` — shared non-UI logic; `lib/db/` holds the DB layer (`schema.ts` = tables, `index.ts` = drizzle client, `migrations/` = generated SQL, never edit by hand)
 - `components/` — shared UI components (shadcn/ui lives in `components/ui/`)
 - `env.ts` (root) — env validation; app code imports `env` from `@/env`
 
 ## TypeScript
+
 - Enforced in tsconfig: `strict` + `noUncheckedIndexedAccess` + `noImplicitReturns` + `noFallthroughCasesInSwitch`
 - No `any` (use `unknown`), no `@ts-ignore` — fix the real type error
 - `interface` for object shapes, `type` for unions/aliases
