@@ -1,0 +1,25 @@
+services:
+  db:
+    # Local dev database. The app talks to it through the node-postgres
+    # driver — the same driver used in production, where DATABASE_URL points
+    # to a pooled endpoint (Neon "-pooler" host, Supabase :6543, ...).
+    # Only the URL changes between environments; pooling is server-side.
+    image: postgres:17-alpine
+    container_name: saas-template-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+
+volumes:
+  db-data:
