@@ -16,7 +16,8 @@
       "!tsconfig.tsbuildinfo",
       "!package-lock.json",
       "!public",
-      "!drizzle"
+      "!drizzle",
+      "!components/ui"
     ]
   },
   "formatter": {
@@ -29,6 +30,32 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
+      "correctness": {
+        "noUnreachable": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error",
+        "noUnusedLabels": "error",
+        "noUnusedPrivateClassMembers": "error",
+        "noUnusedVariables": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noDeprecatedImports": "error",
+        "noDocumentImportInPage": "error",
+        "noDoubleEquals": "error",
+        "noExplicitAny": "error",
+        "noHeadImportInDocument": "error",
+        "noReactForwardRef": "error",
+        "noReactStringRefs": "error",
+        "noTsIgnore": "error"
+      },
+      "style": {
+        "noHeadElement": "error"
+      },
+      "performance": {
+        "noImgElement": "error",
+        "noSyncScripts": "error"
+      },
       "nursery": {
         "useTailwindSortedClasses": {
           "level": "warn",
@@ -37,8 +64,8 @@
       }
     },
     "domains": {
-      "next": "all",
-      "react": "all"
+      "next": "recommended",
+      "react": "recommended"
     }
   },
   "javascript": {

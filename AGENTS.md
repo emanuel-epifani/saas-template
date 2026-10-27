@@ -35,7 +35,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Feature-centric: each feature owns `app/{feature}/` (page, components/, hooks/, lib/)
 - Imports: relative `./` within a module, `@/*` absolute cross-module; files `kebab-case`
 - Big features split 3 ways: `lib/{feature}-logic.ts` (pure, no React) · `lib/{feature}-store.ts` + hooks (Zustand + React glue) · `components/*.tsx` (dumb presentation)
-- Global, NOT feature-scoped: `app/models.ts` (ALL types, no per-feature `types/`), `app/globals.css` (only stylesheet), `lib/texts.ts` (all copy, flat `as const`)
+- Global, NOT feature-scoped: `app/models.ts` (ALL types, no per-feature `types/`), `app/globals.css` (only stylesheet), `texts.ts` (all copy, flat `as const`)
 
 ## Styling
 
