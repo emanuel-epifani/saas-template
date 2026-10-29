@@ -4,7 +4,12 @@ import { nextCookies } from "better-auth/next-js";
 
 import { env } from "@/env";
 import { db } from "@/lib/db";
-import { resetPasswordEmail, sendEmail, verifyEmailEmail } from "@/lib/email";
+import {
+  changeEmailEmail,
+  resetPasswordEmail,
+  sendEmail,
+  verifyEmailEmail,
+} from "@/lib/email";
 import { texts } from "@/texts";
 
 export const auth = betterAuth({
@@ -14,6 +19,14 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg" }),
   user: {
     deleteUser: { enabled: true },
+    changeEmail: {
+      enabled: true,
+      // Verified users get a confirmation link at the NEW address;
+      // the email only changes after they click it.
+      sendChangeEmailConfirmation: async ({ newEmail, url }) => {
+        await sendEmail(changeEmailEmail(newEmail, url));
+      },
+    },
   },
   emailAndPassword: {
     enabled: true,

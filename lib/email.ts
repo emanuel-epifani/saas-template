@@ -97,3 +97,16 @@ export function resetPasswordEmail(to: string, url: string): Email {
     }),
   };
 }
+
+export function changeEmailEmail(to: string, url: string): Email {
+  return {
+    to,
+    subject: texts.changeEmailSubject,
+    html: actionEmail({
+      heading: texts.changeEmailHeading,
+      body: texts.changeEmailBody,
+      url,
+      action: texts.changeEmailAction,
+    }),
+  };
+}

@@ -1,5 +1,5 @@
-import { AuthView } from "@daveyplate/better-auth-ui";
 import { Suspense } from "react";
+import { AuthViewWithReset } from "./auth-view-with-reset";
 
 // One catch-all route renders every auth screen. The route map is owned by
 // better-auth-ui (authViewPaths in its src/lib/view-paths.ts); with this
@@ -24,5 +24,5 @@ async function AuthViewFromParams({
   params: Promise<{ path: string }>;
 }) {
   const { path } = await params;
-  return <AuthView path={path} />;
+  return <AuthViewWithReset path={path} />;
 }
