@@ -21,4 +21,23 @@ export const texts = {
   changeEmailAction: "Confirm new email",
 
   emailIgnoreNote: "If you did not request this, you can ignore this email.",
+
+  navCompanies: "Companies",
+  navJobOffers: "Job offers",
+  footerNote: "SaaS Template — built with Next.js.",
+
+  companiesTitle: "Search companies",
+  companiesTermLabel: "Business type",
+  companiesTermPlaceholder: "pizzeria, metalmeccaniche…",
+  companiesLoadMore: "Load more",
+  jobOffersTitle: "Search job offers",
+  jobOffersTermLabel: "Role",
+  jobOffersTermPlaceholder: "pizzaiolo, manutentore…",
+  cityLabel: "City",
+  cityPlaceholder: "Collegno…",
+  searchAction: "Search",
+  searching: "Searching…",
+  jobApplyAction: "Go to offer",
+  jobDetailsEmpty: "Select a job offer to see the details.",
+  openSiteAction: "Open in new tab",
 } as const;

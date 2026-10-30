@@ -1,8 +1,7 @@
 import { Resend } from "resend";
 
 import { env } from "@/env";
-
-import { texts } from "../texts";
+import { texts } from "@/texts";
 
 // Optional in dev: without RESEND_API_KEY emails are printed to the server
 // console, so the whole auth flow stays testable with zero external setup.

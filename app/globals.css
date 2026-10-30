@@ -129,4 +129,23 @@
   html {
     @apply font-sans;
   }
+
+  /* Always-visible scrollbar for scrollable result lists.
+     -webkit-appearance:none is required on macOS, otherwise the
+     overlay scrollbar auto-hides when scrolling ends. */
+  .scroll-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+  }
+  .scroll-list::-webkit-scrollbar-track {
+    background: var(--muted);
+    border-radius: 9999px;
+  }
+  .scroll-list::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 9999px;
+  }
+  .scroll-list::-webkit-scrollbar-thumb:hover {
+    background: var(--foreground);
+  }
 }

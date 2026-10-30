@@ -32,7 +32,13 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Architecture
 
-- Feature-centric: each feature owns `app/{feature}/` (page, components/, hooks/, lib/)
+- `app/` = presentation only, colocated per feature: `app/{feature}/` owns page, components/, hooks/, lib/ (local utils). NO `"use server"` files here, client code never calls providers/db directly
+- `lib/` = data layer, centralized per provider/resource. One flat group per provider (`lib/<provider>/{repo,schemas,actions}` conceptually — flat `<provider>-*.ts` files while small, folder when it grows):
+  - `lib/<provider>.ts` — connection/client + repo queries + parse/normalize of external payloads. Server-only imports OK (`fs`, `env`); never imported by client code
+  - `lib/<provider>-schemas.ts` — zod input/output schemas. NEUTRAL file: no server-only imports → safe for client bundles (RHF/zodResolver) and server. Types via `z.infer`
+  - `lib/<provider>-actions.ts` — `"use server"` RPC endpoints: validate input → call repo → return normalized data. Exports = async functions ONLY (zod/consts can't be exported from `"use server"` files)
+- Server components call repo/db functions directly (async RSC, no action needed); client components import only `*-actions.ts`, `*-schemas.ts` and `import type`s
+- `lib/db/`: client + schema + plain query functions — NEVER `"use server"` (would expose public RPC endpoints on the DB)
 - Imports: relative `./` within a module, `@/*` absolute cross-module; files `kebab-case`
 - Big features split 3 ways: `lib/{feature}-logic.ts` (pure, no React) · `lib/{feature}-store.ts` + hooks (Zustand + React glue) · `components/*.tsx` (dumb presentation)
 - Global, NOT feature-scoped: `app/models.ts` (ALL types, no per-feature `types/`), `app/globals.css` (only stylesheet), `texts.ts` (all copy, flat `as const`)
@@ -46,8 +52,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Project structure
 
-- `app/` — App Router: routes, layouts, globals.css only
-- `lib/` — shared non-UI logic; `lib/db/` holds the DB layer (`schema.ts` = tables, `index.ts` = drizzle client, `migrations/` = generated SQL, never edit by hand)
+- `app/` — App Router presentation: routes, layouts, components, hooks, local state/utils; globals.css only stylesheet
+- `lib/` — data layer, one group per provider: `<provider>.ts` (repo) + `<provider>-schemas.ts` (zod) + `<provider>-actions.ts` (`"use server"`); `lib/db/` holds the DB layer (`schema.ts` = tables, `index.ts` = drizzle client, `migrations/` = generated SQL, never edit by hand)
 - `components/` — shared UI components (shadcn/ui lives in `components/ui/`)
 - `env.ts` (root) — env validation; app code imports `env` from `@/env`
 

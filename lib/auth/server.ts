@@ -9,7 +9,7 @@ import {
   resetPasswordEmail,
   sendEmail,
   verifyEmailEmail,
-} from "@/lib/email";
+} from "@/lib/email/resend";
 import { texts } from "@/texts";
 
 export const auth = betterAuth({
