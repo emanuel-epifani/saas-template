@@ -1,11 +1,11 @@
 "use client";
 
 import { UserButton } from "@daveyplate/better-auth-ui";
-import { Radar } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import type { NavTone } from "@/app/models";
+import { BrandMark } from "@/components/brand-mark";
 import {
   Sidebar,
   SidebarContent,
@@ -42,9 +42,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <span className="bg-primary text-primary-foreground grid size-8 shrink-0 place-items-center rounded-lg">
-                  <Radar className="size-4" />
-                </span>
+                <BrandMark className="size-8" />
                 <span className="font-heading truncate font-semibold group-data-[collapsible=icon]:hidden">
                   {texts.appName}
                 </span>

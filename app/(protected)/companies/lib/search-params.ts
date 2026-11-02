@@ -10,6 +10,12 @@ export const RADIUS_OPTIONS = [
 
 export const DEFAULT_RADIUS = 5;
 
+export const COMPANY_EXAMPLES = [
+  { term: "metalmeccaniche", city: "Torino" },
+  { term: "logistica", city: "Milano" },
+  { term: "ristorazione", city: "Bologna" },
+] as const;
+
 export function parseRadius(v: string | null): number {
   const km = Number(v);
   return RADIUS_OPTIONS.some((o) => o.km === km) ? km : DEFAULT_RADIUS;

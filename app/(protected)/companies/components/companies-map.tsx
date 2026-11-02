@@ -28,18 +28,18 @@ interface CompaniesMapProps {
   onHover: (index: number | null) => void;
 }
 
-// Normal: small muted dot — highlighted: red teardrop pin.
+// Normal: small dot in the companies tone — highlighted: primary teardrop pin.
 // Tile layer: OpenStreetMap standard (free, no key).
 const dotIcon = L.divIcon({
   className: "",
-  html: `<div style="width:12px;height:12px;border-radius:9999px;background:var(--muted-foreground);border:2px solid var(--background);box-shadow:0 0 0 2px var(--muted-foreground)"></div>`,
+  html: `<div style="width:12px;height:12px;border-radius:9999px;background:var(--companies);border:2px solid var(--card);box-shadow:0 0 0 2px var(--companies)"></div>`,
   iconSize: [12, 12],
   iconAnchor: [6, 6],
 });
 
 const pinIcon = L.divIcon({
   className: "",
-  html: `<svg width="26" height="34" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="var(--destructive)"/><circle cx="12" cy="11.5" r="5" fill="var(--background)"/></svg>`,
+  html: `<svg width="26" height="34" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="var(--primary)"/><circle cx="12" cy="11.5" r="5" fill="var(--card)"/></svg>`,
   iconSize: [26, 34],
   iconAnchor: [13, 32],
 });

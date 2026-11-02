@@ -1,8 +1,8 @@
 // All user-facing copy lives here — flat keys, `as const`, no nesting.
 export const texts = {
-  appName: "SaaS Template",
+  appName: "Scout",
   appTagline:
-    "Trova aziende da contattare e offerte di lavoro da cui aprire nuove partnership.",
+    "Il radar dei recruiter: trova aziende da contattare e offerte da cui aprire nuove partnership.",
 
   verifyEmailSubject: "Verifica il tuo indirizzo email",
   verifyEmailHeading: "Verifica il tuo indirizzo email",
@@ -35,18 +35,37 @@ export const texts = {
   navSignIn: "Accedi",
   navGetStarted: "Inizia ora",
   soonBadge: "Presto",
-  footerNote: "SaaS Template — strumento di prospecting per recruiter.",
+  sidebarToggleLabel: "Apri/chiudi barra laterale",
+  footerNote: "© Scout — prospecting per recruiter e agenzie per il lavoro.",
 
   ctaDashboard: "Vai alla dashboard",
   openAction: "Apri",
-  featureCompaniesTitle: "Cerca aziende",
-  featureCompaniesDesc:
-    "Trova aziende per settore e zona, con contatti e mappa, da proporre come partner.",
-  featureJobsTitle: "Cerca offerte di lavoro",
-  featureJobsDesc:
-    "Cerca offerte aperte per piazzare i tuoi candidati e aprire un contatto con l'azienda.",
-  featurePrivateTitle: "Privato di default",
-  featurePrivateDesc: "Ogni ricerca resta protetta dal tuo account.",
+
+  heroEyebrow: "Per recruiter e agenzie per il lavoro",
+  heroTitleLead: "Trova le aziende giuste. Apri",
+  heroTitleAccent: "nuove partnership.",
+  heroSubtitle:
+    "Cerca aziende per settore e zona, scopri chi sta assumendo e contatta le persone giuste — tutto da un'unica schermata.",
+
+  howItWorksTitle: "Come funziona",
+  stepSearchTitle: "Cerca",
+  stepSearchDesc: "Imposta settore o ruolo e la zona in cui operi.",
+  stepEvaluateTitle: "Valuta",
+  stepEvaluateDesc:
+    "Contatti, sito, posizione sulla mappa e offerte aperte, a colpo d'occhio.",
+  stepContactTitle: "Contatta",
+  stepContactDesc:
+    "Chiama, scrivi o proponi un candidato: la partnership parte da qui.",
+
+  companiesBenefit1: "Ricerca per settore e raggio",
+  companiesBenefit2: "Telefono, indirizzo e sito in un click",
+  companiesBenefit3: "Mappa dell'area con tutti i risultati",
+  jobsBenefit1: "Offerte aperte per ruolo e zona",
+  jobsBenefit2: "Dettaglio, retribuzione e fonte dell'annuncio",
+  jobsBenefit3: "Dall'offerta ai contatti dell'azienda",
+
+  ctaBandTitle: "Il tuo prossimo cliente è già in zona.",
+  ctaBandDesc: "Crea un account e inizia a cercare in meno di un minuto.",
 
   dashboardGreeting: "Bentornato",
   dashboardPrompt: "Cosa cerchi oggi?",
@@ -63,6 +82,7 @@ export const texts = {
   radiusCenterOption: "Centro città",
   loadMore: "Carica altri",
   resultsLabel: "risultati",
+  resultsForLabel: "per",
   jobOffersTitle: "Cerca offerte di lavoro",
   jobOffersSubtitle: "Cerca offerte aperte per i tuoi candidati.",
   jobOffersTermLabel: "Ruolo",
@@ -71,9 +91,23 @@ export const texts = {
   cityPlaceholder: "Collegno…",
   searchAction: "Cerca",
   searching: "Ricerca…",
+  searchIdleTitle: "Inizia una ricerca",
+  searchIdleDescCompanies:
+    "Scegli settore e zona: troverai aziende con contatti e posizione sulla mappa.",
+  searchIdleDescJobs:
+    "Scegli ruolo e zona: troverai offerte aperte e l'azienda da contattare.",
+  searchNoResultsTitle: "Nessun risultato",
+  searchNoResultsDesc: "Prova un termine più generico o allarga la zona.",
+  searchError: "Ricerca non riuscita. Riprova tra poco.",
   jobApplyAction: "Vai all'offerta",
   jobDetailsEmpty: "Seleziona un'offerta per vedere i dettagli.",
   openSiteAction: "Apri in una nuova scheda",
+  callAction: "Chiama",
+  previewSiteAction: "Anteprima sito",
+  copyContactsAction: "Copia contatti",
+  saveSoon: "Salvataggio presto disponibile",
+  copied: "Contatti copiati",
+  findCompanyContacts: "Trova i contatti dell'azienda",
 
   savedTitle: "Salvati",
   savedSubtitle: "Aziende e offerte che hai messo da parte.",

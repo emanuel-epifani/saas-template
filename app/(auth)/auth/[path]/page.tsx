@@ -1,4 +1,9 @@
+import Link from "next/link";
 import { Suspense } from "react";
+
+import { BrandMark } from "@/components/brand-mark";
+import { texts } from "@/texts";
+
 import { AuthViewWithReset } from "./auth-view-with-reset";
 
 // One catch-all route renders every auth screen. The route map is owned by
@@ -8,7 +13,11 @@ import { AuthViewWithReset } from "./auth-view-with-reset";
 // activate automatically if you enable the matching Better Auth feature.
 export default function AuthPage({ params }: PageProps<"/auth/[path]">) {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center p-4">
+    <main className="flex flex-1 flex-col items-center justify-center gap-6 p-4">
+      <Link href="/" className="flex items-center gap-2 font-semibold">
+        <BrandMark />
+        {texts.appName}
+      </Link>
       <Suspense>
         <AuthViewFromParams params={params} />
       </Suspense>
