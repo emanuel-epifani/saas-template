@@ -1,9 +1,15 @@
-import { Briefcase, Building2 } from "lucide-react";
+import { cn } from "cn";
+import type { LucideIcon } from "lucide-react";
+import { ArrowRight, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-
+import type { NavTone } from "@/app/models";
+import { toneTileClasses } from "@/components/page-header";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -11,27 +17,37 @@ import {
 import { requireUser } from "@/lib/auth/session";
 import { texts } from "@/texts";
 
-const cards = [
+import { QuickSearch } from "./components/quick-search";
+
+const modules = [
   {
     href: "/companies",
     icon: Building2,
-    title: texts.dashboardCompaniesTitle,
+    tone: "companies",
+    title: texts.navCompanies,
     desc: texts.dashboardCompaniesDesc,
   },
   {
     href: "/job-offers",
     icon: Briefcase,
-    title: texts.dashboardJobsTitle,
+    tone: "jobs",
+    title: texts.navJobOffers,
     desc: texts.dashboardJobsDesc,
   },
-] as const;
+] satisfies readonly {
+  href: string;
+  icon: LucideIcon;
+  tone: NavTone;
+  title: string;
+  desc: string;
+}[];
 
 // First protected surface: the (protected) layout already guards the
 // segment — requireUser() is called again only where the user object is
 // actually needed (the greeting).
 export default function DashboardPage() {
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 p-8">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 p-6">
       <Suspense
         fallback={
           <div className="bg-muted h-8 w-48 animate-pulse rounded-md" />
@@ -39,21 +55,51 @@ export default function DashboardPage() {
       >
         <Greeting />
       </Suspense>
+
+      <QuickSearch />
+
       <section className="grid gap-4 sm:grid-cols-2">
-        {cards.map(({ href, icon: Icon, title, desc }) => (
-          <Link key={href} href={href}>
-            <Card className="hover:bg-muted/50 h-full transition-colors">
+        {modules.map(({ href, icon: Icon, tone, title, desc }) => (
+          <Link key={href} href={href} className="group">
+            <Card className="h-full transition-shadow hover:shadow-md">
               <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Icon className="text-muted-foreground size-5" />
-                  <CardTitle>{title}</CardTitle>
+                <div
+                  className={cn(
+                    "grid size-10 place-items-center rounded-xl",
+                    toneTileClasses[tone],
+                  )}
+                >
+                  <Icon className="size-5" />
                 </div>
+                <CardTitle>{title}</CardTitle>
                 <CardDescription>{desc}</CardDescription>
+                <span className="text-primary mt-2 flex items-center gap-1 text-sm font-medium">
+                  {texts.openAction}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
               </CardHeader>
             </Card>
           </Link>
         ))}
       </section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {texts.savedTitle}
+            <Badge variant="secondary">{texts.soonBadge}</Badge>
+          </CardTitle>
+          <CardDescription>{texts.savedEmptyDesc}</CardDescription>
+          <CardAction>
+            <Link
+              href="/saved"
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
+              {texts.openAction}
+            </Link>
+          </CardAction>
+        </CardHeader>
+      </Card>
     </main>
   );
 }
@@ -62,9 +108,12 @@ async function Greeting() {
   const user = await requireUser();
 
   return (
-    <h1 className="text-2xl font-semibold tracking-tight">
-      {texts.dashboardGreeting}
-      {user.name ? `, ${user.name}` : ""}
-    </h1>
+    <div className="flex flex-col gap-1">
+      <h1 className="text-3xl font-semibold">
+        {texts.dashboardGreeting}
+        {user.name ? `, ${user.name}` : ""}
+      </h1>
+      <p className="text-muted-foreground">{texts.dashboardPrompt}</p>
+    </div>
   );
 }

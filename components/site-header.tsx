@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { HeaderNav } from "@/components/header-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { getSession } from "@/lib/auth/session";
 import { texts } from "@/texts";
@@ -28,7 +27,14 @@ async function SessionArea() {
   const session = await getSession();
 
   if (session) {
-    return <HeaderNav />;
+    return (
+      <Link
+        href="/dashboard"
+        className={buttonVariants({ size: "sm", className: "ml-auto" })}
+      >
+        {texts.ctaDashboard}
+      </Link>
+    );
   }
 
   return (

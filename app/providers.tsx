@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/client";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -31,7 +32,7 @@ export function Providers({ children }: { children: ReactNode }) {
         account
         deleteUser
       >
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster richColors />
       </AuthUIProvider>
     </ThemeProvider>

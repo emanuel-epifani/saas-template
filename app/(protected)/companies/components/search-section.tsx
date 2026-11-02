@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,22 +23,24 @@ import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { texts } from "@/texts";
 
+import {
+  companiesSearchHref,
+  parseRadius,
+  RADIUS_OPTIONS,
+} from "../lib/search-params";
+
 const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
 
 const PAGE_SIZE = 20;
 
-// Opzioni raggio (km) → la select invia km, il repo li converte in zoom `ll`.
-const RADIUS_OPTIONS = [
-  { km: 2, label: texts.radiusCenterOption },
-  { km: 5, label: "~5 km" },
-  { km: 10, label: "~10 km" },
-  { km: 20, label: "~20 km" },
-] as const;
-
 export function SearchSection() {
-  const [term, setTerm] = useState("");
-  const [city, setCity] = useState("");
-  const [radius, setRadius] = useState<number>(5);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [term, setTerm] = useState(searchParams.get("term") ?? "");
+  const [city, setCity] = useState(searchParams.get("city") ?? "");
+  const [radius, setRadius] = useState<number>(() =>
+    parseRadius(searchParams.get("radius")),
+  );
   const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
     null,
   );
@@ -49,20 +52,39 @@ export function SearchSection() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const autoSearched = useRef(false);
 
   const highlightedIndex = hoveredIndex ?? selectedIndex;
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function runSearch(params: { term: string; city: string; radius: number }) {
     setSelectedIndex(null);
     startTransition(async () => {
-      const data = await findCompanies({ term, city, start: 0, radius });
+      const data = await findCompanies({ ...params, start: 0 });
       setResults(data.companies);
       setHasMore(data.hasMore);
       setCenter(data.center);
       setOffset(0);
     });
   }
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const params = { term, city, radius };
+    router.replace(companiesSearchHref(params), { scroll: false });
+    runSearch(params);
+  }
+
+  // URL-prefill: fire once on mount when the URL already carries a search
+  // (e.g. linked from the dashboard). The ref survives StrictMode's double
+  // effect — each runSearch is a paid SerpAPI call. Deps intentionally
+  // empty: back/forward navigation does NOT re-search (accepted trade-off).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
+  useEffect(() => {
+    if (autoSearched.current) return;
+    autoSearched.current = true;
+    const params = { term, city, radius };
+    if (params.term && params.city) runSearch(params);
+  }, []);
 
   function onLoadMore() {
     const next = offset + PAGE_SIZE;

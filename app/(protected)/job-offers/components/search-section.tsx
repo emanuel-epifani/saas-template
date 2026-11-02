@@ -1,7 +1,8 @@
 "use client";
 
 import { Banknote, Building2, Clock, Globe, MapPin } from "lucide-react";
-import { useRef, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,24 +10,47 @@ import { findJobOffers } from "@/lib/job-offers/actions";
 import type { JobOfferResult } from "@/lib/job-offers/serpapi";
 import { texts } from "@/texts";
 
+import { jobOffersSearchHref } from "../lib/search-params";
+
 export function SearchSection() {
-  const [term, setTerm] = useState("");
-  const [city, setCity] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [term, setTerm] = useState(searchParams.get("term") ?? "");
+  const [city, setCity] = useState(searchParams.get("city") ?? "");
   const [results, setResults] = useState<JobOfferResult[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | undefined>();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [pending, startTransition] = useTransition();
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const autoSearched = useRef(false);
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function runSearch(params: { term: string; city: string }) {
     setSelectedIndex(null);
     startTransition(async () => {
-      const data = await findJobOffers({ term, city });
+      const data = await findJobOffers(params);
       setResults(data.jobs);
       setNextPageToken(data.nextPageToken);
     });
   }
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const params = { term, city };
+    router.replace(jobOffersSearchHref(params), { scroll: false });
+    runSearch(params);
+  }
+
+  // URL-prefill: fire once on mount when the URL already carries a search
+  // (e.g. linked from the dashboard). The ref survives StrictMode's double
+  // effect — each runSearch is a paid SerpAPI call. Deps intentionally
+  // empty: back/forward navigation does NOT re-search (accepted trade-off).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
+  useEffect(() => {
+    if (autoSearched.current) return;
+    autoSearched.current = true;
+    const params = { term, city };
+    if (params.term && params.city) runSearch(params);
+  }, []);
 
   function onLoadMore() {
     startTransition(async () => {
