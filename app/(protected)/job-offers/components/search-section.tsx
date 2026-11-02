@@ -1,25 +1,20 @@
 "use client";
 
+import { Banknote, Building2, Clock, Globe, MapPin } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { findJobOffers } from "@/lib/job-offers-and-companies/serpapi-actions";
-import type { JobOfferResult } from "@/lib/job-offers-and-companies/serpapi-schemas";
+import { findJobOffers } from "@/lib/job-offers/actions";
+import type { JobOfferResult } from "@/lib/job-offers/serpapi";
 import { texts } from "@/texts";
 
 export function SearchSection() {
   const [term, setTerm] = useState("");
   const [city, setCity] = useState("");
   const [results, setResults] = useState<JobOfferResult[]>([]);
+  const [nextPageToken, setNextPageToken] = useState<string | undefined>();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -28,7 +23,16 @@ export function SearchSection() {
     setSelectedIndex(null);
     startTransition(async () => {
       const data = await findJobOffers({ term, city });
-      setResults(data);
+      setResults(data.jobs);
+      setNextPageToken(data.nextPageToken);
+    });
+  }
+
+  function onLoadMore() {
+    startTransition(async () => {
+      const data = await findJobOffers({ term, city, nextPageToken });
+      setResults((prev) => appendUnique(prev, data.jobs));
+      setNextPageToken(data.nextPageToken);
     });
   }
 
@@ -79,66 +83,110 @@ export function SearchSection() {
 
       {results.length > 0 && (
         <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
-          <div className="h-[70vh] overflow-hidden rounded-md border p-2">
-            <ul className="scroll-list flex h-full flex-col gap-2 overflow-y-auto pr-1">
-              {results.map((j, i) => (
-                <li key={`${j.title}-${j.companyName ?? i}`}>
-                  <button
-                    ref={(el) => {
-                      cardRefs.current[i] = el;
-                    }}
-                    type="button"
-                    onClick={() => select(i)}
-                    className={`flex h-30 w-full flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
-                      i === selectedIndex
-                        ? "border-primary bg-accent"
-                        : "hover:bg-accent/50"
-                    }`}
-                  >
-                    <strong className="truncate">{j.title}</strong>
-                    <span className="text-muted-foreground truncate">
-                      {j.companyName}
-                    </span>
-                    <span className="text-muted-foreground truncate">
-                      {j.location}
-                    </span>
-                    <span className="text-muted-foreground truncate">
-                      {j.via}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+          <div className="flex h-[70vh] flex-col gap-3">
+            <p className="text-muted-foreground text-sm">
+              {results.length} {texts.resultsLabel}
+            </p>
+            <div className="min-h-0 flex-1 overflow-hidden rounded-md border p-2">
+              <ul className="scroll-list flex h-full flex-col gap-2 overflow-y-auto pr-1">
+                {results.map((j, i) => (
+                  <li key={`${j.title}-${j.companyName ?? i}`}>
+                    <button
+                      ref={(el) => {
+                        cardRefs.current[i] = el;
+                      }}
+                      type="button"
+                      onClick={() => select(i)}
+                      className={`relative flex h-30 w-full flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
+                        i === selectedIndex
+                          ? "border-primary bg-accent"
+                          : "hover:bg-accent/50"
+                      }`}
+                    >
+                      <span className="text-muted-foreground absolute top-2 right-2 text-xs tabular-nums">
+                        {i + 1}
+                      </span>
+                      <strong className="truncate pr-6">{j.title}</strong>
+                      <span className="text-muted-foreground flex min-w-0 items-center gap-1.5">
+                        <Building2 className="size-3.5 shrink-0" />
+                        <span className="truncate">{j.companyName}</span>
+                      </span>
+                      <span className="text-muted-foreground flex min-w-0 items-center gap-1.5">
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span className="truncate">{j.location}</span>
+                      </span>
+                      <span className="text-muted-foreground flex min-w-0 items-center gap-1.5">
+                        <Globe className="size-3.5 shrink-0" />
+                        <span className="truncate">{j.via}</span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {nextPageToken ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onLoadMore}
+                disabled={pending}
+              >
+                {pending ? texts.searching : texts.loadMore}
+              </Button>
+            ) : null}
           </div>
 
           <aside className="sticky top-4 h-[70vh] self-start overflow-y-auto rounded-md border p-4">
             {selected ? (
               <div className="flex flex-col gap-3 text-sm">
                 <h2 className="text-lg font-semibold">{selected.title}</h2>
-                <p className="text-muted-foreground">
-                  {selected.companyName}
-                  {selected.location ? ` · ${selected.location}` : ""}
-                </p>
-                {selected.salary ? (
-                  <p className="font-medium">{selected.salary}</p>
-                ) : null}
-                {selected.postedAt ? (
-                  <p className="text-muted-foreground">{selected.postedAt}</p>
-                ) : null}
-                <div className="flex items-center justify-between gap-3">
-                  {selected.via ? (
-                    <p className="text-muted-foreground">{selected.via}</p>
-                  ) : (
-                    <span />
-                  )}
-                  {selected.applyLink ? (
-                    <Button
-                      type="button"
-                      size="sm"
-                      onClick={() => setPreviewUrl(selected.applyLink ?? null)}
-                    >
-                      {texts.jobApplyAction}
-                    </Button>
+                <div className="flex flex-col gap-2">
+                  {selected.companyName ? (
+                    <p className="flex items-center gap-2">
+                      <Building2 className="text-muted-foreground size-4 shrink-0" />
+                      <span className="truncate">{selected.companyName}</span>
+                    </p>
+                  ) : null}
+                  {selected.location ? (
+                    <p className="flex items-center gap-2">
+                      <MapPin className="text-muted-foreground size-4 shrink-0" />
+                      <span className="truncate">{selected.location}</span>
+                    </p>
+                  ) : null}
+                  {selected.salary ? (
+                    <p className="flex items-center gap-2 font-medium">
+                      <Banknote className="text-muted-foreground size-4 shrink-0" />
+                      <span>{selected.salary}</span>
+                    </p>
+                  ) : null}
+                  {selected.postedAt ? (
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <Clock className="size-4 shrink-0" />
+                      <span>{selected.postedAt}</span>
+                    </p>
+                  ) : null}
+                  {selected.via || selected.applyLink ? (
+                    <div className="flex items-center justify-between gap-3">
+                      {selected.via ? (
+                        <p className="text-muted-foreground flex min-w-0 items-center gap-2">
+                          <Globe className="size-4 shrink-0" />
+                          <span className="truncate">{selected.via}</span>
+                        </p>
+                      ) : (
+                        <span />
+                      )}
+                      {selected.applyLink ? (
+                        <Button asChild size="sm" className="shrink-0">
+                          <a
+                            href={selected.applyLink}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {texts.jobApplyAction}
+                          </a>
+                        </Button>
+                      ) : null}
+                    </div>
                   ) : null}
                 </div>
                 {selected.description ? (
@@ -155,29 +203,15 @@ export function SearchSection() {
           </aside>
         </div>
       )}
-
-      <Dialog
-        open={previewUrl != null}
-        onOpenChange={(open) => !open && setPreviewUrl(null)}
-      >
-        <DialogContent className="grid-cols-[minmax(0,1fr)] sm:max-w-5xl">
-          <DialogHeader>
-            <DialogTitle className="truncate">{previewUrl}</DialogTitle>
-          </DialogHeader>
-          {previewUrl ? (
-            <iframe
-              src={previewUrl}
-              title={previewUrl}
-              className="h-[70vh] w-full rounded-md border"
-            />
-          ) : null}
-          <Button asChild variant="outline" className="w-fit">
-            <a href={previewUrl ?? "#"} target="_blank" rel="noreferrer">
-              {texts.openSiteAction}
-            </a>
-          </Button>
-        </DialogContent>
-      </Dialog>
     </div>
   );
+}
+
+/** Appende deduplicando contro la lista accumulata: stessa chiave del repo. */
+function appendUnique(
+  prev: JobOfferResult[],
+  next: JobOfferResult[],
+): JobOfferResult[] {
+  const seen = new Set(prev.map((j) => j.jobId));
+  return [...prev, ...next.filter((j) => !seen.has(j.jobId))];
 }

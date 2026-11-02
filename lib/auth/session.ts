@@ -20,3 +20,15 @@ export async function requireUser() {
   }
   return session.user;
 }
+
+// Per le Server Actions: il guard di (protected)/layout copre solo le pagine,
+// gli endpoint RPC sono pubblici → qui si lancia, non si fa redirect.
+// Non usa getSession ("use cache: private") perché nelle actions serve il
+// read reale, non quella cachata per il rendering.
+export async function requireSession() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+  return session;
+}

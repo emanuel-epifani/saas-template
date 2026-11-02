@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "db:up": "npm run db:start && npm run db:migrate && npm run db:studio",
-    "dev": "next dev",
+    "db+fe": "npm run db:start && npm run db:migrate && { npm run db:studio & next dev & wait; }",
     "build": "next build",
     "start": "next start",
     "lint": "biome lint .",

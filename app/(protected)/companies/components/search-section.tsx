@@ -11,11 +11,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { findCompanies } from "@/lib/job-offers-and-companies/serpapi-actions";
-import {
-  type CompanyResult,
-  companyKey,
-} from "@/lib/job-offers-and-companies/serpapi-schemas";
+import { findCompanies } from "@/lib/companies/actions";
+import type { CompanyResult } from "@/lib/companies/serpapi";
 import { texts } from "@/texts";
 
 const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
@@ -103,11 +100,14 @@ export function SearchSection() {
       {results.length > 0 && (
         <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
           <div className="flex h-[70vh] flex-col gap-3">
+            <p className="text-muted-foreground text-sm">
+              {results.length} {texts.resultsLabel}
+            </p>
             <div className="min-h-0 flex-1 overflow-hidden rounded-md border p-2">
               <ul className="scroll-list flex h-full flex-col gap-2 overflow-y-auto pr-1">
                 {results.map((c, i) => (
                   <li
-                    key={companyKey(c)}
+                    key={c.key}
                     className="relative"
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
@@ -118,13 +118,16 @@ export function SearchSection() {
                       }}
                       type="button"
                       onClick={() => select(i)}
-                      className={`flex h-30 w-full cursor-pointer flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
+                      className={`relative flex h-30 w-full cursor-pointer flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
                         i === highlightedIndex
                           ? "border-primary bg-accent"
                           : "hover:bg-accent/50"
                       }`}
                     >
-                      <strong className="truncate">{c.name}</strong>
+                      <span className="text-muted-foreground absolute top-2 right-2 text-xs tabular-nums">
+                        {i + 1}
+                      </span>
+                      <strong className="truncate pr-6">{c.name}</strong>
                       <span className="text-muted-foreground truncate">
                         {c.address}
                       </span>
@@ -158,7 +161,7 @@ export function SearchSection() {
                 onClick={onLoadMore}
                 disabled={pending}
               >
-                {pending ? texts.searching : texts.companiesLoadMore}
+                {pending ? texts.searching : texts.loadMore}
               </Button>
             ) : null}
           </div>
@@ -206,13 +209,12 @@ function appendUnique(
   prev: CompanyResult[],
   next: CompanyResult[],
 ): CompanyResult[] {
-  const seen = new Set(prev.map(companyKey));
+  const seen = new Set(prev.map((c) => c.key));
   return [
     ...prev,
     ...next.filter((c) => {
-      const key = companyKey(c);
-      if (seen.has(key)) return false;
-      seen.add(key);
+      if (seen.has(c.key)) return false;
+      seen.add(c.key);
       return true;
     }),
   ];

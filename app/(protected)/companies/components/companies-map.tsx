@@ -4,10 +4,7 @@ import L from "leaflet";
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 
-import {
-  type CompanyResult,
-  companyKey,
-} from "@/lib/job-offers-and-companies/serpapi-schemas";
+import type { CompanyResult } from "@/lib/companies/serpapi";
 import "leaflet/dist/leaflet.css";
 
 interface CompaniesMapProps {
@@ -100,7 +97,7 @@ export default function CompaniesMap({
       {companies.map((c, i) =>
         c.lat != null && c.lon != null ? (
           <Marker
-            key={companyKey(c)}
+            key={c.key}
             position={[c.lat, c.lon]}
             icon={i === highlightedIndex ? pinIcon : dotIcon}
             eventHandlers={{
