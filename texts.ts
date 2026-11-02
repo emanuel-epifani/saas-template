@@ -62,7 +62,7 @@ export const texts = {
   companiesBenefit3: "Mappa dell'area con tutti i risultati",
   jobsBenefit1: "Offerte aperte per ruolo e zona",
   jobsBenefit2: "Dettaglio, retribuzione e fonte dell'annuncio",
-  jobsBenefit3: "Dall'offerta ai contatti dell'azienda",
+  jobsBenefit3: "Link diretto all'annuncio originale",
 
   ctaBandTitle: "Il tuo prossimo cliente è già in zona.",
   ctaBandDesc: "Crea un account e inizia a cercare in meno di un minuto.",
@@ -107,7 +107,8 @@ export const texts = {
   copyContactsAction: "Copia contatti",
   saveSoon: "Salvataggio presto disponibile",
   copied: "Contatti copiati",
-  findCompanyContacts: "Trova i contatti dell'azienda",
+  mapIdleHint: "I risultati compariranno sulla mappa",
+  jobDetailsIdle: "Avvia una ricerca: qui vedrai il dettaglio dell'offerta.",
 
   savedTitle: "Salvati",
   savedSubtitle: "Aziende e offerte che hai messo da parte.",

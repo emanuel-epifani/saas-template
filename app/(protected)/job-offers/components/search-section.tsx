@@ -13,21 +13,15 @@ import {
   MapPin,
   MousePointerClick,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
-import {
-  companiesSearchHref,
-  DEFAULT_RADIUS,
-} from "@/app/(protected)/companies/lib/search-params";
 import { toneTileClasses } from "@/components/page-header";
 import { SearchBar } from "@/components/search-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -44,7 +38,7 @@ import { findJobOffers } from "@/lib/job-offers/actions";
 import type { JobOfferResult } from "@/lib/job-offers/serpapi";
 import { initials } from "@/lib/utils";
 import { texts } from "@/texts";
-
+import { consumeSearchIntent } from "../../lib/search-intent";
 import { JOB_EXAMPLES, jobOffersSearchHref } from "../lib/search-params";
 
 export function SearchSection() {
@@ -125,16 +119,24 @@ export function SearchSection() {
     });
   }
 
-  // URL-prefill: fire once on mount when the URL already carries a search
-  // (e.g. linked from the dashboard). The ref survives StrictMode's double
-  // effect — each runSearch is a paid SerpAPI call. Deps intentionally
+  // URL-prefill: form values come from the URL, but a search runs only on
+  // explicit intent — a fresh navigation marked via markSearchIntent()
+  // (dashboard quick search / chips). Reloads, new tabs and shared links
+  // have no intent flag, so they only prefill the form: NO paid SerpAPI
+  // call. The ref survives StrictMode's double effect. Deps intentionally
   // empty: back/forward navigation does NOT re-search (accepted trade-off).
   // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
   useEffect(() => {
     if (autoSearched.current) return;
     autoSearched.current = true;
     const params = { term, city };
-    if (params.term && params.city) runSearch(params);
+    if (
+      params.term &&
+      params.city &&
+      consumeSearchIntent(jobOffersSearchHref(params))
+    ) {
+      runSearch(params);
+    }
   }, []);
 
   return (
@@ -152,16 +154,27 @@ export function SearchSection() {
       />
 
       {status === "idle" ? (
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon" className={toneTileClasses.jobs}>
-              <Briefcase />
-            </EmptyMedia>
-            <EmptyTitle>{texts.searchIdleTitle}</EmptyTitle>
-            <EmptyDescription>{texts.searchIdleDescJobs}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <div className="flex flex-wrap justify-center gap-2">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
+          <div className="flex h-[70vh] flex-col gap-3 p-1">
+            <div className="flex items-start gap-3">
+              <div
+                className={cn(
+                  "grid size-10 shrink-0 place-items-center rounded-xl",
+                  toneTileClasses.jobs,
+                )}
+              >
+                <Briefcase className="size-5" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <p className="font-heading text-sm font-medium">
+                  {texts.searchIdleTitle}
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  {texts.searchIdleDescJobs}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {JOB_EXAMPLES.map((ex) => (
                 <Badge key={ex.term} variant="outline" asChild>
                   <button type="button" onClick={() => runExample(ex)}>
@@ -170,13 +183,26 @@ export function SearchSection() {
                 </Badge>
               ))}
             </div>
-          </EmptyContent>
-        </Empty>
+            {Array.from({ length: 4 }, (_, i) => (
+              <PlaceholderCard key={i} />
+            ))}
+          </div>
+          <aside className="bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm">
+            <Empty className="border-0">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <MousePointerClick />
+                </EmptyMedia>
+                <EmptyDescription>{texts.jobDetailsIdle}</EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </aside>
+        </div>
       ) : null}
 
       {status === "loading" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <div className="flex h-[70vh] flex-col gap-3">
+          <div className="flex h-[70vh] flex-col gap-3 p-1">
             {Array.from({ length: 5 }, (_, i) => (
               <Skeleton key={i} className="h-30 shrink-0 rounded-xl" />
             ))}
@@ -210,7 +236,7 @@ export function SearchSection() {
                 </>
               ) : null}
             </p>
-            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
+            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2">
               {results.map((j, i) => (
                 <li key={j.jobId}>
                   <div
@@ -288,26 +314,6 @@ export function SearchSection() {
                           </TooltipTrigger>
                           <TooltipContent>
                             {texts.jobApplyAction}
-                          </TooltipContent>
-                        </Tooltip>
-                      ) : null}
-                      {j.companyName ? (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon-sm" asChild>
-                              <Link
-                                href={companiesSearchHref({
-                                  term: j.companyName,
-                                  city: j.location ?? city,
-                                  radius: DEFAULT_RADIUS,
-                                })}
-                              >
-                                <Building2 className="text-companies" />
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            {texts.findCompanyContacts}
                           </TooltipContent>
                         </Tooltip>
                       ) : null}
@@ -426,19 +432,6 @@ export function SearchSection() {
                       </a>
                     </Button>
                   ) : null}
-                  {selected.companyName ? (
-                    <Button asChild variant="outline">
-                      <Link
-                        href={companiesSearchHref({
-                          term: selected.companyName,
-                          city: selected.location ?? city,
-                          radius: DEFAULT_RADIUS,
-                        })}
-                      >
-                        {texts.findCompanyContacts}
-                      </Link>
-                    </Button>
-                  ) : null}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span>
@@ -472,6 +465,33 @@ export function SearchSection() {
           </aside>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+// Static placeholder for the idle state — same shape as a result card but
+// dashed/muted and without pulse animation (pulse is the loading skeleton's
+// job, so the two states read differently).
+function PlaceholderCard() {
+  return (
+    <div
+      aria-hidden="true"
+      className="bg-card/50 flex flex-col gap-2 rounded-xl border border-dashed p-3"
+    >
+      <div className="flex items-center gap-3">
+        <span className="bg-muted size-9 rounded-lg" />
+        <span className="bg-muted h-4 w-2/3 rounded" />
+      </div>
+      <div className="flex flex-col gap-1.5 pl-12">
+        <span className="bg-muted h-3 w-4/5 rounded" />
+        <span className="bg-muted h-3 w-3/5 rounded" />
+      </div>
+      <div className="mt-1 flex gap-1">
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted ml-auto size-8 rounded-lg" />
+      </div>
     </div>
   );
 }

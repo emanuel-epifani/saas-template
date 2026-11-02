@@ -15,6 +15,7 @@ import {
   JOB_EXAMPLES,
   jobOffersSearchHref,
 } from "@/app/(protected)/job-offers/lib/search-params";
+import { markSearchIntent } from "@/app/(protected)/lib/search-intent";
 import { SearchBar } from "@/components/search-bar";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -42,7 +43,9 @@ export function QuickSearch() {
   }
 
   function onSubmit() {
-    router.push(hrefFor({ term, city, radius }));
+    const href = hrefFor({ term, city, radius });
+    markSearchIntent(href);
+    router.push(href);
   }
 
   return (
@@ -101,7 +104,10 @@ export function QuickSearch() {
         </span>
         {examples.map((ex) => (
           <Badge key={ex.term} variant="outline" asChild>
-            <Link href={hrefFor(ex)}>
+            <Link
+              href={hrefFor(ex)}
+              onClick={() => markSearchIntent(hrefFor(ex))}
+            >
               {ex.term} · {ex.city}
             </Link>
           </Badge>

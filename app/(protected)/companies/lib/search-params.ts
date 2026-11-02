@@ -21,6 +21,10 @@ export function parseRadius(v: string | null): number {
   return RADIUS_OPTIONS.some((o) => o.km === km) ? km : DEFAULT_RADIUS;
 }
 
+export function radiusLabel(km: number): string {
+  return RADIUS_OPTIONS.find((o) => o.km === km)?.label ?? `~${km} km`;
+}
+
 export function companiesSearchHref(params: {
   term: string;
   city: string;

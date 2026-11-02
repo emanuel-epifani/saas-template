@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -35,12 +34,13 @@ import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { hostname, initials } from "@/lib/utils";
 import { texts } from "@/texts";
-
+import { consumeSearchIntent } from "../../lib/search-intent";
 import {
   COMPANY_EXAMPLES,
   companiesSearchHref,
   parseRadius,
   RADIUS_OPTIONS,
+  radiusLabel,
 } from "../lib/search-params";
 
 const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
@@ -65,6 +65,7 @@ export function SearchSection() {
   const [resultQuery, setResultQuery] = useState<{
     term: string;
     city: string;
+    radius: number;
   } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -93,7 +94,11 @@ export function SearchSection() {
         setCenter(data.center);
         setOffset(0);
         setSearched(true);
-        setResultQuery({ term: params.term, city: params.city });
+        setResultQuery({
+          term: params.term,
+          city: params.city,
+          radius: params.radius,
+        });
       } catch {
         toast.error(texts.searchError);
       }
@@ -137,16 +142,24 @@ export function SearchSection() {
     });
   }
 
-  // URL-prefill: fire once on mount when the URL already carries a search
-  // (e.g. linked from the dashboard). The ref survives StrictMode's double
-  // effect — each runSearch is a paid SerpAPI call. Deps intentionally
+  // URL-prefill: form values come from the URL, but a search runs only on
+  // explicit intent — a fresh navigation marked via markSearchIntent()
+  // (dashboard quick search / chips). Reloads, new tabs and shared links
+  // have no intent flag, so they only prefill the form: NO paid SerpAPI
+  // call. The ref survives StrictMode's double effect. Deps intentionally
   // empty: back/forward navigation does NOT re-search (accepted trade-off).
   // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
   useEffect(() => {
     if (autoSearched.current) return;
     autoSearched.current = true;
     const params = { term, city, radius };
-    if (params.term && params.city) runSearch(params);
+    if (
+      params.term &&
+      params.city &&
+      consumeSearchIntent(companiesSearchHref(params))
+    ) {
+      runSearch(params);
+    }
   }, []);
 
   return (
@@ -165,16 +178,27 @@ export function SearchSection() {
       />
 
       {status === "idle" ? (
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon" className={toneTileClasses.companies}>
-              <Building2 />
-            </EmptyMedia>
-            <EmptyTitle>{texts.searchIdleTitle}</EmptyTitle>
-            <EmptyDescription>{texts.searchIdleDescCompanies}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <div className="flex flex-wrap justify-center gap-2">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
+          <div className="flex h-[70vh] flex-col gap-3 p-1">
+            <div className="flex items-start gap-3">
+              <div
+                className={cn(
+                  "grid size-10 shrink-0 place-items-center rounded-xl",
+                  toneTileClasses.companies,
+                )}
+              >
+                <Building2 className="size-5" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <p className="font-heading text-sm font-medium">
+                  {texts.searchIdleTitle}
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  {texts.searchIdleDescCompanies}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {COMPANY_EXAMPLES.map((ex) => (
                 <Badge key={ex.term} variant="outline" asChild>
                   <button
@@ -192,13 +216,30 @@ export function SearchSection() {
                 </Badge>
               ))}
             </div>
-          </EmptyContent>
-        </Empty>
+            {Array.from({ length: 4 }, (_, i) => (
+              <PlaceholderCard key={i} />
+            ))}
+          </div>
+          <div className="sticky top-4 h-[70vh] self-start overflow-hidden rounded-xl border shadow-sm">
+            <CompaniesMap
+              companies={[]}
+              center={null}
+              radiusM={radius * 1000}
+              highlightedIndex={null}
+              selectedIndex={null}
+              onSelect={() => {}}
+              onHover={() => {}}
+            />
+            <div className="bg-card/90 text-muted-foreground absolute top-3 left-1/2 z-[400] -translate-x-1/2 rounded-full px-3 py-1 text-xs shadow-sm">
+              {texts.mapIdleHint}
+            </div>
+          </div>
+        </div>
       ) : null}
 
       {status === "loading" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <div className="flex h-[70vh] flex-col gap-3">
+          <div className="flex h-[70vh] flex-col gap-3 p-1">
             {Array.from({ length: 5 }, (_, i) => (
               <Skeleton key={i} className="h-28 shrink-0 rounded-xl" />
             ))}
@@ -228,11 +269,11 @@ export function SearchSection() {
                 <>
                   {" "}
                   {texts.resultsForLabel} «{resultQuery.term} ·{" "}
-                  {resultQuery.city}»
+                  {resultQuery.city} · {radiusLabel(resultQuery.radius)}»
                 </>
               ) : null}
             </p>
-            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
+            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2">
               {results.map((c, i) => (
                 <li
                   key={c.key}
@@ -412,6 +453,33 @@ export function SearchSection() {
           </Button>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+// Static placeholder for the idle state — same shape as a result card but
+// dashed/muted and without pulse animation (pulse is the loading skeleton's
+// job, so the two states read differently).
+function PlaceholderCard() {
+  return (
+    <div
+      aria-hidden="true"
+      className="bg-card/50 flex flex-col gap-2 rounded-xl border border-dashed p-3"
+    >
+      <div className="flex items-center gap-3">
+        <span className="bg-muted size-9 rounded-lg" />
+        <span className="bg-muted h-4 w-2/3 rounded" />
+      </div>
+      <div className="flex flex-col gap-1.5 pl-12">
+        <span className="bg-muted h-3 w-4/5 rounded" />
+        <span className="bg-muted h-3 w-3/5 rounded" />
+      </div>
+      <div className="mt-1 flex gap-1">
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted size-8 rounded-lg" />
+        <span className="bg-muted ml-auto size-8 rounded-lg" />
+      </div>
     </div>
   );
 }
