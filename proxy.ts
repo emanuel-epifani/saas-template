@@ -6,7 +6,12 @@ import { NextResponse } from "next/server";
 // Optimistic check only: the cookie's existence says "probably signed in",
 // it does NOT validate the session. Real authorization happens server-side
 // in requireUser() (lib/auth/session.ts) and in every Server Action.
-const PROTECTED_PREFIXES = ["/dashboard", "/account"];
+const PROTECTED_PREFIXES = [
+  "/dashboard",
+  "/account",
+  "/companies",
+  "/job-offers",
+];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -26,5 +31,10 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/account/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/account/:path*",
+    "/companies/:path*",
+    "/job-offers/:path*",
+  ],
 };

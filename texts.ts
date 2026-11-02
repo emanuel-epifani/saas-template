@@ -22,9 +22,27 @@ export const texts = {
 
   emailIgnoreNote: "If you did not request this, you can ignore this email.",
 
+  navDashboard: "Dashboard",
   navCompanies: "Companies",
   navJobOffers: "Job offers",
+  navSignIn: "Sign in",
+  navGetStarted: "Get started",
   footerNote: "SaaS Template — built with Next.js.",
+
+  ctaDashboard: "Open dashboard",
+  featureCompaniesTitle: "Search companies",
+  featureCompaniesDesc:
+    "Find local businesses by type and city, with contacts and a map.",
+  featureJobsTitle: "Search job offers",
+  featureJobsDesc: "Browse open roles and jump straight to the listing.",
+  featurePrivateTitle: "Private by default",
+  featurePrivateDesc: "Every search stays behind your account.",
+
+  dashboardGreeting: "Welcome back",
+  dashboardCompaniesTitle: "Companies",
+  dashboardCompaniesDesc: "Search businesses by type and city.",
+  dashboardJobsTitle: "Job offers",
+  dashboardJobsDesc: "Search open roles by title and city.",
 
   companiesTitle: "Search companies",
   companiesTermLabel: "Business type",

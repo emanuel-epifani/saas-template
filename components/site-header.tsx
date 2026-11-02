@@ -1,38 +1,47 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
+import { HeaderNav } from "@/components/header-nav";
+import { buttonVariants } from "@/components/ui/button";
+import { getSession } from "@/lib/auth/session";
 import { texts } from "@/texts";
 
-const links = [
-  { href: "/companies", label: texts.navCompanies },
-  { href: "/job-offers", label: texts.navJobOffers },
-] as const;
-
+// Server component: the session-dependent right side streams in behind a
+// <Suspense> boundary (same pattern as the (protected) layout guard), so
+// logged-out and logged-in navs never flash the wrong state client-side.
 export function SiteHeader() {
-  const pathname = usePathname();
-
   return (
-    <header className="border-b">
+    <header className="bg-background/80 sticky top-0 z-50 border-b backdrop-blur">
       <nav className="mx-auto flex h-14 max-w-5xl items-center gap-6 px-4">
         <Link href="/" className="font-semibold">
           {texts.appName}
         </Link>
-        {links.map(({ href, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className={
-              pathname.startsWith(href)
-                ? "text-foreground text-sm font-medium"
-                : "text-muted-foreground hover:text-foreground text-sm"
-            }
-          >
-            {label}
-          </Link>
-        ))}
+        <Suspense>
+          <SessionArea />
+        </Suspense>
       </nav>
     </header>
+  );
+}
+
+async function SessionArea() {
+  const session = await getSession();
+
+  if (session) {
+    return <HeaderNav />;
+  }
+
+  return (
+    <div className="ml-auto flex items-center gap-2">
+      <Link
+        href="/auth/sign-in"
+        className={buttonVariants({ variant: "ghost", size: "sm" })}
+      >
+        {texts.navSignIn}
+      </Link>
+      <Link href="/auth/sign-up" className={buttonVariants({ size: "sm" })}>
+        {texts.navGetStarted}
+      </Link>
+    </div>
   );
 }

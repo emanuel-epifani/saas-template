@@ -29,6 +29,7 @@ export function Providers({ children }: { children: ReactNode }) {
         redirectTo="/dashboard"
         emailVerification
         credentials
+        account
         deleteUser
       >
         {children}
