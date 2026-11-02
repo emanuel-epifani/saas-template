@@ -19,6 +19,8 @@ const companySearchInputSchema = z.object({
   city: z.string().min(1),
   /** Offset per il load more (0, 20, 40…) → start */
   start: z.number().int().min(0).default(0),
+  /** Raggio dell'area in km → convertito in zoom di ll */
+  radius: z.number().min(1).max(50).default(5),
 });
 
 export async function findCompanies(input: unknown) {

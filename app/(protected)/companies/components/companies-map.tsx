@@ -2,13 +2,24 @@
 
 import L from "leaflet";
 import { useEffect, useMemo } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+} from "react-leaflet";
 
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import "leaflet/dist/leaflet.css";
 
 interface CompaniesMapProps {
   companies: CompanyResult[];
+  /** Centro della ricerca (città geocodificata) — assente prima della 1a search. */
+  center: { lat: number; lng: number } | null;
+  /** Raggio selezionato in metri — disegna il cerchio dell'area di ricerca. */
+  radiusM: number;
   /** Index highlighted on the map (click OR hover from the list). */
   highlightedIndex: number | null;
   /** Index selected from the list — the map centers on it. */
@@ -33,11 +44,11 @@ const pinIcon = L.divIcon({
   iconAnchor: [13, 32],
 });
 
-function FitBounds({ points }: { points: [number, number][] }) {
+function FitBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
   const map = useMap();
   useEffect(() => {
-    if (points.length > 0) map.fitBounds(points, { padding: [30, 30] });
-  }, [points, map]);
+    if (bounds) map.fitBounds(bounds, { padding: [30, 30] });
+  }, [bounds, map]);
   return null;
 }
 
@@ -59,21 +70,25 @@ function CenterOn({
 
 export default function CompaniesMap({
   companies,
+  center,
+  radiusM,
   highlightedIndex,
   selectedIndex,
   onSelect,
   onHover,
 }: CompaniesMapProps) {
-  const points = useMemo(
-    () =>
-      companies
-        .filter(
-          (c): c is CompanyResult & { lat: number; lon: number } =>
-            c.lat != null && c.lon != null,
-        )
-        .map((c) => [c.lat, c.lon] as [number, number]),
-    [companies],
-  );
+  // Fit sul cerchio del raggio quando c'è (mostra l'area cercata),
+  // altrimenti sui pin dei risultati.
+  const bounds = useMemo<L.LatLngBoundsExpression | null>(() => {
+    if (center) return L.latLng(center.lat, center.lng).toBounds(radiusM * 2);
+    const pts = companies
+      .filter(
+        (c): c is CompanyResult & { lat: number; lon: number } =>
+          c.lat != null && c.lon != null,
+      )
+      .map((c) => [c.lat, c.lon] as [number, number]);
+    return pts.length > 0 ? pts : null;
+  }, [companies, center, radiusM]);
 
   const selectedTarget = useMemo<{ lat: number; lng: number } | null>(() => {
     const c = selectedIndex != null ? companies[selectedIndex] : undefined;
@@ -92,8 +107,19 @@ export default function CompaniesMap({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <FitBounds points={points} />
+      <FitBounds bounds={bounds} />
       <CenterOn target={selectedTarget} />
+      {center ? (
+        <Circle
+          center={[center.lat, center.lng]}
+          radius={radiusM}
+          pathOptions={{
+            color: "var(--primary)",
+            weight: 1.5,
+            fillOpacity: 0.08,
+          }}
+        />
+      ) : null}
       {companies.map((c, i) =>
         c.lat != null && c.lon != null ? (
           <Marker

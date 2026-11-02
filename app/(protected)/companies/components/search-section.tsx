@@ -11,6 +11,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { texts } from "@/texts";
@@ -19,9 +26,21 @@ const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
 
 const PAGE_SIZE = 20;
 
+// Opzioni raggio (km) → la select invia km, il repo li converte in zoom `ll`.
+const RADIUS_OPTIONS = [
+  { km: 2, label: texts.radiusCenterOption },
+  { km: 5, label: "~5 km" },
+  { km: 10, label: "~10 km" },
+  { km: 20, label: "~20 km" },
+] as const;
+
 export function SearchSection() {
   const [term, setTerm] = useState("");
   const [city, setCity] = useState("");
+  const [radius, setRadius] = useState<number>(5);
+  const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
   const [results, setResults] = useState<CompanyResult[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -37,9 +56,10 @@ export function SearchSection() {
     e.preventDefault();
     setSelectedIndex(null);
     startTransition(async () => {
-      const data = await findCompanies({ term, city, start: 0 });
+      const data = await findCompanies({ term, city, start: 0, radius });
       setResults(data.companies);
       setHasMore(data.hasMore);
+      setCenter(data.center);
       setOffset(0);
     });
   }
@@ -47,7 +67,7 @@ export function SearchSection() {
   function onLoadMore() {
     const next = offset + PAGE_SIZE;
     startTransition(async () => {
-      const data = await findCompanies({ term, city, start: next });
+      const data = await findCompanies({ term, city, start: next, radius });
       setResults((prev) => appendUnique(prev, data.companies));
       setHasMore(data.hasMore);
       setOffset(next);
@@ -66,7 +86,7 @@ export function SearchSection() {
     <div className="flex flex-col gap-6">
       <form
         onSubmit={onSubmit}
-        className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-[400px_1fr_auto]"
+        className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_160px_auto]"
       >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="term" className="text-sm font-medium">
@@ -91,6 +111,26 @@ export function SearchSection() {
             placeholder={texts.cityPlaceholder}
             required
           />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="radius" className="text-sm font-medium">
+            {texts.radiusLabel}
+          </label>
+          <Select
+            value={String(radius)}
+            onValueChange={(v) => setRadius(Number(v))}
+          >
+            <SelectTrigger id="radius">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {RADIUS_OPTIONS.map((o) => (
+                <SelectItem key={o.km} value={String(o.km)}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <Button type="submit" disabled={pending}>
           {pending ? texts.searching : texts.searchAction}
@@ -118,7 +158,7 @@ export function SearchSection() {
                       }}
                       type="button"
                       onClick={() => select(i)}
-                      className={`relative flex h-30 w-full cursor-pointer flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
+                      className={`relative flex w-full cursor-pointer flex-col gap-0.5 overflow-hidden rounded-md border p-3 text-left text-sm transition-colors ${
                         i === highlightedIndex
                           ? "border-primary bg-accent"
                           : "hover:bg-accent/50"
@@ -169,6 +209,8 @@ export function SearchSection() {
           <div className="sticky top-4 h-[70vh] self-start overflow-hidden rounded-md border">
             <CompaniesMap
               companies={results}
+              center={center}
+              radiusM={radius * 1000}
               highlightedIndex={highlightedIndex}
               selectedIndex={selectedIndex}
               onSelect={select}

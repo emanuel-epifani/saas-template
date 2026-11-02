@@ -15,6 +15,8 @@ export interface CompanySearchInput {
   city: string;
   /** Offset per il load more (0, 20, 40…) → start */
   start: number;
+  /** Raggio dell'area di ricerca in km → convertito in zoom di ll */
+  radius: number;
 }
 
 export interface CompanyResult {
@@ -32,28 +34,33 @@ export interface CompanySearchResult {
   companies: CompanyResult[];
   /** true se SerpApi espone una pagina successiva */
   hasMore: boolean;
+  /** Centro geocodificato della città — la UI ci disegna il cerchio del raggio. */
+  center: { lat: number; lng: number };
 }
 
 const companyKey = (name: string, address?: string): string =>
   `${name}|${address ?? ""}`.toLowerCase();
 
 /**
- * Zoom del viewport passato a `ll`. Determina il raggio della ricerca:
- * 12 ≈ 40 km (includeva Biella/Cossato), 14 ≈ 10 km (resta nel comune).
+ * Raggio (km) → zoom `ll`. Il parametro reale è l'altezza del viewport
+ * (zoom 14 ≈ 10 km ≈ raggio 5 km); ogni zoom -1 raddoppia l'area.
+ * È un'approssimazione: per SerpApi il bound geografico non è un filtro duro.
  */
-const CITY_ZOOM = 14;
+const radiusToZoom = (radiusKm: number): number =>
+  Math.min(30, Math.max(3, Math.round(14 - Math.log2(radiusKm / 5))));
 
 /** Aziende per tipo + città → google_maps */
 export async function searchCompany({
   term,
   city,
   start,
+  radius,
 }: CompanySearchInput): Promise<CompanySearchResult> {
   const { lat, lng } = await resolveCity(city);
   const params = {
     engine: "google_maps",
     q: term,
-    ll: `@${lat},${lng},${CITY_ZOOM}z`,
+    ll: `@${lat},${lng},${radiusToZoom(radius)}z`,
     start: String(start),
     type: "search",
     hl: "it",
@@ -76,5 +83,6 @@ export async function searchCompany({
   return {
     companies: dedupe(companies, (c) => c.key),
     hasMore: Boolean(response.serpapi_pagination?.next),
+    center: { lat, lng },
   };
 }
