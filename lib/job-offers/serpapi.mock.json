@@ -1,0 +1,511 @@
+{
+  "request": {
+    "base_url": "https://serpapi.com/search.json",
+    "params": {
+      "engine": "google_jobs",
+      "q": "manutentore meccanico Rivoli",
+      "location": "Turin, Piedmont, Italy",
+      "hl": "it",
+      "gl": "it"
+    }
+  },
+  "httpStatus": 200,
+  "response": {
+    "search_metadata": {
+      "id": "6ae4c17e2bcc24e825ca45a4",
+      "status": "Success",
+      "json_endpoint": "https://serpapi.com/searches/E1XBYDOaBDZKd-CL6qthX1ZuL-kZXOK5cfZo47B3MNw/6ae4c17e2bcc24e825ca45a4.json",
+      "markdown_endpoint": "https://serpapi.com/searches/E1XBYDOaBDZKd-CL6qthX1ZuL-kZXOK5cfZo47B3MNw/6ae4c17e2bcc24e825ca45a4.md",
+      "created_at": "2026-10-30 16:10:38 UTC",
+      "processed_at": "2026-10-30 16:10:38 UTC",
+      "google_jobs_url": "https://www.google.com/search?q=manutentore+meccanico+Rivoli&uule=w+CAIQICIUVHVyaW4sUGllZG1vbnQsSXRhbHk&hl=it&gl=it&udm=8",
+      "raw_html_file": "https://serpapi.com/searches/E1XBYDOaBDZKd-CL6qthX1ZuL-kZXOK5cfZo47B3MNw/6ae4c17e2bcc24e825ca45a4.html",
+      "total_time_taken": 0.5
+    },
+    "search_parameters": {
+      "q": "manutentore meccanico Rivoli",
+      "engine": "google_jobs",
+      "location_requested": "Turin, Piedmont, Italy",
+      "location_used": "Turin,Piedmont,Italy",
+      "google_domain": "google.com",
+      "hl": "it",
+      "gl": "it"
+    },
+    "filters": [
+      {
+        "name": "Data pubblicazione",
+        "options": [
+          {
+            "name": "Ieri",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-",
+              "q": "manutentore meccanico Rivoli da ieri"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+da+ieri&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAC",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+da+ieri&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-"
+          },
+          {
+            "name": "Ultimi 3 giorni",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A",
+              "q": "manutentore meccanico Rivoli negli ultimi 3 giorni"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+negli+ultimi+3+giorni&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAD",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+negli+ultimi+3+giorni&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A"
+          },
+          {
+            "name": "Ultima settimana",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw",
+              "q": "manutentore meccanico Rivoli nell'ultima settimana"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+nell%27ultima+settimana&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAE",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+nell%27ultima+settimana&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw"
+          },
+          {
+            "name": "Ultimo mese",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg",
+              "q": "manutentore meccanico Rivoli nell'ultimo mese"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+nell%27ultimo+mese&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAF",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+nell%27ultimo+mese&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg"
+          }
+        ]
+      },
+      {
+        "name": "Data pubblicazione",
+        "options": [
+          {
+            "name": "Ieri",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-",
+              "q": "manutentore meccanico Rivoli da ieri"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+da+ieri&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAC",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+da+ieri&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX-AiQQ4p_4E5UagpW3udMBZjlDEEOFOF4ap3p2PaD4lDfglNLEheh0qn6HW_hK7MpLoXjAy2TL_ypzxdK5EEW6jvr-mxGnQDEDel-gw8HJRAUODVg-9boSStnIH5UEBrnpVMZIAYPOAoQS_X5bRefOHPDfXs7k8OM5CLgPhpfC2hhkTU_t8BAZ6WYCG0c34NxJnUkZfBjaKtNaD6CpV8a9ZczNyuL1b9K4uRikc2ynvbGUsTvvVdQ1G2Qj32t1kArlikEWO5Yxw_-d7eNYuH9LXtT1ktD2A4nrDlHgAB_j4cr8q-ISg4DiKNJw6HUhqrnV2yWLOSrVALGdAExqcOsE4rYUJhm2w_sGjweMkMPBRjhZk2-"
+          },
+          {
+            "name": "Ultimi 3 giorni",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A",
+              "q": "manutentore meccanico Rivoli negli ultimi 3 giorni"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+negli+ultimi+3+giorni&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAD",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+negli+ultimi+3+giorni&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXTC-lceUb_e8f6Zna6AGYpHhzt9PabyvHzhxjFFZvz2_U7bvnii5FVr2pxql3a5lPVznLeVuJT39HZaH2Z2uLH7hI0gI4G1TynQBU-0Cq5AXYI8Py_NDQMRSYHBsy3-MHpePZTT0st-4eDTS4t51JC2I0Dx_39WQzoJaICn3OnhLCfZbkTllMw7ijwNBfAkvfrfZEeWQvUY0-ii-CpadgJ3fu1A_ggjZ9Z-he3qW8jnTNbT1O5787rWJ1CiMT-WMvZuS_okdekkv_yT5zAdzQwKdrjM30VMU33NhrmVXtOil2jEubSX7uMUkUl8ipWnkv374v54wknqf6GtIDuSxZfrP_pUlUF5tbCIa7G8o_HG6VMVgAcn4_wh_3UO-QZ_coN03P_A"
+          },
+          {
+            "name": "Ultima settimana",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw",
+              "q": "manutentore meccanico Rivoli nell'ultima settimana"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+nell%27ultima+settimana&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAE",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+nell%27ultima+settimana&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXCeIWUkt4GGo7CxN6uWaIoPZEUhd_Exa_83AkxJLb_QryRJ2CtMDgSHGJc_VWIOu6etXj6nS50gW2WuAyMKTuEpUjBxfiYDj9RERaNksvEGKFuXDikR7q5XkLSs64oOMacH_Rxbt0UHvDkNl0dkyCqW1QZmu3TLgd2BSPTMjEmJQUAhKrRSvJkFvFbEdfglVmbGNkz9fMW1XWKN07rG33Wt6_HpCSjOul9JRbTso-alPun3L7YMon5iOcDksswvRJeJo5syiQAXLaerhoNNmOaKCbscPFHdfA65Waos_rn4P1TqUCyO9fpll1jxOqzYLFj9JPXs1BgrZ_O71uy6SjIMpy8YxSnFEKg2mCmg5Ez3ECWU0_KUbCSh0UJ84I_gYySO9rHw"
+          },
+          {
+            "name": "Ultimo mese",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg",
+              "q": "manutentore meccanico Rivoli nell'ultimo mese"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+nell%27ultimo+mese&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGRAF",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+nell%27ultimo+mese&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXMGGwDm6hGk_uFWGodC8zvbA3MeUjSOc82UhWfaCPFMXO69hk2Pi39TCEONtNse6md3qlV8lE3LWNr2sNe1q7l8bpKWEjfO3mb4-j7zzT56m27oQ-oC8omm26RCd5jNYng5LGdnsBLO6dVQY9LAy_Iv1PzzeTbdXKc__aa6eDOv4QFCCGBLWdOPPccOt9kFRL8Uc5_VgONIw-3t5zyHLLsdHOuZ3-Mcvy6ncKH0Ctjm6RrefaHEnQaQlPyxgqncoP-ddAPcqrd5O27ADWjVo5smVHLj8i67FVtnqAP-pYTP2SMJXKxst9wK156jPg1AL0sdwL_8PreD1V9WndTbsdMvvbs9OslFT7hT77Muog-V8oiyMedPTrh7HxkR5n-mkyzShXXg"
+          }
+        ]
+      },
+      {
+        "name": "Tipo di lavoro",
+        "options": [
+          {
+            "name": "Tempo pieno",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ",
+              "q": "manutentore meccanico Rivoli tempo pieno"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+tempo+pieno&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAC",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+tempo+pieno&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ"
+          },
+          {
+            "name": "Part-time",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg",
+              "q": "manutentore meccanico Rivoli part-time"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+part-time&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAD",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+part-time&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg"
+          },
+          {
+            "name": "Contratto",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI",
+              "q": "manutentore meccanico Rivoli contratto"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+contratto&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAE",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+contratto&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI"
+          },
+          {
+            "name": "Tirocinio",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8",
+              "q": "manutentore meccanico Rivoli tirocinio"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+tirocinio&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAF",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+tirocinio&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8"
+          }
+        ]
+      },
+      {
+        "name": "Tipo di lavoro",
+        "options": [
+          {
+            "name": "Tempo pieno",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ",
+              "q": "manutentore meccanico Rivoli tempo pieno"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+tempo+pieno&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAC",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+tempo+pieno&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflX1-9uxDRnD_dYUJ9sQVyhjIuVvRBx8p-vzUQS8IWxSoEJCsmJ6Wthn8sM0vWVxn3ZAEw-GXBnpep0jOiZOgLKH7iSKUj3ZVq-jffYOv-xQrcVFOjJ2AtH-XbHCnGS-wgYYU0cwJMnFLb1qmjdtnq-2LtaUFz7_calVxk6SoysFSaeSYhco1ug2qC4Ui76RGxciv8rH_KLXi4VRD2bFz7vuTzQEbJl7c6yhFmFZLezjl8IgbBqm15aRYEdH1klnGMaWbk2pqpHdAOtmkOkEiKlYFbGl2OICxeDwEwbbxH8VH9pvHmZ5uXMvEd_k-yQBaWVGve5fQ"
+          },
+          {
+            "name": "Part-time",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg",
+              "q": "manutentore meccanico Rivoli part-time"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+part-time&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAD",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+part-time&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wWM-uh8P0MY0TrTNOJ6PvzHSyHcSDLYqef9UPbGfAdFl4zjnseDu9RAIzecqU0E0bN72x2V0rMWLeq26MH7aSSAmf7K4WHRmyc4ofOFCPxA1Fgx2FNV3kaU6fLnGgMF38cTwU4GPm8PSDDJcT_09GLeghswwZV1hJWEevbweXjDbNUFdpew9tHG8dP28iTY6kb0xnYNJz6S6eGEj_OigFXy6t7-hlWf0LyshMYVkvlLIWSJ-2kKQrc3-30KxgOBKsjdDI5LGsJxok6DJTE4qvDMH5AQg"
+          },
+          {
+            "name": "Contratto",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI",
+              "q": "manutentore meccanico Rivoli contratto"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+contratto&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAE",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+contratto&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02wKLDGsW2ds6gAIE05DXh1OCznmnwvDsXszeerYYyMnEIc1J5EY-K73lPV95X8L3DzBhKDCEiMMTJYf95CbTKJdsuDNDPSao5dj3dsMmNPCz3P37Z5_KI4eqJR-V0bVpJZLrCgXI3XEEptg42wv_tmA_fgnb5jWGudz9JV0WMUML_J1wfHQV7WNpxENzYCnQhOIdxCcwXTIpJnLnWYM8AWErxcH6_R1gPITQO4jTLz86wuW5aE6dnGuZBzuR5li5QBrkNhAPHwlt_617EQ5M5qs5eXHKI"
+          },
+          {
+            "name": "Tirocinio",
+            "parameters": {
+              "uds": "AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8",
+              "q": "manutentore meccanico Rivoli tirocinio"
+            },
+            "link": "https://www.google.com/search?sca_esv=e2e56018dc726da6&hl=it&gl=it&sxsrf=AKL5yDjZtjFSa6ZLLPRPeooMZi2gDkRAYA:1793376638800&q=manutentore+meccanico+Rivoli+tirocinio&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8&udm=8&sa=X&ved=2ahUKEwix6oPMkOKXAxUIM1kFHfhcAEIQkbEKegQIGhAF",
+            "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&q=manutentore+meccanico+Rivoli+tirocinio&uds=AE2AFgbf06ZzDvczg9XBG5Z3qflXkWhL3eyflhhrhTgsGhZnzvaWC3r7nzZBlbdUmieA9x1vXDFcD3S6EMQSiuF0e02w1_utg-CtUw4_qRGKgWScM1qBrAWIoI1f-6RlFIdaVkD4pnVoDOcQ9mPRbHEUP5IxUObk3kTWs2t77Z__-q6gPpKY_Pdc_1Zo4Yrlc50AmgPrmRGWy06nBbiHJUgS8P78fE7SXJV5nJah19r09iO-7hZsOCKLcMA0sh0COUNEJ3I3YJGKMmpNugYNoRjSg8igIkzc0uB8XQDHwm1igGtFNYOLlGU1s8STTCck0R9WVmxow8WKJX2-8_tB_FmJno3dSm-fvhRtKWD44xbOzRnT6OEzgS8"
+          }
+        ]
+      }
+    ],
+    "jobs_results": [
+      {
+        "title": "MANUTENTORE MECCANICO",
+        "company_name": "Manpower",
+        "location": "Rivoli TO",
+        "via": "Manpower",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=RVsHd64dZ0DnYif4AAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXNsQrCMBAAUFy7uzjdLNiI4qJTCUUc2kCJc0ljSFNiLuRi7S_41-ry1ld8VsWxqdq7rFspuhqamvOqvXEBO-icNkkreDjwasaEQC-4IlpvNpcx50hnxoh8aSmr7HSp8ckwmAEXNuFAf3oaVTLRq2z6w2m_lDHY7bpRIeLbJHDht8zoHUjxBUz4TPyMAAAA&shmds=v1_Ac3VAoyUoIPehjGqyqhpyuiSgj0QZyk63QAOob-6a1zgj8284w&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=RVsHd64dZ0DnYif4AAAAAA%3D%3D",
+        "extensions": ["21 giorni fa", "Full-time"],
+        "source_link": "https://www.manpower.it/it/annuncio-lavoro/engineering/produzione/manutentore-meccanico/1052128",
+        "job_title": "MANUTENTORE MECCANICO",
+        "description": "MANUTENTORE MECCANICO JUNIOR | SETTORE METALMECCANICO MANPOWER - Agenzia per il Lavoro ricerca, per azienda cliente operante nel settore metalmeccanico, un: MANUTENTORE MECCANICO JUNIOR Attività principali: Esecuzione di interventi di manutenzione meccanica ordinaria e straordinaria su impianti e macchinari; Attività di carpenteria leggera per riparazioni e modifiche strutturali; Utilizzo di strumenti da officina e attrezzature meccaniche; Attività di saldatura a filo e/o elettrodo per il ripristino di componenti meccanici; Supporto nelle attività di montaggio e assemblaggio meccanico; Ricerca guasti e verifica del corretto funzionamento degli impianti. Requisiti: Diploma tecnico a indirizzo meccanico, meccatronico o affine; Gradita esperienza, anche minima, in ambito manutenzione meccanica, carpenteria o saldatura; Capacità di lettura del disegno meccanico; Buona manualità e utilizzo dei principali strumenti da officina; Predisposizione all'apprendimento e al lavoro in team; Disponibilità a lavorare su turni. Si valutano positivamente: Candidati neodiplomati alla prima esperienza lavorativa; Profili junior motivati a intraprendere un percorso di crescita professionale nel settore della manutenzione industriale. Luogo di lavoro: nei pressi di RIVOLI(TO) Orario: Full time, sui due turni dal lunedì al venerdì ( è richiesta reperibilità per il sabato e la domenica). Contratto: Tempo determinato con possibilità di inserimento con contratto indeterminato. RAL 25/30k Annuncio valido fino a: 31-Dec-2026",
+        "apply_options": [
+          {
+            "title": "Manpower",
+            "link": "https://www.manpower.it/it/annuncio-lavoro/engineering/produzione/manutentore-meccanico/1052128?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNQU5VVEVOVE9SRSBNRUNDQU5JQ08iLCJjb21wYW55X25hbWUiOiJNYW5wb3dlciIsImh0aWRvY2lkIjoiUlZzSGQ2NGRaMERuWWlmNEFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSVVWSFZ5YVc0c1VHbGxaRzF2Ym5Rc1NYUmhiSGsiLCJnbCI6Iml0IiwiaGwiOiJpdCIsImZjIjoiRXN3QkNvd0JRVVJFWWxkbFlXWTBURmhpYWt0Qk9ETnZPR3hsYVRKNGVWUkpkREJRY1RkbVdtVnpabFowV1dkRlNuQXRjRUZCYlRaUlZVTnRUSGd3VkhsVk5qZGplblJyTW5SSWNGbGhkelEyWkVNelREZzFNMHh0YWxWRFdXNXNNMDF0TFRGQmJFOVZUemR4Vms1VVQwZHhVa1I2TVRGUGJFdENOR1prUVU5MlVqWlhWMk0xVG1SclIyeHBOakJzTmxvU0YyWnpTR3RoY2tkNlRVbHFiVFZPYjFBdFRHMUNhMEZSR2lKQlNFNHdSVGRJWTA1MFp6QjBjbE5uVEdZMWIyOUdaSEJhVkhaT2JqTTRTemhuIiwiZmN2IjoiMyIsImZjX2lkIjoiUlZzSGQ2NGRaMERuWWlmNEFBQUFBQT09In0="
+      },
+      {
+        "title": "Manutentore Meccanico Industriale - Full Time - €28.000 - €35.000 All'Anno (Rivoli)",
+        "company_name": "In Job",
+        "location": "Rivoli TO",
+        "via": "Jobijoba",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=hdVaZZiqTEWmIchYAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_yXNOwrCUBCFYWzT2llN5wNMQkQQrWyUCCKIfbi5DnFknAn3Idaux424DVfiqzl8cIo_eXaSuDUSA0pQh7BFa42QVSjlGH1wZBhhDKvIDAe6fP26P4pZmuf535Ppz0vm_lJEYbCnqzINP--eLDpr4EjA5qpOwUdYqzaMvcUphNbPs8x7ThsfTCCbWr1kKljrLTtr7b9T-ZNx2LIJWBXT_Ja20oy6pcBGayCBfw0OuzfSatmQzAAAAA&shmds=v1_Ac3VAowCwon_wH2A1vU3lm_sUOEDRaqdxK7i-i0G97l3huzz9g&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=hdVaZZiqTEWmIchYAAAAAA%3D%3D",
+        "extensions": ["7 giorni fa", "Full-time"],
+        "source_link": "https://www.jobijoba.it/annunci-di-lavoro/13/bd68d62b2747313a6bf8917a79c9a338",
+        "job_title": "Manutentore Meccanico Industriale - Full Time - €28.000 - €35.000 All'Anno (Rivoli)",
+        "description": "In Job spa Filiale di Verona sta cercando un/una Manutentore/trice Meccanico/a per l'industria tessile a Rivoli Veronese.  \nScopra di più sulle mansioni generali e sulle competenze richieste per questa possibilità leggendo di seguito.  \nLa figura si occuperà della manutenzione delle macchine di produzione, garantendo il corretto funzionamento continuo e lavorando in autonomia o in team. xjsofne È richiesta esperienza nella manutenzione meccanica industriale e capacità di lettura del disegno tecnico.  \nIl contratto è a tempo determinato o indeterminato con un salario annuale indicativo tra 28.000€ e 35.000€.#J-18808-Ljbffr",
+        "apply_options": [
+          {
+            "title": "Jobijoba",
+            "link": "https://www.jobijoba.it/annunci-di-lavoro/13/bd68d62b2747313a6bf8917a79c9a338?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Kit Lavoro",
+            "link": "https://www.kitlavoro.it/lavoro/651473413/manutentore-meccanico-industriale-full-time-eur28-000-eur35-000-all-anno-rivoli?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNYW51dGVudG9yZSBNZWNjYW5pY28gSW5kdXN0cmlhbGUgLSBGdWxsIFRpbWUgLSDigqwyOC4wMDAgLSDigqwzNS4wMDAgQWxsJ0Fubm8gKFJpdm9saSkiLCJjb21wYW55X25hbWUiOiJJbiBKb2IiLCJodGlkb2NpZCI6ImhkVmFaWmlxVEVXbUljaFlBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lVVkhWeWFXNHNVR2xsWkcxdmJuUXNTWFJoYkhrIiwiZ2wiOiJpdCIsImhsIjoiaXQiLCJmYyI6IkVzd0JDb3dCUVVSRVlsZGxXWE5zZFZCMmJIcE5jRVY1TmpKd1JDMUpTR3hUUkVFMGNHY3pia3h4YkhGYVVVbEVlbkZSYlVKQ01sVk9WazVmYVhGNk5uTm5ORkpVYjJWdlVEQmtlR1JpT0VSWFQyOUpXV3hxVDJOaFgySmlabTlSVG5GMWVVWlpWVUUxVlRKb05GcDNWRXRsVGtkdmJIVlZhbk4wV1ZsQ1V6QTBNa1ZGUmpFeU4waHJXRUkwVlVvNFQyMFNGMlp6U0d0aGNrZDZUVWxxYlRWT2IxQXRURzFDYTBGUkdpSkJTRTR3UlRkR1VUWk9TRTVYYW5kRGJqTkRaWFpNWjJGVGIwb3Rka3RVU1ZwMyIsImZjdiI6IjMiLCJmY19pZCI6ImhkVmFaWmlxVEVXbUljaFlBQUFBQUE9PSJ9"
+      },
+      {
+        "title": "MANUTENTORE ELETTROMECCANICO",
+        "company_name": "UMANA SPA",
+        "location": "Rivoli TO",
+        "via": "LinkedIn",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=8Ejd1KiXlKtXgHV8AAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXNwQqCMBgAYLr6AB06_eegLYIudhoyIkgXNs8y59DF8hf_Jb5Gb5xdvuuXfDdJmoui0rLQqpQg71LrUuUyy0RxyxQcoPTWTdZA6yGYGScE-sAVsQtud-ljHCnlnCiwjqKJ3jKLb46Da3DhL2zoT029mdwYTHT16Xxc2Dh0-221zgKeDwF-WJsZgwetfj5uoASUAAAA&shmds=v1_Ac3VAoy9TPs_ibC8VlkVwE0fliL9FsCDO7jRUJ_sZLYMTGgQ9A&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=8Ejd1KiXlKtXgHV8AAAAAA%3D%3D",
+        "thumbnail": "https://serpapi.com/searches/6ae4c17e2bcc24e825ca45a4/images/7tmLc4U7Zp30DJswJ5dulRN4fRToKS_geqEnmV5qENI.jpeg",
+        "extensions": ["4 giorni fa", "Consulenza"],
+        "source_link": "https://it.linkedin.com/jobs/view/manutentore-elettromeccanico-at-umana-spa-4480652763",
+        "job_title": "MANUTENTORE ELETTROMECCANICO",
+        "description": "Umana S.p.A. cerca un MANUTENTORE ELETTROMECCANICO per un’importante azienda del territorio operante nel settore agroalimentare nella zona di Rivoli (TO).\n\n\n\n\nResponsabilità:\n\n\n\n\nEseguire attività di manutenzione ordinaria e straordinaria su impianti di produzione, confezionamento e movimentazione del settore agroalimentare;Individuare e risolvere guasti di natura meccanica, elettrica, pneumatica e oleodinamica, intervenendo in modo tempestivo per limitare i fermi macchina;Effettuare controlli periodici e manutenzione preventiva secondo i piani aziendali, verificando lo stato di usura dei componenti;Collaborare con il personale di produzione durante le attività di avviamento, cambio formato e regolazione delle linee produttive;Compilare la documentazione relativa agli interventi eseguiti, registrando anomalie, ricambi utilizzati e attività svolte;Garantire il rispetto delle procedure di sicurezza, igiene e qualità previste per gli ambienti produttivi del comparto alimentare.\n\n\nRequisiti:\n\n\n\n\nDiploma o qualifica professionale ad indirizzo meccanico, elettrico, elettrotecnico o meccatronico;Esperienza,di almeno 3 anni, in attività di manutenzione elettromeccanica in contesti produttivi;Si seguono i turni francesi 5-13/13-21/21-5) + disponibilità anche per il weekend (non sempre).\n\n\nSi offre: un contratto a tempo indeterminato in azienda, RAL 35K.\n\n\n\n\nOperiamo nel rispetto delle diversità e con impegno nel favorire equità e pari opportunità, praticando e valorizzando l'inclusione. Il presente annuncio è rivolto senza forma di discriminazione alcuna a tutti i soggetti. L'eventuale declinazione di genere nei termini utilizzati nell'annuncio è da riferirsi comunque a candidati e candidate di ambo i sessi. Le candidature presentate non devono contenere dati relativi allo stato di salute, informazioni relative all'origine etnica, ad opinioni politiche o religiose, all'orientamento sessuale o legate allo stato di famiglia e alle responsabilità familiari. Su www.umana.it/privacy è possibile consultare l'informativa sul trattamento dei dati personali (art. 13 del Reg. UE 2016/679).",
+        "apply_options": [
+          {
+            "title": "LinkedIn",
+            "link": "https://it.linkedin.com/jobs/view/manutentore-elettromeccanico-at-umana-spa-4480652763?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "JobLeads",
+            "link": "https://www.jobleads.com/it/job/manutentore-elettromeccanico--rivoli--e75bbad6298d6cca8df6eb4deec148bc4?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "CVing",
+            "link": "https://cving.com/en/job-offers/rivoli/manutentore-elettromeccanico?p=1&ea=0&verified=true&orp=false&order=0&id=5413829&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/-237654463648308540?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Trabajo.org",
+            "link": "https://it.trabajo.org/offerta-5278-7660e7d5469c17fd88efc4cebe45cf60?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "HelpLavoro",
+            "link": "https://www.helplavoro.it/offerta-di-lavoro-a-rivoli-cercasi-manutentore-elettromeccanico/6931859.html?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Talent.com",
+            "link": "https://it.talent.com/view?id=643277506810681210&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jobijoba",
+            "link": "https://www.jobijoba.it/annunci-di-lavoro/13/adfd79e1fbdfe31f0522b8d9e486dcae?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNQU5VVEVOVE9SRSBFTEVUVFJPTUVDQ0FOSUNPIiwiY29tcGFueV9uYW1lIjoiVU1BTkEgU1BBIiwiaHRpZG9jaWQiOiI4RWpkMUtpWGxLdFhnSFY4QUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJVVZIVnlhVzRzVUdsbFpHMXZiblFzU1hSaGJIayIsImdsIjoiaXQiLCJobCI6Iml0IiwiZmMiOiJFc3dCQ293QlFVUkVZbGRsV25NeFZEWk9OVFphU1RSbWFWRlVUMk5oTjJkVllXMW9aRzV6UVVKa2NtbG1ibms0U1hsalRsSkxielZ3Vlc5MWJGYzRPWHBCY1dKM09VZEhUM0U1U1UxRlJrTndWRkp6Y0VOVVFtcFJNM2wyYUVKQmMydFlZbXhQTlVZM05XWXhOekkxZEdVMGIzcHdibWxvUlVSVE9IaGlUME5JV21OcWVuTkJRM2hzVUc5cU5rVjBYMk1TRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZEZVMUp0YVdObllYSjRhVTFYVTI5VVpEVnhaVk5TV1U1M1UxOW4iLCJmY3YiOiIzIiwiZmNfaWQiOiI4RWpkMUtpWGxLdFhnSFY4QUFBQUFBPT0ifQ=="
+      },
+      {
+        "title": "Manutentore Elettromeccanico (M/F/NB)",
+        "company_name": "Randstad",
+        "location": "Rivoli TO",
+        "via": "Randstad",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=EhaaB2UF-M-ktuolAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXNsQrCMBCAYVy7uzjdqIKNCC66KepUheJertcjjaS5klxLX8W3tS7_9vFn30V2LTAMykElMtw8q0bpmAiDI4F1Ye7mednADkpHHAmhceBxlCiQBniIWM-rc6vap5MxKfncJkV1lJN0RgLXMpmP1OmfKrUYufeoXB2O-ynvg90uSwzNbBpwYb6M4h28Xz9FJpQ5nAAAAA&shmds=v1_Ac3VAow_fdHGJ2AVlYL6PIoeZlnfwO0Fe5UUFXrbK9DM8SybqA&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=EhaaB2UF-M-ktuolAAAAAA%3D%3D",
+        "thumbnail": "https://serpapi.com/images/i/iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAY1BMVEUgddn___8Aa9cbc9nz9vzu9PwNcNgAbtjH1vM_hd0Aada5zvCPsukAZ9aStOmLsOjY5PcAZNUAYNVwnuPM2vQue9syftulwe2-0vFRi97m7vp3o-RZkuCvyO-euupomOGBqud6eZL2AAAB8UlEQVRIie2W23KjMAyGLR8kwGDMOZx5_6esSJsGk20z7dXObv4ZRmDxGWEZCSFe-uuE8iB84lf3cVXV0V25PHMyP7jr6k5iCkfZJOQSG7jTe0iYwzfkiYP8azAgz1wApvAl-cAdQ1VNfFTl7-TO-SpwN8dlDYRZfSN3rs4w9D-m63Oe9iPaa5ztN3eeJTUDHVHHRj-k9RloiMzvQMRfgr9-4gv8J0CNqH8K0oWLkkW0XMQu9ANQEJdB-jT_n55WEtX-cbhpnpENrNdbVJDIxLiwK3HV-yh870apHdyLZeXltYC-jyYmPYKIk6A-lkIh9S0bvkBYk7gX5HSmENmplIz78ghiOhhwoGEg642GOWl5s3mYLgDRwNtunnYnogc96LBbLVkclwlsM6zFCMIPMotghKkQ0ukC-7ZEGDtoCndqOomQ1TzrZR4yoWCCnFQMKwyT5FATJUd2Om-lSIL-mJqMIpidWaznVs3ghryqU1tzJ2BQeuicdsNMotAnUMBYlDewNzaTFS9O6QCdLnmOotTLZSioDULlSUkPWwS3J-bQpRoqu3mTVLCM4Lcauh6izQT9ce34lS7ejeu2p9fGcvNR38Wzt60i55c48ulWybX2VT4d-yPthyTkhPElKf5BIUX7kNq_yv0MkbeIvJqXXhJvOGwdGLi_5QEAAAAASUVORK5CYII.png",
+        "extensions": ["22K €–28K € all'anno", "Full-time"],
+        "source_link": "https://www.randstad.it/offerte-lavoro/manutentore-elettromeccanico-mfnb_rivoli_8204fd68-8f5c-40b4-bc0a-33a27e33b767/",
+        "job_title": "Manutentore Elettromeccanico (M/F/NB)",
+        "description": "Hai una solida esperienza nella manutenzione di impianti industriali e sei alla ricerca di una nuova sfida professionale in un contesto solido e altamente specializzato? Randstad Italia, filiale di Rivoli, seleziona per una consolidata realtà situata a Rivoli, specializzata nel settore dei trattamenti termici, un profilo esperto da inserire nel proprio organico tecnico.\n\n\nMANUTENTORE ELETTROMECCANICO SENIOR (M/F/NB)Luogo di lavoro: Rivoli.\n\nSi offre: contratto iniziale in somministrazione; RAL 22-28k.\n\nOrario di lavoro: su turno centrale.\n\nRetribuzione annua: 22000€ - 28000€\n\n\nesperienza2 anni\nresponsabilità\n\n\n\nDi cosa ti occuperai?Il candidato, inserito all'interno dell'ufficio tecnico/manutenzione, sarà il punto di riferimento per l'efficienza degli impianti di produzione. Le tue responsabilità principali includeranno:\n\nesecuzione di interventi di manutenzione preventiva e correttiva su macchinari per il trattamento termico e la lavorazione della lamiera;diagnosi e risoluzione di guasti complessi a livello elettrico, elettronico e meccanico;collaborazione con i reparti produttivi per ottimizzare il funzionamento dei macchinari e ridurre i tempi di fermo macchina;gestione dei ricambi necessari e interfaccia con fornitori esterni per componenti specifici;controllo costante della conformità dei sistemi e delle sicurezze elettromeccaniche.\nqualifiche\n\n\n\nSei in possesso di questi requisiti?Comprovata e significativa esperienza pregressa nel ruolo di manutentore elettromeccanico in contesti produttivi industriali;approfondita conoscenza degli schemi elettrici e dei principi di meccanica applicata;capacità di intervenire in totale autonomia su guasti complessi e logiche di funzionamento di impianti complessi;precisione, orientamento all'analisi tecnica e capacità di problem solving;disponibilità a lavorare su orario giornaliero in turno centrale.Credi che il tuo profilo sia in linea? Candidati subito!\n\n                     Il presente annuncio è rivolto a persone di genere femminile (F), maschile (M) e non binario (NB) ai sensi della Legge n. 300/1970, del Decreto Legislativo n. 198/2006 e del Decreto Legislativo n. 96/2026 ed è aperta a qualsiasi persona nel rispetto della diversity e dell'inclusività. Ti preghiamo di leggere l'informativa sulla privacy Randstad (https://www.randstad.it/privacy/) ai sensi dell'art. 13 del Regolamento (UE) 2016/679 sulla protezione dei dati (GDPR).\n\n\nlivello di studio\n\nlicenza media (scuola secondaria di 1° grado)\n\nlavorare presso \n\n\nnull",
+        "apply_options": [
+          {
+            "title": "Randstad",
+            "link": "https://www.randstad.it/offerte-lavoro/manutentore-elettromeccanico-mfnb_rivoli_8204fd68-8f5c-40b4-bc0a-33a27e33b767/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Randstad",
+            "link": "https://www.randstad.com/jobs/manutentore-elettromeccanico-mfnb_rivoli_47381759/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Only Job",
+            "link": "https://careers.onlyjob.it/job/view-job.php?id=20187-manutentore-metalmeccanico-rivoli&language=es&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Indeed",
+            "link": "https://it.indeed.com/viewjob?jk=0ffaaa0f4816a814&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Orienta",
+            "link": "https://www.orientajob.com/job/view-job.php?id=164334-tecnico-manutentore-frigorista-rivoli&language=it&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/-1489755546637891326?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Find Your Job With Orienta",
+            "link": "https://www.orientajob.pl/job/view-job.php?id=164334&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Glassdoor",
+            "link": "https://www.glassdoor.it/job-listing/jv?jl=1010300101044&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNYW51dGVudG9yZSBFbGV0dHJvbWVjY2FuaWNvIChNL0YvTkIpIiwiY29tcGFueV9uYW1lIjoiUmFuZHN0YWQiLCJodGlkb2NpZCI6IkVoYWFCMlVGLU0ta3R1b2xBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lVVkhWeWFXNHNVR2xsWkcxdmJuUXNTWFJoYkhrIiwiZ2wiOiJpdCIsImhsIjoiaXQiLCJmYyI6IkVzd0JDb3dCUVVSRVlsZGxZVXhOVlhOS05uTndVRTA0VEhkNk0ycEVObEZHWW0xUlV6TTNXVFpLTlZSTmMwSldRekYwUW14YVRtZDBiRmxmVVc5UmMxQmZNM0JIVFVsS01DMUdibVJqTkdSeVRITlZaMGxMUmpaR2RtaE1RVlZ6UmpOblRVUTJZbVpMUkRCWlZrdHpRME5KY1hWTU5ISkRlRUZGWkVkSlZHNVBjakZwYldOYWF6ZHhZelk0VUZka1dYSVNGMlp6U0d0aGNrZDZUVWxxYlRWT2IxQXRURzFDYTBGUkdpSkJTRTR3UlRkSFJuSlZVMU5JZUZscU1URTJWVk14UVhSMmEzSjRYM293ZEVGMyIsImZjdiI6IjMiLCJmY19pZCI6IkVoYWFCMlVGLU0ta3R1b2xBQUFBQUE9PSJ9"
+      },
+      {
+        "title": "MANUTENTORE MECCANICO",
+        "company_name": "Manpower Italia srl",
+        "location": "Rivoli TO",
+        "via": "JobLeads",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=CqpPwYovOtuNf8NgAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXNsQ6CMBAA0LjyCU43m0iNxkUnQohhABKCMzlqAyVnr-lV5EP8YHV560s-m-RUZfW9K-quaQuoijzP6jJvYA-t1SZohIcFwoUDg7zgxjyS2V6nGL1clBKhdJSI0epU81OxMwOvauZB_vQyYTCeMJr-eD6sqXfjDip0nt8mQBmRLIIEAut-4cJkoWu-uUlCUJcAAAA&shmds=v1_Ac3VAowLNBz4dLbqLALszP_CIwu12XSLj21XfgDearVCYMnjsQ&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=CqpPwYovOtuNf8NgAAAAAA%3D%3D",
+        "extensions": ["8 giorni fa", "25K €–30K € all'anno", "Full-time"],
+        "source_link": "https://www.jobleads.com/it/job/manutentore-meccanico--rivoli--e31c362bb1478876ab579e3e7568c7317",
+        "job_title": "MANUTENTORE MECCANICO",
+        "description": "Settore: produzione\nOrario di lavoro: Tempo pieno\nContratto: Assunzione Diretta\nLuogo di lavoro: Rivoli\nMANUTENTORE MECCANICO JUNIOR | SETTORE METALMECCANICOMANPOWER - Agenzia per il Lavoro ricerca, per azienda cliente operante nel settore metalmeccanico, un:\n\nMANUTENTORE MECCANICO JUNIOR\n\nAttività principali:Esecuzione di interventi di manutenzione meccanica ordinaria e straordinaria su impianti e macchinari;Attività di carpenteria leggera per riparazioni e modifiche strutturali;Utilizzo di strumenti da officina e attrezzature meccaniche;Attività di saldatura a filo e/o elettrodo per il ripristino di componenti meccanici;Supporto nelle attività di montaggio e assemblaggio meccanico;Ricerca guasti e verifica del corretto funzionamento degli impianti.Requisiti:Diploma tecnico a indirizzo meccanico, meccatronico o affine;Gradita esperienza, anche minima, in ambito manutenzione meccanica, carpenteria o saldatura;Capacità di lettura del disegno meccanico;Buona manualità e utilizzo dei principali strumenti da officina;Predisposizione all'apprendimento e al lavoro in team;Disponibilità a lavorare su turni.Si valutano positivamente:Candidati neodiplomati alla prima esperienza lavorativa;Profili junior motivati a intraprendere un percorso di crescita professionale nel settore della manutenzione industriale.Luogo di lavoro:nei pressi di RIVOLI(TO)\nOrario: Full time, sui due turni dal lunedì al venerdì (è richiesta reperibilità per il sabato e la domenica).\nContratto: Tempo determinato con possibilità di inserimento con contratto indeterminato. RAL25/30k\n\nAnnuncio valido fino a: 31-Dec-2026",
+        "apply_options": [
+          {
+            "title": "JobLeads",
+            "link": "https://www.jobleads.com/it/job/manutentore-meccanico--rivoli--e31c362bb1478876ab579e3e7568c7317?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/89224734365507166?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Trabajo.org",
+            "link": "https://it.trabajo.org/offerta-2264-4964a3a7ead1197de2f23896b8680c93?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jobijoba",
+            "link": "https://www.jobijoba.it/annunci-di-lavoro/13/6aa65b2af747b2d3ccf50533a211ea7d?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jobilize",
+            "link": "https://www.jobilize.com/job/it-piedmont-rivoli-manutentore-meccanico-manpower-hiring-now-job-immediately?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNQU5VVEVOVE9SRSBNRUNDQU5JQ08iLCJjb21wYW55X25hbWUiOiJNYW5wb3dlciBJdGFsaWEgc3JsIiwiaHRpZG9jaWQiOiJDcXBQd1lvdk90dU5mOE5nQUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJVVZIVnlhVzRzVUdsbFpHMXZiblFzU1hSaGJIayIsImdsIjoiaXQiLCJobCI6Iml0IiwiZmMiOiJFc3dCQ293QlFVUkVZbGRsWWtoTWRXZE9SMkYyYTFCMk5rSXRWblZEZFdabFltbFBRazlIUjJwNU9HcENZbGgzTFRKT1JsSlNUV3htTkc1NmVUZHlVVlpLWlVScldUZFdiMGxJTVVsVVZURXlWblEwVUVsbFNHa3dOWE5FZGw5NmFFSkdlakpxT0hORFN6SnpWMVZmVjA5R2VFb3hORWxmWmt4YWNIbERaV0UzTTFSVlJEUmFRV0ZSVm5wV1dIRnRlVm9TRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZEZXR2hZWmtSYVZVbHVRWGh6UzJKclIwdHdSVEpmZWtwUE1reDMiLCJmY3YiOiIzIiwiZmNfaWQiOiJDcXBQd1lvdk90dU5mOE5nQUFBQUFBPT0ifQ=="
+      },
+      {
+        "title": "Manutentore Elettromeccanico 3 Turni",
+        "company_name": "Oggi lavoro srl",
+        "location": "Rivoli TO",
+        "via": "Trabajo.org",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=zDHIbzm8Jj3e7wvaAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_0XNsQrCQAyAYVz7COKQWbAniotugjhJQbqX9AzXK9ek5NLSt_FV1cnlH7-_eK-K6wN5MmITJbglMlMZyHvk6AWOUE_KEXbwjJ7UI7wiJJxFBfIEd5GQaH3pzMZ8di7nVIZsaNGXXgYnTK0srpc2_9LkDpXGhEbN4bRfypHDdlOF8Dc1QeTvbJYUoa4-rWNM7qIAAAA&shmds=v1_Ac3VAoxBCIOpCIUirKup_Tdkk7tBY1zoacJ7iYe96cW4CGrPPQ&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=zDHIbzm8Jj3e7wvaAAAAAA%3D%3D",
+        "extensions": ["5 giorni fa", "Full-time"],
+        "source_link": "https://it.trabajo.org/offerta-3189-e6812b6ced86f2db80ee568530083358",
+        "job_title": "Manutentore Elettromeccanico 3 Turni",
+        "description": "Oggi Lavoro Spa in Rivoli cerca un manutentore elettromeccanico per garantire la continuità degli impianti di produzione nell’area alimentare. Il ruolo richiede interventi su guasti elettrici e meccanici, manutenzione preventiva e ordinaria, collaborazione con produzione e documentazione tecnica.\n\nSi richiede diploma tecnico, esperienza specifica e disponibilità a tre turni con ciclo continuo. Inserimento diretto e retribuzione annua lorda tra 30.000 e 35.000 euro, in relazione a esperienza e\nJ-18808-Ljbffr",
+        "apply_options": [
+          {
+            "title": "Trabajo.org",
+            "link": "https://it.trabajo.org/offerta-3189-e6812b6ced86f2db80ee568530083358?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Kit Lavoro",
+            "link": "https://www.kitlavoro.it/lavoro/655481277/manutentore-elettromeccanico-3-turni-rivoli?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNYW51dGVudG9yZSBFbGV0dHJvbWVjY2FuaWNvIDMgVHVybmkiLCJjb21wYW55X25hbWUiOiJPZ2dpIGxhdm9ybyBzcmwiLCJodGlkb2NpZCI6InpESEliem04SmozZTd3dmFBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lVVkhWeWFXNHNVR2xsWkcxdmJuUXNTWFJoYkhrIiwiZ2wiOiJpdCIsImhsIjoiaXQiLCJmYyI6IkVzd0JDb3dCUVVSRVlsZGxZVGg2TldSc1REaGpjVFIzUlZZeU9YUjRibGhoYkRCcFdYbHdUbU5tU0VWcFdrZENSSEV6VUV4UVF6WkxkakJWWDFobU5XbDNjMEZPYlhKUVYwUm1MVlV5Y0U0MFVqQjNibUZPVTJ4NFZXVjZVMUJMVjBKeU1tOXRlbGhmV0ZGeU4xQk9SMFJpY0RoVWVXRmxOWHBuUWs1Q2RuWlFPRFY0UjNneGFrTk1lWGRpTTNkcFFqTVNGMlp6U0d0aGNrZDZUVWxxYlRWT2IxQXRURzFDYTBGUkdpSkJTRTR3UlRkSU5WWjBRWFl6UlRoelRtNWFhbTh3VG1oelYyZzNXbE5PVEhKUiIsImZjdiI6IjMiLCJmY19pZCI6InpESEliem04SmozZTd3dmFBQUFBQUE9PSJ9"
+      },
+      {
+        "title": "Manutentore Elettromeccanico 3 Turni - Alimentare",
+        "company_name": "Oggi lavoro srl",
+        "location": "Rivoli TO",
+        "via": "Jooble",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=VTL-d8Y7_dnh8E47AAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_0WNsQrCMBBAce0niMPNQhtRXHRyECcpSPeSxiO9cs2V5Fr6UX6kcXJ50-O94rMp6qcNs2JQiQh3RtUoIzpnAzmBEzRzDAQl3JjGbNlslfAih9FZeBOwXSQKpBkeIp5xe-1Vp3QxJiWufFKr5Cono5GAnaxmkC790KY-xya2iu3xfFirKfj9rvb-34wMFPJsESZo6i-BNm_xrwAAAA&shmds=v1_Ac3VAoyhRKpsekDAgD3RvxUW3qFMKq4IyQ2hoPGABsM3eJNRqA&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=VTL-d8Y7_dnh8E47AAAAAA%3D%3D",
+        "extensions": ["6 giorni fa", "30K €–35K € all'anno", "Full-time"],
+        "source_link": "https://it.jooble.org/jdp/-5954805368460717670",
+        "job_title": "Manutentore Elettromeccanico 3 Turni - Alimentare",
+        "description": "Oggi Lavoro Spa in Rivoli cerca un manutentore elettromeccanico per garantire la continuità degli impianti di produzione nell’area alimentare. Il ruolo richiede interventi su guasti elettrici e meccanici, manutenzione preventiva e ordinaria, collaborazione con produzione e documentazione tecnica. \n\n Si richiede diploma tecnico, esperienza specifica e disponibilità a tre turni con ciclo continuo. Inserimento diretto e retribuzione annua lorda tra 30.000 e 35.000 euro, in relazione a esperienza e \n\n#J-18808-Ljbffr",
+        "apply_options": [
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/-5954805368460717670?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNYW51dGVudG9yZSBFbGV0dHJvbWVjY2FuaWNvIDMgVHVybmkgLSBBbGltZW50YXJlIiwiY29tcGFueV9uYW1lIjoiT2dnaSBsYXZvcm8gc3JsIiwiaHRpZG9jaWQiOiJWVEwtZDhZN19kbmg4RTQ3QUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJVVZIVnlhVzRzVUdsbFpHMXZiblFzU1hSaGJIayIsImdsIjoiaXQiLCJobCI6Iml0IiwiZmMiOiJFc3dCQ293QlFVUkVZbGRsWWpJdFFsQkNSVVZEVURWbGFFRmZlV2g2YUVGVFdHWkZRMHcwVkY5dWFFcElTblJ5VTNGTVpIaFZNRzVRTnpseFNFNWtWRmhRUlZweU0zQndXWFp2UVhCM1IzaDFOVWhyTlRNdFpETlNNRWxrUW1wYVowWkdiR2hZVERoSlFsVmlRMGhVUTNSdFkwazVVV1ZhVUhoWGFFTkhNVmhQVlhoR1JWRjViV0prYm5kTmEyMUVWRk1TRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZElOa3RoVDB4alMwUnJWbVpmUWw4d2JIbEdWbGQ0VUZSYVVFMUIiLCJmY3YiOiIzIiwiZmNfaWQiOiJWVEwtZDhZN19kbmg4RTQ3QUFBQUFBPT0ifQ=="
+      },
+      {
+        "title": "TECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI (TO)",
+        "company_name": "MinoEge - Gruppo VENPA",
+        "location": "Rivoli TO",
+        "via": "LinkedIn",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=00m8IKjfUga04lKRAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_x2NsQrCMBRFcfUTnB64qGArgotOIaYlYBMptWuJNdRI7AtNLP01_87W5cA9XDjz72x-KxgVnEo4c5BJwikXBDJGKfnbjIjxIQqZM9hCzkt54bAq5HpaptZdreBhwKoeOwT_gRSxsXpxeobg_DGOvbdR44MKpo5qfMfY6jsO8QvvfkLln6rTzqqgq_1hN0SubTbLzLTIGj020u7jHELJxJWAacdmj9ZAIX92nrOKvAAAAA&shmds=v1_Ac3VAozWmc26c2wZ9YfRsHcMKiJZTjWJ5GBu7hZSUrU1SXBnMg&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=00m8IKjfUga04lKRAAAAAA%3D%3D",
+        "thumbnail": "https://serpapi.com/searches/6ae4c17e2bcc24e825ca45a4/images/Tmyu3LzfOOkpL-fipog-FH2cS9NvAV_EWF5juFuoXwY.jpeg",
+        "extensions": ["28 giorni fa", "Full-time"],
+        "source_link": "https://it.linkedin.com/jobs/view/tecnico-di-officina-meccanico-manutentore-rivoli-to-at-minoege-gruppo-venpa-4475028116",
+        "job_title": "TECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI (TO)",
+        "description": "Noleggio operatore\n\nSOLLEVAMENTO SOLLEVAMENTO Piattaforme autocarrate con operatore Ragni con operatore Autogru con operatore Vedi tutti \n\nServizi\n\nNoleggio a freddo\n\nPiù di 7000 mezzi a parco per il sollevamento di cose e persone, movimento terra e power.\n\nNoleggio con operatore\n\nI nostri mezzi speciali a disposizione con operatore\n\nAssistenza\n\nManutenzione, assistenza tecnica e pronto intervento con riparazione o sostituzione mezzi in cantiere.\n\nConsulenza\n\nConsulenza tecnico-commerciale e sopralluoghi in cantiere per valutare l’area di lavoro.\n\nFormazione\n\nCorsi di formazione per operatori ed abilitazione alla conduzione di mezzi da cantiere.\n\nTrasporto\n\nMovimentazione, consegna e ritiro di mezzi da cantiere e trasporti eccezionali in Italia ed Europa.\n\nSettoriChi siamo Chi siamo Il gruppo SediLavora con noiBlogContatti\n\nTECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI (TO)\n\nHR MINOEGE\n\n01 ottobre 2026\n\nCondividi:\n\nVenpa è alla ricerca di un\n\nTECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI\n\nPrincipali attività\n\nSupervisionare il personale di officina e assegnare compitiCoordinare le attività di manutenzione e riparazione delle attrezzature e veicoli in base alle necessità del noleggioAssicurare il corretto flusso informativo tra officina, magazzino ricambi e ufficio noleggio e officine esterneGestire le disponibilità dei materiali e delle risorse necessarie per gli interventi assicurando corretto livello di stoccaggioGestione e manutenzione dei mezzi tecnici aziendali (camion/furgoni)\n\nRequisiti\n\nDiploma o qualifica in ambito meccanico/elettrico/elettronicaCapacità di lavorare in autonomia e in teamCompetenze in meccanica, oleodinamica e schemi elettrici\n\nCosa offriamo\n\nCCNL metalmeccanico industria con una RAL a partire da 28.000,00€Un ambiente lavorativo stimolante, con concrete possibilità di formazione e crescita professionaleOrario full-time dal lunedì al venerdì orario 8:30 - 12:30 14:00 - 18:00\n\nPer candidarsi si prega di inviare il Curriculum Vitae (in formato word o pdf) con data, firma autentica e autorizzazione al trattamento dei dati personali secondo la seguente dicitura: “Autorizzo il trattamento dei miei dati personali e professionali, riportati nel mio curriculum ai sensi del GDPR (Regolamento UE 2016/679) e del Decreto Legislativo 30 giugno 2003, n. 196 (Codice in materia di protezione dei dati personali), ai fini di attività di Ricerca e Selezione del Personale e contatti lavorativi”. Le ricerche si intendono riferite a persone di entrambi i sessi (L. 903/1977, D.Lgs. 198/2006), di qualsiasi orientamento o espressione di genere, orientamento sessuale, età, etnia e credo religioso. Il presente annuncio è stato ideato nel rispetto della diversity e dell’inclusività.\n\nCondividi:\n\nEmail inviata!\n\nGentile candidato/a,\n\nconfermiamo la ricezione della sua candidatura.\n\nLa ringraziamo per l’interesse dimostrato: se il suo profilo risulterà in linea con la posizione, verrà contattato/a telefonicamente da un nostro recruiter. Qualora non ricevesse una telefonata entro 3 settimane, significa che la candidatura non è stata considerata in linea con la ricerca in corso. Il suo CV rimarrà comunque a disposizione per future opportunità.\n\nCordiali saluti\n\nSelezione Gruppo Venpa\n\nContinua\n\nCandidati\n\nNome\n\nCognome\n\nEmail\n\nTelefono\n\nParlaci di te\n\nBio\n\nCurriculum Vitae\n\nHo letto e accettato la Privacy Policy\n\nTECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI (TO)\n\nHR MINOEGE\n\n01 ottobre 2026\n\nCondividi:\n\nVenpa è alla ricerca di un\n\nTECNICO DI OFFICINA MECCANICO MANUTENTORE - RIVOLI\n\nPrincipali attività\n\nSupervisionare il personale di officina e assegnare compitiCoordinare le attività di manutenzione e riparazione delle attrezzature e veicoli in base alle necessità del noleggioAssicurare il corretto flusso informativo tra officina, magazzino ricambi e ufficio noleggio e officine esterneGestire le disponibilità dei materiali e delle risorse necessarie per gli interventi assicurando corretto livello di stoccaggioGestione e manutenzione dei mezzi tecnici aziendali (camion/furgoni)\n\nRequisiti\n\nDiploma o qualifica in ambito meccanico/elettrico/elettronicaCapacità di lavorare in autonomia e in teamCompetenze in meccanica, oleodinamica e schemi elettrici\n\nCosa offriamo\n\nCCNL metalmeccanico industria con una RAL a partire da 28.000,00€Un ambiente lavorativo stimolante, con concrete possibilità di formazione e crescita professionaleOrario full-time dal lunedì al venerdì orario 8:30 - 12:30 14:00 - 18:00\n\nPer candidarsi si prega di inviare il Curriculum Vitae (in formato word o pdf) con data, firma autentica e autorizzazione al trattamento dei dati personali secondo la seguente dicitura: “Autorizzo il trattamento dei miei dati personali e professionali, riportati nel mio curriculum ai sensi del GDPR (Regolamento UE 2016/679) e del Decreto Legislativo 30 giugno 2003, n. 196 (Codice in materia di protezione dei dati personali), ai fini di attività di Ricerca e Selezione del Personale e contatti lavorativi”. Le ricerche si intendono riferite a persone di entrambi i sessi (L. 903/1977, D.Lgs. 198/2006), di qualsiasi orientamento o espressione di genere, orientamento sessuale, età, etnia e credo religioso. Il presente annuncio è stato ideato nel rispetto della diversity e dell’inclusività.\n\nCondividi:\n\nEmail inviata!\n\nGentile candidato/a,\n\nconfermiamo la ricezione della sua candidatura.\n\nLa ringraziamo per l’interesse dimostrato: se il suo profilo risulterà in linea con la posizione, verrà contattato/a telefonicamente da un nostro recruiter. Qualora non ricevesse una telefonata entro 3 settimane, significa che la candidatura non è stata considerata in linea con la ricerca in corso. Il suo CV rimarrà comunque a disposizione per future opportunità.\n\nCordiali saluti\n\nSelezione Gruppo Venpa\n\nContinua\n\nCandidati\n\nNome\n\nCognome\n\nEmail\n\nTelefono\n\nParlaci di te\n\nBio\n\nCurriculum Vitae\n\nHo letto e accettato la Privacy Policy\n\nVuoi parlare con noi per un supporto o una consulenza specifica?\n\nChiamaci e parla con il nostro team specializzato.\n\nTelefono\n\n+39 0421 290573\n\nCome possiamo aiutarti?\n\nInviaci qui un messaggio, siamo pronti per rispondere a tutte le tue domande.\n\nNome\n\nCognome\n\nEmail\n\nAzienda (?!?common.optional?!?)\n\nRegione Regione Abruzzo Basilicata Calabria Campania Emilia Romagna Friuli-Venezia Giulia Lazio Liguria Lombardia Marche Molise Piemonte Puglia Sardegna Sicilia Toscana Trentino Alto-Adige Umbria Val d'Aosta Veneto Estero\n\n?!?common.message?!?\n\nHo letto e accettato la Privacy Policy\n\nTi metteremo subito in contatto con la sede più vicina a te.\n\n Via L. Zecchetto, 4 - 30029 Santo Stino di Livenza (VE) +39 0421 290573\n\nRisorse\n\nParco mezziSediNoleggio in tutta ItaliaBlogContatti\n\nCorporate\n\nGruppo VenpaLavora con noiEmail security\n\nLegal\n\nPrivacy PolicyCookie PolicyTermini e condizioniGestisci preferenze cookie\n\n© Minoege Srl - Via L. Zecchetto, 4 - 30029 Santo Stino di Livenza (VE) - P.IVA 03836880272 - Tutti i diritti riservati.",
+        "apply_options": [
+          {
+            "title": "LinkedIn",
+            "link": "https://it.linkedin.com/jobs/view/tecnico-di-officina-meccanico-manutentore-rivoli-to-at-minoege-gruppo-venpa-4475028116?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "JobLeads",
+            "link": "https://www.jobleads.com/it/job/tecnico-di-officina-meccanico-manutentore-rivoli-to--rivoli--ef9ed38a6d085cf502ccb9df0361f269f?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jobijoba",
+            "link": "https://www.jobijoba.it/annunci-di-lavoro/13/5838deb97009f895d6051644ce364403?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "WhatJobs",
+            "link": "https://it.whatjobs.com/jobs/tecnico-di-officina-meccanico-manutentore/rivoli-piemonte?id=247850344&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Kit Lavoro",
+            "link": "https://www.kitlavoro.it/lavoro/648015021/tecnico-di-officina-meccanico-manutentore-rivoli-to?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJURUNOSUNPIERJIE9GRklDSU5BIE1FQ0NBTklDTyBNQU5VVEVOVE9SRSAtIFJJVk9MSSAoVE8pIiwiY29tcGFueV9uYW1lIjoiTWlub0VnZSAtIEdydXBwbyBWRU5QQSIsImh0aWRvY2lkIjoiMDBtOElLamZVZ2EwNGxLUkFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSVVWSFZ5YVc0c1VHbGxaRzF2Ym5Rc1NYUmhiSGsiLCJnbCI6Iml0IiwiaGwiOiJpdCIsImZjIjoiRXN3QkNvd0JRVVJFWWxkbFdYWnlNMUJNV2xGUWRsQXhhVWswTm5kWFdGZFNiMjQwUjNsT1duRTVSSGhIVG1WMVIyZ3lMVzFRY0cxSmJYUnJUMlZYUzBrM2FHWjNlbHBwWWtOdlJYYzBZM0pFTnpOS1NtNU5TVEZCV1hGTldVTkhPVFpYTFd3MmNVWllPRjlhZG00MVRIWk9XalZMV1VWSE5qRllZVXRXVDNaclptZHVPSFI2WjJKYUxUVndOVWRFTFRFU0YyWnpTR3RoY2tkNlRVbHFiVFZPYjFBdFRHMUNhMEZSR2lKQlNFNHdSVGRJVWtZNFVHNHliVEJMU3pocU5HZHlXVlk0TWtkSWJWZHZOMDlSIiwiZmN2IjoiMyIsImZjX2lkIjoiMDBtOElLamZVZ2EwNGxLUkFBQUFBQT09In0="
+      },
+      {
+        "title": "Tecnico Meccanico Premium - Diagnostica & Riparazioni",
+        "company_name": "Gino Spa",
+        "location": "Rivoli TO",
+        "via": "Jooble",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=-g1P212DueU75hdPAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_x2NMQvCMBCFce3u4nSTg2AjgouuQidR2u7lGo_0JM2FJC3Ff-S_NLo8Ht-D7xWfVdG0pB1rgRtpjf_2CDTyNMIerozGSUysEbZQs8eAbxbHeatZU8j8yWBxliAQJ6hEjKXNZUjJx7NSMdrSxITZUGoZlTjqZVEv6eMvujhgIG8xUXc8HZbSO7NbV-wEGo_ALr_MYhna-xe-PVYRrAAAAA&shmds=v1_Ac3VAoz0sdB44xsbL5EufWowOJReA2U9Db2AJlGF-gQv6D4bEw&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=-g1P212DueU75hdPAAAAAA%3D%3D",
+        "extensions": ["5 giorni fa", "Full-time"],
+        "source_link": "https://it.jooble.org/jdp/3476779705217773314",
+        "job_title": "Tecnico Meccanico Premium - Diagnostica & Riparazioni",
+        "description": "Gino Spa, azienda di respiro premium con sede a Rivoli, cerca un Tecnico Meccanico da inserire nel team dell'officina della filiale di Rivoli. \n\n Le tue principali responsabilità includeranno ispezionare e riparare sistemi elettrici e meccanici, assistere nella diagnosi per determinare la causa del guasto, controllare componenti per usura e qualità del lavoro, e supportare i colleghi per raggiungere gli obiettivi comuni. \n\n#J-18808-Ljbffr",
+        "apply_options": [
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/3476779705217773314?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJUZWNuaWNvIE1lY2NhbmljbyBQcmVtaXVtIC0gRGlhZ25vc3RpY2EgXHUwMDI2IFJpcGFyYXppb25pIiwiY29tcGFueV9uYW1lIjoiR2lubyBTcGEiLCJodGlkb2NpZCI6Ii1nMVAyMTJEdWVVNzVoZFBBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lVVkhWeWFXNHNVR2xsWkcxdmJuUXNTWFJoYkhrIiwiZ2wiOiJpdCIsImhsIjoiaXQiLCJmYyI6IkVzd0JDb3dCUVVSRVlsZGxXVFk0Wm1zNVZVTktSMVIzYXpsd04wWkVPV2s0WVRsT1ZrVk5VVlo0ZDNOSVRrZExlRVJXZDJ3MWFtZ3dlVXByTm1Ka05ERXlMVVZTWTJadmNHRlhha1pYYWxsb1oyRmZUall4WnpBNWFEQnFTVFpCV0UxMU9HWnpiM0ZHYW0xV1pFYzBkVzlvTmtWTk4xZFNiMDA0TTNGclMxWjBOVVJtYlRaWWRIbHRWbTVCV1VFemRWOFNGMlp6U0d0aGNrZDZUVWxxYlRWT2IxQXRURzFDYTBGUkdpSkJTRTR3UlRkSFoxRmtSbU4xTUdKQkxVaG9XV2hhYkVGd1NYUm5lSHBOYUVkUiIsImZjdiI6IjMiLCJmY19pZCI6Ii1nMVAyMTJEdWVVNzVoZFBBQUFBQUE9PSJ9"
+      },
+      {
+        "title": "Manutentore elettromeccanico",
+        "company_name": "Oggi Lavoro S.p.a.",
+        "location": "Rivoli TO",
+        "via": "Oggi Lavoro",
+        "share_link": "https://www.google.com/search?ibp=htl;jobs&q=manutentore+meccanico+Rivoli&htidocid=Kb5Vehumdrui9WMaAAAAAA%3D%3D&hl=it-IT&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_yXNMQrCQBBAUWxzBBunFtyIYBMPYKME1D5MxmGzstlZdiYhZ_G0Kja_fL96r6rmimkyTiaFgSObFRmZCFMggR3cAnEhhGeAiLMUAZ3gLOIjr0-DWdamrlWj82pogRzJWEviXpb6Jb3-0umAhXNE4-5w3C8uJ7_dtN4HuPzNu8sOHYT0_c0SAzzaD4Aa9kKdAAAA&shmds=v1_Ac3VAowZa714w_G_CLVs8AWRmaad_I_UkI9tMtQ3QVRkU3L2bg&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=manutentore+meccanico+Rivoli&htidocid=Kb5Vehumdrui9WMaAAAAAA%3D%3D",
+        "thumbnail": "https://serpapi.com/images/i/iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAhFBMVEX___8AAADKysrk5OS6urrp6enV1dW-vr6Tk5OWqqq_np7w07v6-vrx8fH09PSzs7Pe3t6srKyvx6FVVVVvb28yMjJqamoJCQkQBxRkZGRQUFFLS0soKCh6enpFRUWCgoI8PDycnJykpKMTExMGAAvD2beTr4Ps8ejX5M6PoJ_Hyt_79O37_76cAAABIklEQVRIie2SaW_DIAxAbQM220iAtiRN1yPtrq77__9v9MhOqVP3bRMPLCHhZ06AQqFQ-O84-oBUv6xi1CXZ3KWZt7cuD9Vn0blzHuEem-pvYq3GckactwsXsbXVQayjZ4jag9fRhTHxcqYbWFGTfJj01SKt38oi5mUG0XgATw48GxBHnWBt40wnuwLUCWIDGAYT2wgq7_VwRqMdRKpgzQo2jsYeudsw-tgxSg96GdAMosV2edc2k9TPOd-q9hWIrHNYMFKxlQAxb8OGSgOI5fdD2ineLyxOp8in55CcTDmAtYjQhpQIM3kvmmRY0Y0eRo859jx9fUfWngMR526MCaRyq4fJ7fb56oS57APAbnd9xKjLRICbIy-u_jm3UCgU_gyvHa0OobC_WncAAAAASUVORK5CYII.png",
+        "extensions": ["10 giorni fa", "2K €–2,8K € al mese", "Full-time"],
+        "source_link": "https://ol24.oggilavoro.eu/job/view-job.php?id=61948-manutentore-elettromeccanico-rivoli&language=it",
+        "job_title": "Manutentore elettromeccanico",
+        "description": "People, Divisione Permanent di Oggi Lavoro Spa, ricerca per azienda cliente operante nel settore alimentare un/una: MANUTENTORE ELETTROMECCANICO La risorsa sarà inserita all'interno del team di manutenzione e avrà il compito di garantire la continuità e l'efficienza degli impianti produttivi, intervenendo su guasti e anomalie di natura elettrica e meccanica e svolgendo attività di manutenzione preventiva, ordinaria e straordinaria.Attività principaliEseguire interventi di manutenzione ordinaria, straordinaria e preventiva su impianti e linee di produzione;Ricercare e diagnosticare guasti di natura elettrica, meccanica, elettromeccanica, pneumatica e oleodinamica;Ripristinare il corretto funzionamento dei macchinari nel minor tempo possibile;Effettuare controlli periodici sullo stato di efficienza degli impianti;Collaborare con il personale di produzione nella gestione delle anomalie e nell'ottimizzazione delle performance delle linee;Compilare la documentazione tecnica relativa agli interventi eseguiti;Operare nel rispetto delle procedure aziendali e delle normative in materia di sicurezza.Requisiti richiestiDiploma ad indirizzo elettrico, elettrotecnico, meccanico, meccatronico o titolo equivalente;Esperienza pregressa nel ruolo di manutentore elettromeccanico in contesti produttivi;Buona conoscenza degli impianti elettrici e meccanici industriali;Capacità di lettura degli schemi elettrici e del disegno meccanico;Disponibilità al lavoro su turni;Precisione, autonomia operativa, problem solving e predisposizione al lavoro in team.Si offreTipologia contrattuale: inserimento diretto in azienda;Retribuzione annua lorda: range compreso tra 30.000 € e 35.000 €, commisurato all'esperienza e alle competenze maturate;CCNL di riferimento: Industria Alimentare - E012;Livello di inquadramento: 3° o 2° livello, da definire in base all'esperienza, alle competenze tecniche e al grado di autonomia della risorsa;Orario di lavoro: full time su 3 turni, con disponibilità a operare su ciclo continuo in caso di picchi produttivi o particolari esigenze organizzative. Sede di lavoro: nelle vicinanze di Rivoli (TO)#divisionepermanent OGGI LAVORO S.p.A. (Aut. Min. 10/10/2007 Prot. n°13/I/0023403)L'annuncio è rivolto a tutte le persone, nel rispetto dei principi di pari opportunità, inclusione e non discriminazione. Le persone interessate sono invitate a leggere l'informativa privacy sul sito www.oggilavoro.eu.",
+        "apply_options": [
+          {
+            "title": "Oggi Lavoro",
+            "link": "https://ol24.oggilavoro.eu/job/view-job.php?id=61948-manutentore-elettromeccanico-rivoli&language=it&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Humangest",
+            "link": "https://lavoro.humangest.it/job/view-job.php?id=97557-manutentore-elettromeccanico-rivoli&language=it&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Indeed",
+            "link": "https://it.indeed.com/viewjob?jk=4b7d60e315849926&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "CVing",
+            "link": "https://s3.cving.com/en/job-offers/rivoli/manutentore-elettromeccanico?p=31&radius=15000&ea=0&verified=true&suggested=false&order=0&id=5406067&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Jooble",
+            "link": "https://it.jooble.org/jdp/1882035761508773732?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "Glassdoor",
+            "link": "https://www.glassdoor.it/job-listing/jv?jl=1010304689610&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          },
+          {
+            "title": "UCV.online",
+            "link": "https://it.ucv.online/offerte-lavoro/manutentore-elettromeccanico-rivoli-torino-con-esperienza-it/manutentore-elettromeccanico-experienced-associate-synergie-sede-italy?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+          }
+        ],
+        "job_id": "eyJqb2JfdGl0bGUiOiJNYW51dGVudG9yZSBlbGV0dHJvbWVjY2FuaWNvIiwiY29tcGFueV9uYW1lIjoiT2dnaSBMYXZvcm8gUy5wLmEuIiwiaHRpZG9jaWQiOiJLYjVWZWh1bWRydWk5V01hQUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJVVZIVnlhVzRzVUdsbFpHMXZiblFzU1hSaGJIayIsImdsIjoiaXQiLCJobCI6Iml0IiwiZmMiOiJFc3dCQ293QlFVUkVZbGRsV2toVVUwMVdPV0pZUzNKUGEwcFlURmh5VEhSUWEwc3lTSG81TFZWVVNuSjVja2swZHpSYVQzZFVRa3RGTFVkcVduUnFhMXBYYmkxUGFHMXRkVmhOYkVoSmVpMVdWVTlpVlROeVIzTlZWVmxYUVhOMlpqZE1jWFZwUkhSc1EyeFZUbHBKVWtOWU5qZFlkVWhSVGw5b0xXSk5WUzFoUTE5TlIyOWZaMDlZYW5WeWJVSkVWbmdTRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZElVRmx4Y0ZkeFlsOXNUMUZPVUhaalgwUkpSSFJFVWtkSFUxWlIiLCJmY3YiOiIzIiwiZmNfaWQiOiJLYjVWZWh1bWRydWk5V01hQUFBQUFBPT0ifQ=="
+      }
+    ],
+    "serpapi_pagination": {
+      "next_page_token": "eyJmYyI6IkVvd0RDc3dDUVVSRVlsZGxZVzVKYUZoV2JYVlFNazg0V1dkR1RIWklja3R1U1ZWbFZrSTNTQzFXYTA1Zk56ZG9aMGRZZVdab1RpMXFZMUp5UVVrd1dWTXdjRGhvT1dSTldFcDFMVWhqZFZvemFHeEpUMVl5TFRScmFraGxUVTFEUjJOWmFHNXZhalZqTUZGUU1FeEpNRlZHTkhaM1QyaDJZVUpPYzFaeVoyTkpWazlGUkRoelJYWnFZM3BWVEVsTFltOHlOVlpaUVdkMVRsaHpSWGhOY1VSNGMyZHBURGswVnpWWFdtNVZkbFl5VDBoc1duZHFTMEZqVFhkSU5WaGZjMWRzWWtGVGRYUTBURlZpZURWc01ucHlSVjk0TFMxa1NqRXhVMVpaVlRSdE1rRlVOMnRrYjNaUVNWaHpOVGhKVkZKd0xUbFVibWxOTldJNFRWcFFiSEJzT1RGQmQyRklkMnhUVFVrNU4zVkRTRTFWZFZFM2FtNWtja2RQUVVVd04wSnFVa0V0TWxkTE0waERTV1JSVFdzMlYwNDJiVTVFZWtKMmFDMUtSRFZ6TWs4dGRHbEZlRVZWWlZWa1RGSkhkMjRTRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZEdOMjltYUcweFltdzNUR2hSVFRJd05XWkdlakpqWmtSNmFFUkIiLCJmY3YiOiIzIn0=",
+      "next": "https://serpapi.com/search.json?engine=google_jobs&gl=it&google_domain=google.com&hl=it&location=Turin%2C+Piedmont%2C+Italy&next_page_token=eyJmYyI6IkVvd0RDc3dDUVVSRVlsZGxZVzVKYUZoV2JYVlFNazg0V1dkR1RIWklja3R1U1ZWbFZrSTNTQzFXYTA1Zk56ZG9aMGRZZVdab1RpMXFZMUp5UVVrd1dWTXdjRGhvT1dSTldFcDFMVWhqZFZvemFHeEpUMVl5TFRScmFraGxUVTFEUjJOWmFHNXZhalZqTUZGUU1FeEpNRlZHTkhaM1QyaDJZVUpPYzFaeVoyTkpWazlGUkRoelJYWnFZM3BWVEVsTFltOHlOVlpaUVdkMVRsaHpSWGhOY1VSNGMyZHBURGswVnpWWFdtNVZkbFl5VDBoc1duZHFTMEZqVFhkSU5WaGZjMWRzWWtGVGRYUTBURlZpZURWc01ucHlSVjk0TFMxa1NqRXhVMVpaVlRSdE1rRlVOMnRrYjNaUVNWaHpOVGhKVkZKd0xUbFVibWxOTldJNFRWcFFiSEJzT1RGQmQyRklkMnhUVFVrNU4zVkRTRTFWZFZFM2FtNWtja2RQUVVVd04wSnFVa0V0TWxkTE0waERTV1JSVFdzMlYwNDJiVTVFZWtKMmFDMUtSRFZ6TWs4dGRHbEZlRVZWWlZWa1RGSkhkMjRTRjJaelNHdGhja2Q2VFVscWJUVk9iMUF0VEcxQ2EwRlJHaUpCU0U0d1JUZEdOMjltYUcweFltdzNUR2hSVFRJd05XWkdlakpqWmtSNmFFUkIiLCJmY3YiOiIzIn0%3D&q=manutentore+meccanico+Rivoli"
+    }
+  }
+}

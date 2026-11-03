@@ -44,6 +44,3 @@ next-env.d.ts
 # ides
 .idea/
 
-# local development
-debug/*
-

@@ -66,7 +66,7 @@ export async function searchJobOffer({
       postedAt: j.detected_extensions?.posted_at,
       applyLink: j.apply_options?.[0]?.link,
       via: j.via,
-      description: normalizeDescription(j.description),
+      description: j.description,
     }),
   );
 
@@ -74,14 +74,4 @@ export async function searchJobOffer({
     jobs: dedupe(jobs, (j) => j.jobId),
     nextPageToken: response.serpapi_pagination?.next_page_token,
   };
-}
-
-/** Whitespace cleanup only — content untouched: CRLF→LF, strip line-end spaces, collapse blank-line runs to one. */
-function normalizeDescription(text: string | undefined): string | undefined {
-  if (!text) return text;
-  return text
-    .replace(/\r\n?/g, "\n")
-    .replace(/[ \t]+$/gm, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
 }

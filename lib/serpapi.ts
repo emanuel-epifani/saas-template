@@ -11,9 +11,10 @@ import { env } from "@/env";
  *   - resolveCity:  geocoding Nominatim → coordinate + nome canonico
  *   - dedupe:       helper di deduplicazione generico
  *
- * MOCK: finché env.SERPAPI_MOCK !== "false" le call esterne non partono:
- * le fixture in debug/provders-api/out/ hanno la STESSA forma dei payload
- * reali. ATTENZIONE: debug/ è gitignored → su clone fresco non ci sono.
+ * MOCK: finché env.SERPAPI_MOCK !== "false" le call esterne non partono.
+ * Ogni engine legge UN file json accanto al repo della feature
+ * (lib/<feature>/serpapi.mock.json), con la STESSA forma del payload reale
+ * salvato da una call live — sono tracciati in git.
  */
 
 const BASE_URL = "https://serpapi.com/search.json";
@@ -88,11 +89,10 @@ async function callSerpApi(
   return serpSearchResponseSchema.parse(await res.json());
 }
 
-const FIXTURES_DIR = join(process.cwd(), "debug", "provders-api", "out");
-
+// Un mock per engine, accanto al repo della feature che lo usa.
 const MOCK_FIXTURES: Record<string, string> = {
-  google_maps: "google-maps-aziende-metalmeccaniche-rivoli.json",
-  google_jobs: "google-jobs-manutentore-meccanico-rivoli.json",
+  google_maps: join("lib", "companies", "serpapi.mock.json"),
+  google_jobs: join("lib", "job-offers", "serpapi.mock.json"),
 };
 
 const serpFixtureSchema = z.object({ response: serpSearchResponseSchema });
@@ -101,7 +101,7 @@ function mockResponse(params: Record<string, string>): SerpSearchResponse {
   const file = MOCK_FIXTURES[params.engine ?? ""];
   if (!file) throw new Error(`No mock fixture for engine "${params.engine}"`);
   return serpFixtureSchema.parse(
-    JSON.parse(readFileSync(join(FIXTURES_DIR, file), "utf8")),
+    JSON.parse(readFileSync(join(process.cwd(), file), "utf8")),
   ).response;
 }
 

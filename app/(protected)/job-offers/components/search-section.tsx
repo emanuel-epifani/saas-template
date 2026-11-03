@@ -6,7 +6,6 @@ import {
   Briefcase,
   Building2,
   Clock,
-  ExternalLink,
   Globe,
   MapPin,
   MousePointerClick,
@@ -29,7 +28,6 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { findJobOffers } from "@/lib/job-offers/actions";
 import type { JobOfferResult } from "@/lib/job-offers/serpapi";
-import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
@@ -335,26 +333,9 @@ export function SearchSection() {
                         &nbsp;
                       </span>
                     )}
-                    {j.via || j.applyLink || j.salary ? (
+                    {j.via || j.salary ? (
                       <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        {j.applyLink ? (
-                          <a
-                            href={j.applyLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={texts.jobApplyAction}
-                            className="relative z-10 flex min-w-0 flex-1 items-center gap-2 rounded-sm hover:underline"
-                          >
-                            <Globe className="size-3.5 shrink-0" />
-                            <span
-                              className="min-w-0 truncate"
-                              title={j.via ?? hostname(j.applyLink)}
-                            >
-                              {j.via ?? hostname(j.applyLink)}
-                            </span>
-                            <ExternalLink className="size-3 shrink-0" />
-                          </a>
-                        ) : j.via ? (
+                        {j.via ? (
                           <>
                             <Globe className="size-3.5 shrink-0" />
                             <span className="min-w-0 truncate" title={j.via}>
@@ -369,7 +350,7 @@ export function SearchSection() {
                             </span>
                           </>
                         )}
-                        {j.salary && (j.via || j.applyLink) ? (
+                        {j.salary && j.via ? (
                           <span className="ml-auto shrink-0" title={j.salary}>
                             {j.salary}
                           </span>
