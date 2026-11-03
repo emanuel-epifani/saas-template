@@ -1,9 +1,7 @@
 import { cn } from "cn";
-import { Globe, MapPin, Phone } from "lucide-react";
-import { toneTileClasses } from "@/components/page-header";
+import { Copy, ExternalLink, Globe, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { initials } from "@/lib/utils";
 import { texts } from "@/texts";
 
 // Static, non-interactive mock of the companies search used on the landing.
@@ -78,28 +76,31 @@ export function ProductPreview() {
                   i === 0 && "bg-accent/40 ring-primary ring-2",
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <span
-                    className={cn(
-                      "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-semibold",
-                      toneTileClasses.companies,
-                    )}
-                  >
-                    {initials(c.name)}
+                <div className="flex items-start gap-2">
+                  <span className="min-w-0 flex-1 truncate font-medium">
+                    {c.name}
                   </span>
-                  <span className="truncate font-medium">{c.name}</span>
+                  <span className="text-muted-foreground text-xs tabular-nums">
+                    {i + 1}
+                  </span>
                 </div>
-                <div className="text-muted-foreground flex flex-col gap-0.5 pl-12">
+                <div className="text-muted-foreground flex flex-col gap-0.5">
                   <span className="flex min-w-0 items-center gap-1.5">
                     <MapPin className="size-3.5 shrink-0" />
-                    <span className="truncate">{c.address}</span>
+                    <span className="flex-1 truncate">{c.address}</span>
+                    <Copy className="size-3 shrink-0" />
                   </span>
                   <span className="flex min-w-0 items-center gap-1.5">
                     <Phone className="size-3.5 shrink-0" />
-                    <span className="truncate">{c.phone}</span>
-                    <span>·</span>
+                    <span className="flex-1 truncate">{c.phone}</span>
+                    <Phone className="size-3 shrink-0" />
+                    <Copy className="size-3 shrink-0" />
+                  </span>
+                  <span className="flex min-w-0 items-center gap-1.5">
                     <Globe className="size-3.5 shrink-0" />
-                    <span className="truncate">{c.site}</span>
+                    <span className="flex-1 truncate">{c.site}</span>
+                    <ExternalLink className="size-3 shrink-0" />
+                    <Copy className="size-3 shrink-0" />
                   </span>
                 </div>
               </div>

@@ -99,9 +99,12 @@ export function SearchSection() {
   }
 
   function onLoadMore() {
+    // Continue the ACTIVE search (the «…» summary), not the form draft —
+    // the draft may have been edited without pressing Cerca.
+    if (!resultQuery) return;
     startTransition(async () => {
       try {
-        const data = await findJobOffers({ term, city, nextPageToken });
+        const data = await findJobOffers({ ...resultQuery, nextPageToken });
         setResults((prev) => appendUnique(prev, data.jobs));
         setNextPageToken(data.nextPageToken);
       } catch {

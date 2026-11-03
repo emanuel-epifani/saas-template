@@ -1,7 +1,14 @@
 "use client";
 
 import { cn } from "cn";
-import { Bookmark, Building2, Copy, Globe, MapPin, Phone } from "lucide-react";
+import {
+  Building2,
+  Copy,
+  ExternalLink,
+  Globe,
+  MapPin,
+  Phone,
+} from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -11,19 +18,12 @@ import { SearchBar } from "@/components/search-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/tooltip";
 import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
-import { hostname, initials } from "@/lib/utils";
+import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { consumeSearchIntent } from "../../lib/search-intent";
 import {
@@ -69,7 +69,6 @@ export function SearchSection() {
   } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const autoSearched = useRef(false);
@@ -120,10 +119,13 @@ export function SearchSection() {
   }
 
   function onLoadMore() {
+    // Continue the ACTIVE search (the «…» summary), not the form draft —
+    // the draft may have been edited without pressing Cerca.
+    if (!resultQuery) return;
     const next = offset + PAGE_SIZE;
     startTransition(async () => {
       try {
-        const data = await findCompanies({ term, city, start: next, radius });
+        const data = await findCompanies({ ...resultQuery, start: next });
         setResults((prev) => appendUnique(prev, data.companies));
         setHasMore(data.hasMore);
         setOffset(next);
@@ -288,15 +290,7 @@ export function SearchSection() {
                         : "hover:bg-accent/30",
                     )}
                   >
-                    <div className="flex items-start gap-3">
-                      <span
-                        className={cn(
-                          "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-semibold",
-                          toneTileClasses.companies,
-                        )}
-                      >
-                        {initials(c.name)}
-                      </span>
+                    <div className="flex items-start gap-2">
                       <button
                         ref={(el) => {
                           cardRefs.current[i] = el;
@@ -311,96 +305,126 @@ export function SearchSection() {
                         {i + 1}
                       </span>
                     </div>
-                    <div className="text-muted-foreground flex flex-col gap-0.5 pl-12">
-                      {c.address ? (
-                        <span className="flex min-w-0 items-center gap-1.5">
-                          <MapPin className="size-3.5 shrink-0" />
-                          <span className="truncate">{c.address}</span>
+                    {c.address ? (
+                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span
+                          className="min-w-0 flex-1 truncate"
+                          title={c.address}
+                        >
+                          {c.address}
                         </span>
-                      ) : null}
-                      {c.phone || c.website ? (
-                        <span className="flex min-w-0 items-center gap-1.5">
-                          {c.phone ? (
-                            <>
-                              <Phone className="size-3.5 shrink-0" />
-                              <span className="truncate">{c.phone}</span>
-                            </>
-                          ) : null}
-                          {c.phone && c.website ? <span>·</span> : null}
-                          {c.website ? (
-                            <>
-                              <Globe className="size-3.5 shrink-0" />
-                              <span className="truncate">
-                                {hostname(c.website)}
-                              </span>
-                            </>
-                          ) : null}
+                        <span className="relative z-10 flex shrink-0 items-center">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                className="text-muted-foreground hover:text-foreground"
+                                onClick={() =>
+                                  copy(c.address ?? "", texts.addressCopied)
+                                }
+                              >
+                                <Copy />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{texts.copyAddress}</TooltipContent>
+                          </Tooltip>
                         </span>
-                      ) : null}
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="relative z-10 flex items-center gap-1">
-                      {c.phone ? (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon-sm" asChild>
-                              <a href={`tel:${c.phone}`}>
-                                <Phone />
-                              </a>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>{texts.callAction}</TooltipContent>
-                        </Tooltip>
-                      ) : null}
-                      {c.website ? (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon-sm"
-                              onClick={() => setPreviewUrl(c.website ?? null)}
-                            >
-                              <Globe />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            {texts.previewSiteAction}
-                          </TooltipContent>
-                        </Tooltip>
-                      ) : null}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => {
-                              navigator.clipboard
-                                .writeText(
-                                  [c.name, c.address, c.phone, c.website]
-                                    .filter(Boolean)
-                                    .join("\n"),
-                                )
-                                .then(() => toast.success(texts.copied));
-                            }}
-                          >
-                            <Copy />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {texts.copyContactsAction}
-                        </TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="ml-auto">
-                            <Button variant="ghost" size="icon-sm" disabled>
-                              <Bookmark />
-                            </Button>
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent>{texts.saveSoon}</TooltipContent>
-                      </Tooltip>
-                    </div>
+                      </div>
+                    ) : null}
+                    {c.phone ? (
+                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                        <Phone className="size-3.5 shrink-0" />
+                        <span
+                          className="min-w-0 flex-1 truncate"
+                          title={c.phone}
+                        >
+                          {c.phone}
+                        </span>
+                        <span className="relative z-10 flex shrink-0 items-center">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                className="text-muted-foreground hover:text-foreground"
+                                asChild
+                              >
+                                <a href={`tel:${c.phone.replace(/\s+/g, "")}`}>
+                                  <Phone />
+                                </a>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{texts.callAction}</TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                className="text-muted-foreground hover:text-foreground"
+                                onClick={() =>
+                                  copy(c.phone ?? "", texts.phoneCopied)
+                                }
+                              >
+                                <Copy />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{texts.copyPhone}</TooltipContent>
+                          </Tooltip>
+                        </span>
+                      </div>
+                    ) : null}
+                    {c.website ? (
+                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                        <Globe className="size-3.5 shrink-0" />
+                        <span
+                          className="min-w-0 flex-1 truncate"
+                          title={c.website}
+                        >
+                          {hostname(c.website)}
+                        </span>
+                        <span className="relative z-10 flex shrink-0 items-center">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                className="text-muted-foreground hover:text-foreground"
+                                asChild
+                              >
+                                <a
+                                  href={c.website}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  <ExternalLink />
+                                </a>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {texts.openSiteAction}
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                className="text-muted-foreground hover:text-foreground"
+                                onClick={() =>
+                                  copy(c.website ?? "", texts.websiteCopied)
+                                }
+                              >
+                                <Copy />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{texts.copyWebsite}</TooltipContent>
+                          </Tooltip>
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                 </li>
               ))}
@@ -430,30 +454,14 @@ export function SearchSection() {
           </div>
         </div>
       ) : null}
-
-      <Dialog
-        open={previewUrl != null}
-        onOpenChange={(open) => !open && setPreviewUrl(null)}
-      >
-        <DialogContent className="grid-cols-[minmax(0,1fr)] sm:max-w-5xl">
-          <DialogHeader>
-            <DialogTitle className="truncate">{previewUrl}</DialogTitle>
-          </DialogHeader>
-          {previewUrl ? (
-            <iframe
-              src={previewUrl}
-              title={previewUrl}
-              className="h-[70vh] w-full rounded-md border"
-            />
-          ) : null}
-          <Button asChild variant="outline" className="w-fit">
-            <a href={previewUrl ?? "#"} target="_blank" rel="noreferrer">
-              {texts.openSiteAction}
-            </a>
-          </Button>
-        </DialogContent>
-      </Dialog>
     </div>
+  );
+}
+
+function copy(value: string, message: string) {
+  navigator.clipboard.writeText(value).then(
+    () => toast.success(message),
+    () => toast.error(texts.copyError),
   );
 }
 
@@ -464,22 +472,12 @@ function PlaceholderCard() {
   return (
     <div
       aria-hidden="true"
-      className="bg-card/50 flex flex-col gap-2 rounded-xl border border-dashed p-3"
+      className="bg-card/50 flex flex-col gap-1.5 rounded-xl border border-dashed p-3"
     >
-      <div className="flex items-center gap-3">
-        <span className="bg-muted size-9 rounded-lg" />
-        <span className="bg-muted h-4 w-2/3 rounded" />
-      </div>
-      <div className="flex flex-col gap-1.5 pl-12">
-        <span className="bg-muted h-3 w-4/5 rounded" />
-        <span className="bg-muted h-3 w-3/5 rounded" />
-      </div>
-      <div className="mt-1 flex gap-1">
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted ml-auto size-8 rounded-lg" />
-      </div>
+      <span className="bg-muted h-4 w-2/3 rounded" />
+      <span className="bg-muted h-3 w-4/5 rounded" />
+      <span className="bg-muted h-3 w-3/5 rounded" />
+      <span className="bg-muted h-3 w-1/2 rounded" />
     </div>
   );
 }
