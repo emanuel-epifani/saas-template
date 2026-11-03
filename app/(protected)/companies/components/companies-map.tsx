@@ -1,15 +1,7 @@
 "use client";
 
 import L from "leaflet";
-import { useEffect, useMemo } from "react";
-import {
-  Circle,
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMap,
-} from "react-leaflet";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import "leaflet/dist/leaflet.css";
@@ -44,30 +36,6 @@ const pinIcon = L.divIcon({
   iconAnchor: [13, 32],
 });
 
-function FitBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (bounds) map.fitBounds(bounds, { padding: [30, 30] });
-  }, [bounds, map]);
-  return null;
-}
-
-function CenterOn({
-  target,
-}: {
-  target: { lat: number; lng: number; zoom?: number } | null;
-}) {
-  const map = useMap();
-  useEffect(() => {
-    if (target) {
-      map.setView([target.lat, target.lng], target.zoom ?? map.getZoom(), {
-        animate: true,
-      });
-    }
-  }, [target, map]);
-  return null;
-}
-
 export default function CompaniesMap({
   companies,
   center,
@@ -77,6 +45,16 @@ export default function CompaniesMap({
   onSelect,
   onHover,
 }: CompaniesMapProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const markersRef = useRef<(L.Marker | null)[]>([]);
+  const [map, setMap] = useState<L.Map | null>(null);
+  const onSelectRef = useRef(onSelect);
+  const onHoverRef = useRef(onHover);
+  onSelectRef.current = onSelect;
+  onHoverRef.current = onHover;
+  const highlightedRef = useRef(highlightedIndex);
+  highlightedRef.current = highlightedIndex;
+
   // Fit sul cerchio del raggio quando c'è (mostra l'area cercata),
   // altrimenti sui pin dei risultati.
   const bounds = useMemo<L.LatLngBoundsExpression | null>(() => {
@@ -96,50 +74,91 @@ export default function CompaniesMap({
     return { lat: c.lat, lng: c.lon };
   }, [companies, selectedIndex]);
 
-  return (
-    <MapContainer
-      center={[45.07, 7.52]}
-      zoom={11}
-      className="h-full w-full"
-      scrollWheelZoom
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <FitBounds bounds={bounds} />
-      <CenterOn target={selectedTarget} />
-      {center ? (
-        <Circle
-          center={[center.lat, center.lng]}
-          radius={radiusM}
-          pathOptions={{
-            color: "var(--primary)",
-            weight: 1.5,
-            fillOpacity: 0.08,
-          }}
-        />
-      ) : null}
-      {companies.map((c, i) =>
-        c.lat != null && c.lon != null ? (
-          <Marker
-            key={c.key}
-            position={[c.lat, c.lon]}
-            icon={i === highlightedIndex ? pinIcon : dotIcon}
-            eventHandlers={{
-              click: () => onSelect(i),
-              mouseover: () => onHover(i),
-              mouseout: () => onHover(null),
-            }}
-          >
-            <Popup>
-              <strong>{c.name}</strong>
-              {c.address ? <br /> : null}
-              {c.address}
-            </Popup>
-          </Marker>
-        ) : null,
-      )}
-    </MapContainer>
-  );
+  // Imperative Leaflet: Next keeps hidden routes alive and re-runs effects on
+  // restore; react-leaflet can't survive that (map container reused). We
+  // create a fresh inner element per effect-mount, so Leaflet never sees a
+  // recycled node, and tear it down in cleanup.
+  useEffect(() => {
+    const host = containerRef.current;
+    if (!host) return;
+    const el = document.createElement("div");
+    el.className = "h-full w-full";
+    host.appendChild(el);
+    const m = L.map(el, { scrollWheelZoom: true }).setView([45.07, 7.52], 11);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(m);
+    setMap(m);
+    return () => {
+      m.remove();
+      el.remove();
+      setMap(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!map || !center) return;
+    const circle = L.circle([center.lat, center.lng], {
+      radius: radiusM,
+      color: "var(--primary)",
+      weight: 1.5,
+      fillOpacity: 0.08,
+    }).addTo(map);
+    return () => {
+      circle.remove();
+    };
+  }, [map, center, radiusM]);
+
+  useEffect(() => {
+    if (!map) return;
+    const markers = companies.map((c, i) => {
+      if (c.lat == null || c.lon == null) return null;
+      const content = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = c.name;
+      content.appendChild(title);
+      if (c.address) {
+        content.appendChild(document.createElement("br"));
+        content.appendChild(document.createTextNode(c.address));
+      }
+      return L.marker([c.lat, c.lon], {
+        icon: i === highlightedRef.current ? pinIcon : dotIcon,
+      })
+        .on("click", () => onSelectRef.current(i))
+        .on("mouseover", () => onHoverRef.current(i))
+        .on("mouseout", () => onHoverRef.current(null))
+        .bindPopup(content)
+        .addTo(map);
+    });
+    markersRef.current = markers;
+    return () => {
+      for (const m of markers) m?.remove();
+      markersRef.current = [];
+    };
+  }, [map, companies]);
+
+  useEffect(() => {
+    if (!map) return;
+    markersRef.current.forEach((m, i) => {
+      m?.setIcon(i === highlightedIndex ? pinIcon : dotIcon);
+    });
+  }, [map, highlightedIndex]);
+
+  useEffect(() => {
+    if (!map || !bounds) return;
+    map.fitBounds(bounds, { padding: [30, 30] });
+  }, [map, bounds]);
+
+  useEffect(() => {
+    // No animate:true — the pan animation outlives <Activity> hide and
+    // crashes on the detached node ("_leaflet_pos" of undefined).
+    if (map && selectedTarget) {
+      map.setView([selectedTarget.lat, selectedTarget.lng], map.getZoom(), {
+        animate: false,
+      });
+    }
+  }, [map, selectedTarget]);
+
+  return <div ref={containerRef} className="h-full w-full" />;
 }

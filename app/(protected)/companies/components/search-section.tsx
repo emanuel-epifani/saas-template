@@ -22,6 +22,7 @@ import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
+import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
 import { mapsDirectionsUrl } from "../lib/maps-url";
 import {
@@ -35,6 +36,17 @@ import {
 const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
 
 const PAGE_SIZE = 20;
+
+interface Snapshot {
+  results: CompanyResult[];
+  center: { lat: number; lng: number } | null;
+  hasMore: boolean;
+  offset: number;
+  resultQuery: { term: string; city: string; radius: number };
+  selectedIndex: number | null;
+}
+
+const cache = createSearchCache<Snapshot>();
 
 export function SearchSection() {
   const router = useRouter();
@@ -139,19 +151,52 @@ export function SearchSection() {
   // have no intent flag, so they only prefill the form: NO paid SerpAPI
   // call. The ref survives StrictMode's double effect. Deps intentionally
   // empty: back/forward navigation does NOT re-search (accepted trade-off).
+  // Mount order: explicit intent wins (fresh search, overwrites cache) →
+  // else restore the cached snapshot for this exact URL (back/forward,
+  // sidebar navigation — zero SerpAPI calls) → else idle. Reload and
+  // shared links have neither, so they only prefill the form.
   // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
   useEffect(() => {
     if (autoSearched.current) return;
     autoSearched.current = true;
     const params = { term, city, radius };
-    if (
-      params.term &&
-      params.city &&
-      consumeSearchIntent(companiesSearchHref(params))
-    ) {
+    if (!params.term || !params.city) return;
+    const href = companiesSearchHref(params);
+    if (consumeSearchIntent(href)) {
       runSearch(params);
+      return;
+    }
+    const snap = cache.restore(href);
+    if (!snap) return;
+    setResults(snap.results);
+    setCenter(snap.center);
+    setHasMore(snap.hasMore);
+    setOffset(snap.offset);
+    setResultQuery(snap.resultQuery);
+    setSelectedIndex(snap.selectedIndex);
+    setSearched(true);
+    if (snap.selectedIndex != null) {
+      requestAnimationFrame(() => {
+        cardRefs.current[snap.selectedIndex ?? -1]?.scrollIntoView({
+          block: "nearest",
+        });
+      });
     }
   }, []);
+
+  // Keep the cache in sync with the ACTIVE search — every change after a
+  // completed search (results, selection, paging) refreshes the snapshot.
+  useEffect(() => {
+    if (!searched || !resultQuery) return;
+    cache.save(companiesSearchHref(resultQuery), {
+      results,
+      center,
+      hasMore,
+      offset,
+      resultQuery,
+      selectedIndex,
+    });
+  }, [searched, results, center, hasMore, offset, resultQuery, selectedIndex]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -301,27 +346,37 @@ export function SearchSection() {
                         rel="noreferrer"
                         title={`${texts.directionsAction}: ${c.address}`}
                         aria-label={`${texts.directionsAction}: ${c.address}`}
-                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
                       >
                         <MapPin className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
-                          {c.address}
-                        </span>
+                        <span className="min-w-0 truncate">{c.address}</span>
                       </a>
-                    ) : null}
+                    ) : (
+                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span className="min-w-0 truncate">
+                          {texts.noAddress}
+                        </span>
+                      </span>
+                    )}
                     {c.phone ? (
                       <a
                         href={`tel:${c.phone.replace(/\s+/g, "")}`}
                         title={`${texts.callAction}: ${c.phone}`}
                         aria-label={`${texts.callAction}: ${c.phone}`}
-                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
                       >
                         <Phone className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
-                          {c.phone}
-                        </span>
+                        <span className="min-w-0 truncate">{c.phone}</span>
                       </a>
-                    ) : null}
+                    ) : (
+                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        <Phone className="size-3.5 shrink-0" />
+                        <span className="min-w-0 truncate">
+                          {texts.noPhone}
+                        </span>
+                      </span>
+                    )}
                     {c.website ? (
                       <a
                         href={c.website}
@@ -329,14 +384,21 @@ export function SearchSection() {
                         rel="noreferrer"
                         title={`${texts.openSiteAction}: ${c.website}`}
                         aria-label={`${texts.openSiteAction}: ${c.website}`}
-                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
                       >
                         <Globe className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
+                        <span className="min-w-0 truncate">
                           {hostname(c.website)}
                         </span>
                       </a>
-                    ) : null}
+                    ) : (
+                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        <Globe className="size-3.5 shrink-0" />
+                        <span className="min-w-0 truncate">
+                          {texts.noWebsite}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}

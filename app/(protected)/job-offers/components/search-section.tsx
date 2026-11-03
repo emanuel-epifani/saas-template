@@ -38,8 +38,18 @@ import { findJobOffers } from "@/lib/job-offers/actions";
 import type { JobOfferResult } from "@/lib/job-offers/serpapi";
 import { initials } from "@/lib/utils";
 import { texts } from "@/texts";
+import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
 import { JOB_EXAMPLES, jobOffersSearchHref } from "../lib/search-params";
+
+interface Snapshot {
+  results: JobOfferResult[];
+  nextPageToken?: string;
+  resultQuery: { term: string; city: string };
+  selectedIndex: number | null;
+}
+
+const cache = createSearchCache<Snapshot>();
 
 export function SearchSection() {
   const router = useRouter();
@@ -128,19 +138,48 @@ export function SearchSection() {
   // have no intent flag, so they only prefill the form: NO paid SerpAPI
   // call. The ref survives StrictMode's double effect. Deps intentionally
   // empty: back/forward navigation does NOT re-search (accepted trade-off).
+  // Mount order: explicit intent wins (fresh search, overwrites cache) →
+  // else restore the cached snapshot for this exact URL (back/forward,
+  // sidebar navigation — zero SerpAPI calls) → else idle. Reload and
+  // shared links have neither, so they only prefill the form.
   // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only by design
   useEffect(() => {
     if (autoSearched.current) return;
     autoSearched.current = true;
     const params = { term, city };
-    if (
-      params.term &&
-      params.city &&
-      consumeSearchIntent(jobOffersSearchHref(params))
-    ) {
+    if (!params.term || !params.city) return;
+    const href = jobOffersSearchHref(params);
+    if (consumeSearchIntent(href)) {
       runSearch(params);
+      return;
+    }
+    const snap = cache.restore(href);
+    if (!snap) return;
+    setResults(snap.results);
+    setNextPageToken(snap.nextPageToken);
+    setResultQuery(snap.resultQuery);
+    setSelectedIndex(snap.selectedIndex);
+    setSearched(true);
+    if (snap.selectedIndex != null) {
+      requestAnimationFrame(() => {
+        cardRefs.current[snap.selectedIndex ?? -1]?.scrollIntoView({
+          block: "nearest",
+        });
+      });
     }
   }, []);
+
+  // Keep the cache in sync with the ACTIVE search — every change after a
+  // completed search (results, selection, paging) refreshes the snapshot.
+  useEffect(() => {
+    if (!searched || !resultQuery) return;
+    cache.save(jobOffersSearchHref(resultQuery), {
+      results,
+      nextPageToken,
+      resultQuery,
+      selectedIndex,
+    });
+  }, [searched, results, nextPageToken, resultQuery, selectedIndex]);
 
   return (
     <div className="flex flex-col gap-6">
