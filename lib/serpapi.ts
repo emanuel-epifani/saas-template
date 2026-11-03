@@ -28,7 +28,6 @@ const USE_MOCK = env.SERPAPI_MOCK !== "false";
 const serpLocalResultSchema = z.object({
   title: z.string().optional(),
   address: z.string().optional(),
-  place_id: z.string().optional(),
   phone: z.string().optional(),
   website: z.string().optional(),
   gps_coordinates: z

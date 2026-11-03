@@ -1,7 +1,7 @@
 "use client";
 
 import L from "leaflet";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import "leaflet/dist/leaflet.css";
@@ -54,25 +54,14 @@ export default function CompaniesMap({
   onHoverRef.current = onHover;
   const highlightedRef = useRef(highlightedIndex);
   highlightedRef.current = highlightedIndex;
+  const companiesRef = useRef(companies);
+  companiesRef.current = companies;
 
-  // Fit sul cerchio del raggio quando c'è (mostra l'area cercata),
-  // altrimenti sui pin dei risultati.
-  const bounds = useMemo<L.LatLngBoundsExpression | null>(() => {
-    if (center) return L.latLng(center.lat, center.lng).toBounds(radiusM * 2);
-    const pts = companies
-      .filter(
-        (c): c is CompanyResult & { lat: number; lon: number } =>
-          c.lat != null && c.lon != null,
-      )
-      .map((c) => [c.lat, c.lon] as [number, number]);
-    return pts.length > 0 ? pts : null;
-  }, [companies, center, radiusM]);
-
-  const selectedTarget = useMemo<{ lat: number; lng: number } | null>(() => {
-    const c = selectedIndex != null ? companies[selectedIndex] : undefined;
-    if (!c || c.lat == null || c.lon == null) return null;
-    return { lat: c.lat, lng: c.lon };
-  }, [companies, selectedIndex]);
+  // Fit only when the searched area changes — appending results ("Carica
+  // altri") must not reset the user's zoom/pan.
+  const fitKey = center
+    ? `${center.lat},${center.lng},${radiusM}`
+    : companies.map((c) => c.key).join("|");
 
   // Imperative Leaflet: Next keeps hidden routes alive and re-runs effects on
   // restore; react-leaflet can't survive that (map container reused). We
@@ -145,20 +134,36 @@ export default function CompaniesMap({
     });
   }, [map, highlightedIndex]);
 
+  // Fit sul cerchio del raggio quando c'è (mostra l'area cercata),
+  // altrimenti sui pin dei risultati — keyed on fitKey, not the data.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fitKey gates the fit
   useEffect(() => {
-    if (!map || !bounds) return;
-    map.fitBounds(bounds, { padding: [30, 30] });
-  }, [map, bounds]);
+    if (!map || !fitKey) return;
+    const cs = companiesRef.current;
+    const b = center
+      ? L.latLng(center.lat, center.lng).toBounds(radiusM * 2)
+      : cs
+          .filter(
+            (c): c is CompanyResult & { lat: number; lon: number } =>
+              c.lat != null && c.lon != null,
+          )
+          .map((c) => [c.lat, c.lon] as [number, number]);
+    if (Array.isArray(b) ? b.length > 0 : b) {
+      map.fitBounds(b, { padding: [30, 30] });
+    }
+  }, [map, fitKey]);
 
+  // Pan to the selected card only when the SELECTION changes — load-more
+  // appends must not re-pan.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: gated on selectedIndex
   useEffect(() => {
+    if (!map || selectedIndex == null) return;
+    const c = companiesRef.current[selectedIndex];
+    if (!c || c.lat == null || c.lon == null) return;
     // No animate:true — the pan animation outlives <Activity> hide and
     // crashes on the detached node ("_leaflet_pos" of undefined).
-    if (map && selectedTarget) {
-      map.setView([selectedTarget.lat, selectedTarget.lng], map.getZoom(), {
-        animate: false,
-      });
-    }
-  }, [map, selectedTarget]);
+    map.setView([c.lat, c.lon], map.getZoom(), { animate: false });
+  }, [map, selectedIndex]);
 
   return <div ref={containerRef} className="h-full w-full" />;
 }
