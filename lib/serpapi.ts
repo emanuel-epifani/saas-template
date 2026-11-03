@@ -56,8 +56,19 @@ const serpJobResultSchema = z.object({
     .optional(),
 });
 
-const serpSearchResponseSchema = z.object({
+// Due schemi standalone, uno per engine — condividono solo `error`.
+// google_maps pagina a offset (`start`): `next` è solo un link alla
+// pagina successiva, usato come flag "c'è altro". google_jobs pagina a
+// token opaco: `next_page_token` va rimandato indietro com'è.
+const serpMapsResponseSchema = z.object({
   local_results: z.array(serpLocalResultSchema).optional(),
+  serpapi_pagination: z
+    .object({ next: z.string().optional() })
+    .optional(),
+  error: z.string().optional(),
+});
+
+const serpJobsResponseSchema = z.object({
   jobs_results: z.array(serpJobResultSchema).optional(),
   serpapi_pagination: z
     .object({
@@ -70,45 +81,64 @@ const serpSearchResponseSchema = z.object({
 
 export type SerpLocalResult = z.infer<typeof serpLocalResultSchema>;
 export type SerpJobResult = z.infer<typeof serpJobResultSchema>;
-export type SerpSearchResponse = z.infer<typeof serpSearchResponseSchema>;
+export type SerpMapsResponse = z.infer<typeof serpMapsResponseSchema>;
+export type SerpJobsResponse = z.infer<typeof serpJobsResponseSchema>;
 
 // ---------------------------------------------------------------------------
 // Call — 1 call riuscita = 1 credito. `querySerpApi` è l'unico punto di
 // uscita: sopra c'è solo lo switch mock/reale.
+// Engine → schema del payload + file mock accanto al repo della feature:
+// una sola fonte di verità per real e mock.
 // ---------------------------------------------------------------------------
 
-async function callSerpApi(
-  params: Record<string, string>,
-): Promise<SerpSearchResponse> {
+const engines = {
+  google_maps: {
+    schema: serpMapsResponseSchema,
+    mockFile: join("lib", "companies", "serpapi.mock.json"),
+  },
+  google_jobs: {
+    schema: serpJobsResponseSchema,
+    mockFile: join("lib", "job-offers", "serpapi.mock.json"),
+  },
+} as const;
+
+type Engine = keyof typeof engines;
+
+async function fetchSerpApi(params: Record<string, string>): Promise<unknown> {
   const url = new URL(BASE_URL);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
   url.searchParams.set("api_key", env.SERPAPI_API_KEY ?? "");
 
   const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`SerpApi HTTP ${res.status}`);
-  return serpSearchResponseSchema.parse(await res.json());
+  return res.json();
 }
 
-// Un mock per engine, accanto al repo della feature che lo usa.
-const MOCK_FIXTURES: Record<string, string> = {
-  google_maps: join("lib", "companies", "serpapi.mock.json"),
-  google_jobs: join("lib", "job-offers", "serpapi.mock.json"),
-};
+const serpFixtureEnvelopeSchema = z.object({ response: z.unknown() });
 
-const serpFixtureSchema = z.object({ response: serpSearchResponseSchema });
-
-function mockResponse(params: Record<string, string>): SerpSearchResponse {
-  const file = MOCK_FIXTURES[params.engine ?? ""];
-  if (!file) throw new Error(`No mock fixture for engine "${params.engine}"`);
-  return serpFixtureSchema.parse(
+function readMockFile(file: string): unknown {
+  return serpFixtureEnvelopeSchema.parse(
     JSON.parse(readFileSync(join(process.cwd(), file), "utf8")),
   ).response;
 }
 
 export function querySerpApi(
-  params: Record<string, string>,
-): Promise<SerpSearchResponse> {
-  return USE_MOCK ? Promise.resolve(mockResponse(params)) : callSerpApi(params);
+  params: Record<string, string> & { engine: "google_maps" },
+): Promise<SerpMapsResponse>;
+export function querySerpApi(
+  params: Record<string, string> & { engine: "google_jobs" },
+): Promise<SerpJobsResponse>;
+export async function querySerpApi(
+  params: Record<string, string> & { engine: Engine },
+): Promise<SerpMapsResponse | SerpJobsResponse> {
+  const { schema, mockFile } = engines[params.engine];
+  const raw = USE_MOCK ? readMockFile(mockFile) : await fetchSerpApi(params);
+  const response = schema.parse(raw);
+  // SerpApi segnala gli errori a livello API (quota esaurita, parametri
+  // invalidi) dentro HTTP 200, nel campo `error` — senza questo check
+  // il caller li leggerebbe come "0 risultati".
+  if (response.error) throw new Error(`SerpApi: ${response.error}`);
+  return response;
 }
 
 // ---------------------------------------------------------------------------

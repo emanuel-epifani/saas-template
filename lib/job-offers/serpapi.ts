@@ -43,7 +43,7 @@ export async function searchJobOffer({
   nextPageToken,
 }: JobOfferSearchInput): Promise<JobOfferSearchResult> {
   const { canonicalName } = await resolveCity(city);
-  const params: Record<string, string> = {
+  const params: Record<string, string> & { engine: "google_jobs" } = {
     engine: "google_jobs",
     // La città va anche in `q`: `location` da solo filtra a livello di
     // provincia, quindi "pizzaiolo" + Collegno restituiva tutta l'area

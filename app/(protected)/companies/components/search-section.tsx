@@ -1,7 +1,13 @@
 "use client";
 
 import { cn } from "cn";
-import { Building2, Globe, MapPin, Phone } from "lucide-react";
+import {
+  Building2,
+  Globe,
+  LoaderCircle,
+  MapPin,
+  Phone,
+} from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -298,7 +304,10 @@ export function SearchSection() {
       {status === "results" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
           <div className="flex h-[70vh] flex-col gap-3">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+              {pending ? (
+                <LoaderCircle className="size-3.5 animate-spin" />
+              ) : null}
               {results.length} {texts.resultsLabel}
               {resultQuery ? (
                 <>
@@ -308,7 +317,12 @@ export function SearchSection() {
                 </>
               ) : null}
             </p>
-            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2">
+            <ul
+              className={cn(
+                "scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2 transition-opacity",
+                pending && "opacity-60",
+              )}
+            >
               {results.map((c, i) => (
                 <li
                   key={c.key}
@@ -397,12 +411,15 @@ export function SearchSection() {
                 onClick={onLoadMore}
                 disabled={pending}
               >
+                {pending ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : null}
                 {pending ? texts.searching : texts.loadMore}
               </Button>
             ) : null}
           </div>
 
-          <div className="sticky top-4 h-[70vh] self-start overflow-hidden rounded-xl border shadow-sm">
+          <div className="relative sticky top-4 h-[70vh] self-start overflow-hidden rounded-xl border shadow-sm">
             <CompaniesMap
               companies={results}
               center={center}
@@ -412,6 +429,14 @@ export function SearchSection() {
               onSelect={select}
               onHover={setHoveredIndex}
             />
+            {pending ? (
+              // La mappa resta leggibile e interattiva: solo un chip
+              // leggero in angolo segnala l'aggiornamento in corso.
+              <div className="bg-card/90 text-muted-foreground pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow backdrop-blur">
+                <LoaderCircle className="size-3.5 animate-spin" />
+                {texts.updating}
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

@@ -7,6 +7,7 @@ import {
   Building2,
   Clock,
   Globe,
+  LoaderCircle,
   MapPin,
   MousePointerClick,
 } from "lucide-react";
@@ -259,7 +260,10 @@ export function SearchSection() {
       {status === "results" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
           <div className="flex h-[70vh] flex-col gap-3">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+              {pending ? (
+                <LoaderCircle className="size-3.5 animate-spin" />
+              ) : null}
               {results.length} {texts.resultsLabel}
               {resultQuery ? (
                 <>
@@ -269,7 +273,12 @@ export function SearchSection() {
                 </>
               ) : null}
             </p>
-            <ul className="scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2">
+            <ul
+              className={cn(
+                "scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2 transition-opacity",
+                pending && "opacity-60",
+              )}
+            >
               {results.map((j, i) => (
                 <li key={j.jobId}>
                   <div
@@ -297,7 +306,7 @@ export function SearchSection() {
                     </div>
                     {j.companyName ? (
                       <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Building2 className="text-jobs size-3.5 shrink-0" />
+                        <Building2 className="size-3.5 shrink-0" />
                         <span
                           className="min-w-0 truncate"
                           title={j.companyName}
@@ -375,12 +384,20 @@ export function SearchSection() {
                 onClick={onLoadMore}
                 disabled={pending}
               >
+                {pending ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : null}
                 {pending ? texts.searching : texts.loadMore}
               </Button>
             ) : null}
           </div>
 
-          <aside className="bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm">
+          <aside
+            className={cn(
+              "bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm transition-opacity",
+              pending && "opacity-60",
+            )}
+          >
             {selected ? (
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex min-w-0 flex-col gap-0.5">

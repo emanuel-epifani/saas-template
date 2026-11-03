@@ -1,4 +1,4 @@
-import { MapPin, Search } from "lucide-react";
+import { LoaderCircle, MapPin, Search } from "lucide-react";
 
 import type { SearchBarProps } from "@/app/models";
 import { Button } from "@/components/ui/button";
@@ -97,6 +97,7 @@ export function SearchBar({
         </>
       ) : null}
       <Button type="submit" size="xl" disabled={pending}>
+        {pending ? <LoaderCircle className="animate-spin" /> : null}
         {pending ? texts.searching : texts.searchAction}
       </Button>
     </form>

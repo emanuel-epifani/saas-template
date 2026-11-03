@@ -57,7 +57,7 @@ export async function searchCompany({
   radius,
 }: CompanySearchInput): Promise<CompanySearchResult> {
   const { lat, lng } = await resolveCity(city);
-  const params = {
+  const params: Record<string, string> & { engine: "google_maps" } = {
     engine: "google_maps",
     q: term,
     ll: `@${lat},${lng},${radiusToZoom(radius)}z`,

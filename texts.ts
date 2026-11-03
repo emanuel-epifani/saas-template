@@ -90,7 +90,8 @@ export const texts = {
   cityLabel: "Zona",
   cityPlaceholder: "Collegno…",
   searchAction: "Cerca",
-  searching: "Ricerca…",
+  searching: "Ricerca in corso…",
+  updating: "Aggiornamento…",
   searchIdleTitle: "Inizia una ricerca",
   searchIdleDescCompanies:
     "Scegli settore e zona: troverai aziende con contatti e posizione sulla mappa.",
