@@ -20,7 +20,7 @@ export interface CompanySearchInput {
 }
 
 export interface CompanyResult {
-  /** Chiave dedupe + key React: name|address (calcolata al normalize). */
+  /** Google Place ID: chiave dedupe + key React (+ future external_id su DB). */
   key: string;
   name: string;
   address?: string;
@@ -37,9 +37,6 @@ export interface CompanySearchResult {
   /** Centro geocodificato della città — la UI ci disegna il cerchio del raggio. */
   center: { lat: number; lng: number };
 }
-
-const companyKey = (name: string, address?: string): string =>
-  `${name}|${address ?? ""}`.toLowerCase();
 
 /**
  * Raggio (km) → zoom `ll`. Il parametro reale è l'altezza del viewport
@@ -70,7 +67,7 @@ export async function searchCompany({
 
   const companies = (response.local_results ?? []).map(
     (p): CompanyResult => ({
-      key: companyKey(p.title ?? "", p.address),
+      key: p.place_id,
       name: p.title ?? "",
       address: p.address,
       phone: p.phone,

@@ -6,7 +6,7 @@
  * `import type` dai client component (zero bundle server-side).
  */
 
-import { dedupe, querySerpApi, resolveCity } from "@/lib/serpapi";
+import { dedupe, jobHtidocid, querySerpApi, resolveCity } from "@/lib/serpapi";
 
 export interface JobOfferSearchInput {
   /** Ruolo libero ("pizzaiolo") → q */
@@ -18,8 +18,8 @@ export interface JobOfferSearchInput {
 }
 
 export interface JobOfferResult {
-  /** ID Google Jobs della singola inserzione — chiave di dedupe + key React. */
-  jobId: string;
+  /** ID Google dell'annuncio (htidocid, estratto da job_id) — dedupe + key React. */
+  htidocid: string;
   title: string;
   companyName?: string;
   location?: string;
@@ -58,7 +58,7 @@ export async function searchJobOffer({
 
   const jobs = (response.jobs_results ?? []).map(
     (j): JobOfferResult => ({
-      jobId: j.job_id,
+      htidocid: jobHtidocid(j.job_id),
       title: j.title ?? "",
       companyName: j.company_name,
       location: j.location,
@@ -71,7 +71,7 @@ export async function searchJobOffer({
   );
 
   return {
-    jobs: dedupe(jobs, (j) => j.jobId),
+    jobs: dedupe(jobs, (j) => j.htidocid),
     nextPageToken: response.serpapi_pagination?.next_page_token,
   };
 }

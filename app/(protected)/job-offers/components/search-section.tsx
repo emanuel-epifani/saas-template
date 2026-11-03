@@ -280,7 +280,7 @@ export function SearchSection() {
               )}
             >
               {results.map((j, i) => (
-                <li key={j.jobId}>
+                <li key={j.htidocid}>
                   <div
                     className={cn(
                       "bg-card relative flex flex-col gap-0.5 rounded-xl border p-3 text-sm shadow-xs transition-colors",
@@ -384,9 +384,7 @@ export function SearchSection() {
                 onClick={onLoadMore}
                 disabled={pending}
               >
-                {pending ? (
-                  <LoaderCircle className="animate-spin" />
-                ) : null}
+                {pending ? <LoaderCircle className="animate-spin" /> : null}
                 {pending ? texts.searching : texts.loadMore}
               </Button>
             ) : null}
@@ -497,6 +495,6 @@ function appendUnique(
   prev: JobOfferResult[],
   next: JobOfferResult[],
 ): JobOfferResult[] {
-  const seen = new Set(prev.map((j) => j.jobId));
-  return [...prev, ...next.filter((j) => !seen.has(j.jobId))];
+  const seen = new Set(prev.map((j) => j.htidocid));
+  return [...prev, ...next.filter((j) => !seen.has(j.htidocid))];
 }

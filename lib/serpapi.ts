@@ -27,6 +27,8 @@ const USE_MOCK = env.SERPAPI_MOCK !== "false";
 // ---------------------------------------------------------------------------
 
 const serpLocalResultSchema = z.object({
+  /** Google Place ID — sempre presente nei local_results, chiave dedupe. */
+  place_id: z.string(),
   title: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
@@ -62,9 +64,7 @@ const serpJobResultSchema = z.object({
 // token opaco: `next_page_token` va rimandato indietro com'è.
 const serpMapsResponseSchema = z.object({
   local_results: z.array(serpLocalResultSchema).optional(),
-  serpapi_pagination: z
-    .object({ next: z.string().optional() })
-    .optional(),
+  serpapi_pagination: z.object({ next: z.string().optional() }).optional(),
   error: z.string().optional(),
 });
 
@@ -179,7 +179,10 @@ const locationCache = new Map<string, ResolvedLocation>();
 
 /** Città → coordinate + nome canonico SerpApi. Cache per processo, chiave normalizzata. */
 export async function resolveCity(city: string): Promise<ResolvedLocation> {
-  //todo:capire se serve per forza questo remappping (o magari metti già cities suggerite da maps in modo da poter passare in input sol una tra le opzioi giuste?)
+  /*
+    todo:capire se serve per forza questo remappping (o magari metti già cities suggerite da maps in modo da poter passare in input sol una tra le opzioi giuste?)
+    opzioni:Google Places Autocomplete,mapbox,geoapify,locationIQ,phono(Komoot),lista istat locale, etc
+   */
   const key = city.trim().toLowerCase();
   const cached = locationCache.get(key);
   if (cached) return cached;
@@ -235,6 +238,24 @@ export async function resolveCity(city: string): Promise<ResolvedLocation> {
   };
   locationCache.set(key, resolved);
   return resolved;
+}
+
+// ---------------------------------------------------------------------------
+// google_jobs — job_id NON è un ID stabile (token per google_jobs_listing):
+// è base64 di un JSON che incorpora contesto della ricerca (uule, gl, hl, fc).
+// L'ID Google dell'annuncio è htidocid, stabile cross-run → chiave dedupe.
+// Formato interno non contrattuale: se cambia il parse lancia e la ricerca
+// fallisce rumorosamente (come gli altri schemi) — niente fallback silenziosi.
+// ---------------------------------------------------------------------------
+
+const jobIdPayloadSchema = z.object({
+  htidocid: z.string(),
+});
+
+export function jobHtidocid(jobId: string): string {
+  return jobIdPayloadSchema.parse(
+    JSON.parse(Buffer.from(jobId, "base64").toString("utf8")),
+  ).htidocid;
 }
 
 // ---------------------------------------------------------------------------

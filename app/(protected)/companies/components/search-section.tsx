@@ -1,13 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import {
-  Building2,
-  Globe,
-  LoaderCircle,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Building2, Globe, LoaderCircle, MapPin, Phone } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -411,9 +405,7 @@ export function SearchSection() {
                 onClick={onLoadMore}
                 disabled={pending}
               >
-                {pending ? (
-                  <LoaderCircle className="animate-spin" />
-                ) : null}
+                {pending ? <LoaderCircle className="animate-spin" /> : null}
                 {pending ? texts.searching : texts.loadMore}
               </Button>
             ) : null}
