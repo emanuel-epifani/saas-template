@@ -18,6 +18,11 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { hostname } from "@/lib/utils";
@@ -318,7 +323,7 @@ export function SearchSection() {
                 >
                   <div
                     className={cn(
-                      "bg-card relative flex flex-col gap-0.5 rounded-xl border p-3 text-sm shadow-xs transition-colors",
+                      "group/card bg-card relative flex flex-col gap-0.5 rounded-xl border p-3 text-sm shadow-xs transition-colors",
                       i === highlightedIndex
                         ? "bg-accent/40 ring-primary ring-2"
                         : "hover:bg-accent/30",
@@ -340,63 +345,94 @@ export function SearchSection() {
                       </span>
                     </div>
                     {c.address ? (
-                      <a
-                        href={mapsDirectionsUrl(c)}
-                        target="_blank"
-                        rel="noreferrer"
-                        title={`${texts.directionsAction}: ${c.address}`}
-                        aria-label={`${texts.directionsAction}: ${c.address}`}
-                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
-                      >
-                        <MapPin className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">{c.address}</span>
-                      </a>
+                      <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                          <a
+                            href={mapsDirectionsUrl(c)}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`${texts.directionsAction}: ${c.address}`}
+                            className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                          >
+                            <MapPin
+                              className={cn(
+                                "group-hover/card:text-primary size-3.5 shrink-0 transition-colors",
+                                i === highlightedIndex && "text-primary",
+                              )}
+                            />
+                            <span className="min-w-0 truncate">
+                              {c.address}
+                            </span>
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {texts.directionsAction}
+                        </TooltipContent>
+                      </Tooltip>
                     ) : (
-                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <MapPin className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">
-                          {texts.noAddress}
-                        </span>
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
                       </span>
                     )}
                     {c.phone ? (
-                      <a
-                        href={`tel:${c.phone.replace(/\s+/g, "")}`}
-                        title={`${texts.callAction}: ${c.phone}`}
-                        aria-label={`${texts.callAction}: ${c.phone}`}
-                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
-                      >
-                        <Phone className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">{c.phone}</span>
-                      </a>
+                      <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                          <a
+                            href={`tel:${c.phone.replace(/\s+/g, "")}`}
+                            aria-label={`${texts.callAction}: ${c.phone}`}
+                            className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                          >
+                            <Phone
+                              className={cn(
+                                "group-hover/card:text-primary size-3.5 shrink-0 transition-colors",
+                                i === highlightedIndex && "text-primary",
+                              )}
+                            />
+                            <span className="min-w-0 truncate">{c.phone}</span>
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent>{texts.callAction}</TooltipContent>
+                      </Tooltip>
                     ) : (
-                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Phone className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">
-                          {texts.noPhone}
-                        </span>
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
                       </span>
                     )}
                     {c.website ? (
-                      <a
-                        href={c.website}
-                        target="_blank"
-                        rel="noreferrer"
-                        title={`${texts.openSiteAction}: ${c.website}`}
-                        aria-label={`${texts.openSiteAction}: ${c.website}`}
-                        className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
-                      >
-                        <Globe className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">
-                          {hostname(c.website)}
-                        </span>
-                      </a>
+                      <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                          <a
+                            href={c.website}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`${texts.openSiteAction}: ${c.website}`}
+                            className="text-muted-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                          >
+                            <Globe
+                              className={cn(
+                                "group-hover/card:text-primary size-3.5 shrink-0 transition-colors",
+                                i === highlightedIndex && "text-primary",
+                              )}
+                            />
+                            <span className="min-w-0 truncate">
+                              {hostname(c.website)}
+                            </span>
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent>{texts.openSiteAction}</TooltipContent>
+                      </Tooltip>
                     ) : (
-                      <span className="text-muted-foreground/60 -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Globe className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate">
-                          {texts.noWebsite}
-                        </span>
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
                       </span>
                     )}
                   </div>
