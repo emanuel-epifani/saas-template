@@ -44,3 +44,9 @@ next-env.d.ts
 # ides
 .idea/
 
+# AI/SKILL ecc
+.devin/*
+.impeccable
+
+
+

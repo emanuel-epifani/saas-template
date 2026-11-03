@@ -1,23 +1,17 @@
 "use client";
 
 import { Briefcase, Building2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import {
-  COMPANY_EXAMPLES,
   companiesSearchHref,
   DEFAULT_RADIUS,
   RADIUS_OPTIONS,
 } from "@/app/(protected)/companies/lib/search-params";
-import {
-  JOB_EXAMPLES,
-  jobOffersSearchHref,
-} from "@/app/(protected)/job-offers/lib/search-params";
+import { jobOffersSearchHref } from "@/app/(protected)/job-offers/lib/search-params";
 import { markSearchIntent } from "@/app/(protected)/lib/search-intent";
 import { SearchBar } from "@/components/search-bar";
-import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { texts } from "@/texts";
 
@@ -30,20 +24,11 @@ export function QuickSearch() {
   const [city, setCity] = useState("");
   const [radius, setRadius] = useState<number>(DEFAULT_RADIUS);
 
-  const examples = mode === "companies" ? COMPANY_EXAMPLES : JOB_EXAMPLES;
-
-  function hrefFor(params: { term: string; city: string; radius?: number }) {
-    return mode === "companies"
-      ? companiesSearchHref({
-          term: params.term,
-          city: params.city,
-          radius: params.radius ?? DEFAULT_RADIUS,
-        })
-      : jobOffersSearchHref({ term: params.term, city: params.city });
-  }
-
   function onSubmit() {
-    const href = hrefFor({ term, city, radius });
+    const href =
+      mode === "companies"
+        ? companiesSearchHref({ term, city, radius })
+        : jobOffersSearchHref({ term, city });
     markSearchIntent(href);
     router.push(href);
   }
@@ -62,14 +47,14 @@ export function QuickSearch() {
           value="companies"
           className="text-muted-foreground data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-xs"
         >
-          <Building2 className="text-companies" />
+          <Building2 />
           {texts.navCompanies}
         </ToggleGroupItem>
         <ToggleGroupItem
           value="jobs"
           className="text-muted-foreground data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-xs"
         >
-          <Briefcase className="text-jobs" />
+          <Briefcase />
           {texts.navJobOffers}
         </ToggleGroupItem>
       </ToggleGroup>
@@ -97,22 +82,6 @@ export function QuickSearch() {
         }
         onSubmit={onSubmit}
       />
-
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-muted-foreground text-sm">
-          {texts.dashboardExamplesLabel}
-        </span>
-        {examples.map((ex) => (
-          <Badge key={ex.term} variant="outline" asChild>
-            <Link
-              href={hrefFor(ex)}
-              onClick={() => markSearchIntent(hrefFor(ex))}
-            >
-              {ex.term} · {ex.city}
-            </Link>
-          </Badge>
-        ))}
-      </div>
     </section>
   );
 }

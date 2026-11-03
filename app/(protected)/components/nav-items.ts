@@ -17,13 +17,11 @@ export const navGroups: readonly NavGroup[] = [
         href: "/companies",
         label: texts.navCompanies,
         icon: Building2,
-        tone: "companies",
       },
       {
         href: "/job-offers",
         label: texts.navJobOffers,
         icon: Briefcase,
-        tone: "jobs",
       },
     ],
   },

@@ -4,7 +4,6 @@ import { UserButton } from "@daveyplate/better-auth-ui";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import type { NavTone } from "@/app/models";
 import { BrandMark } from "@/components/brand-mark";
 import {
   Sidebar,
@@ -24,12 +23,6 @@ import {
 import { texts } from "@/texts";
 
 import { navGroups } from "./nav-items";
-
-const toneIconClasses = {
-  primary: undefined,
-  companies: "text-companies",
-  jobs: "text-jobs",
-} satisfies Record<NavTone, string | undefined>;
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -65,11 +58,7 @@ export function AppSidebar() {
                       tooltip={item.label}
                     >
                       <Link href={item.href}>
-                        <item.icon
-                          className={
-                            toneIconClasses[item.tone ?? "primary"] ?? undefined
-                          }
-                        />
+                        <item.icon />
                         <span>{item.label}</span>
                       </Link>
                     </SidebarMenuButton>

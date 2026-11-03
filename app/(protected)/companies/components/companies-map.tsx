@@ -20,21 +20,18 @@ interface CompaniesMapProps {
   onHover: (index: number | null) => void;
 }
 
-// Normal: small dot in the companies tone — highlighted: primary teardrop pin.
-// Tile layer: OpenStreetMap standard (free, no key).
-const dotIcon = L.divIcon({
-  className: "",
-  html: `<div style="width:12px;height:12px;border-radius:9999px;background:var(--companies);border:2px solid var(--card);box-shadow:0 0 0 2px var(--companies)"></div>`,
-  iconSize: [12, 12],
-  iconAnchor: [6, 6],
-});
-
-const pinIcon = L.divIcon({
-  className: "",
-  html: `<svg width="26" height="34" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="var(--primary)"/><circle cx="12" cy="11.5" r="5" fill="var(--card)"/></svg>`,
-  iconSize: [26, 34],
-  iconAnchor: [13, 32],
-});
+// Every result is a numbered teardrop pin; the active one fills with the
+// action color — same numbering and same selection rule as the list
+// register. Tile layer: OpenStreetMap standard (free, no key),
+// desaturated via CSS.
+function markerIcon(i: number, active: boolean) {
+  return L.divIcon({
+    className: "",
+    html: `<svg class="map-pin${active ? " is-active" : ""}" width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><path class="map-pin-shape" d="M13 1C6.4 1 1 6.4 1 13c0 8 12 18 12 18s12-10 12-18C25 6.4 19.6 1 13 1Z"/><text x="13" y="15.5" text-anchor="middle" class="map-pin-num">${i + 1}</text></svg>`,
+    iconSize: [26, 32],
+    iconAnchor: [13, 32],
+  });
+}
 
 export default function CompaniesMap({
   companies,
@@ -90,12 +87,24 @@ export default function CompaniesMap({
     if (!map || !center) return;
     const circle = L.circle([center.lat, center.lng], {
       radius: radiusM,
-      color: "var(--primary)",
+      color: "var(--foreground)",
       weight: 1.5,
-      fillOpacity: 0.08,
+      dashArray: "6 6",
+      fillOpacity: 0.04,
+    }).addTo(map);
+    const origin = L.marker([center.lat, center.lng], {
+      icon: L.divIcon({
+        className: "",
+        html: `<div class="map-origin" aria-hidden="true"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      }),
+      interactive: false,
+      keyboard: false,
     }).addTo(map);
     return () => {
       circle.remove();
+      origin.remove();
     };
   }, [map, center, radiusM]);
 
@@ -104,6 +113,10 @@ export default function CompaniesMap({
     const markers = companies.map((c, i) => {
       if (c.lat == null || c.lon == null) return null;
       const content = document.createElement("div");
+      const num = document.createElement("span");
+      num.className = "map-popup-num";
+      num.textContent = `N° ${String(i + 1).padStart(2, "0")}`;
+      content.appendChild(num);
       const title = document.createElement("strong");
       title.textContent = c.name;
       content.appendChild(title);
@@ -112,7 +125,7 @@ export default function CompaniesMap({
         content.appendChild(document.createTextNode(c.address));
       }
       return L.marker([c.lat, c.lon], {
-        icon: i === highlightedRef.current ? pinIcon : dotIcon,
+        icon: markerIcon(i, i === highlightedRef.current),
       })
         .on("click", () => onSelectRef.current(i))
         .on("mouseover", () => onHoverRef.current(i))
@@ -130,7 +143,7 @@ export default function CompaniesMap({
   useEffect(() => {
     if (!map) return;
     markersRef.current.forEach((m, i) => {
-      m?.setIcon(i === highlightedIndex ? pinIcon : dotIcon);
+      m?.setIcon(markerIcon(i, i === highlightedIndex));
     });
   }, [map, highlightedIndex]);
 
@@ -153,15 +166,20 @@ export default function CompaniesMap({
     }
   }, [map, fitKey]);
 
-  // Pan to the selected card only when the SELECTION changes — load-more
-  // appends must not re-pan.
+  // On selection the popup is the eye's anchor — the map re-centers only
+  // when the pin is off-view or hugging the edge, so a click never makes
+  // the user lose their bearings. Load-more appends must not re-pan.
   useEffect(() => {
     if (!map || selectedIndex == null) return;
     const c = companiesRef.current[selectedIndex];
     if (!c || c.lat == null || c.lon == null) return;
+    const ll = L.latLng(c.lat, c.lon);
     // No animate:true — the pan animation outlives <Activity> hide and
     // crashes on the detached node ("_leaflet_pos" of undefined).
-    map.setView([c.lat, c.lon], map.getZoom(), { animate: false });
+    if (!map.getBounds().pad(-0.15).contains(ll)) {
+      map.setView(ll, map.getZoom(), { animate: false });
+    }
+    markersRef.current[selectedIndex]?.openPopup();
   }, [map, selectedIndex]);
 
   return <div ref={containerRef} className="h-full w-full" />;

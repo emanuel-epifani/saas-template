@@ -14,9 +14,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { toneTileClasses } from "@/components/page-header";
 import { SearchBar } from "@/components/search-bar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -32,7 +30,7 @@ import type { JobOfferResult } from "@/lib/job-offers/serpapi";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
-import { JOB_EXAMPLES, jobOffersSearchHref } from "../lib/search-params";
+import { jobOffersSearchHref } from "../lib/search-params";
 
 interface Snapshot {
   results: JobOfferResult[];
@@ -88,14 +86,6 @@ export function SearchSection() {
 
   function onSubmit() {
     const params = { term, city };
-    router.replace(jobOffersSearchHref(params), { scroll: false });
-    runSearch(params);
-  }
-
-  // Idle-state example chips set the fields too, so the URL mirrors the form.
-  function runExample(params: { term: string; city: string }) {
-    setTerm(params.term);
-    setCity(params.city);
     router.replace(jobOffersSearchHref(params), { scroll: false });
     runSearch(params);
   }
@@ -191,13 +181,8 @@ export function SearchSection() {
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
           <div className="flex h-[70vh] flex-col gap-3 p-1">
             <div className="flex items-start gap-3">
-              <div
-                className={cn(
-                  "grid size-10 shrink-0 place-items-center rounded-xl",
-                  toneTileClasses.jobs,
-                )}
-              >
-                <Briefcase className="size-5" />
+              <div className="border-border grid size-10 shrink-0 place-items-center rounded-md border">
+                <Briefcase className="text-muted-foreground size-5" />
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-heading text-sm font-medium">
@@ -208,20 +193,11 @@ export function SearchSection() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {JOB_EXAMPLES.map((ex) => (
-                <Badge key={ex.term} variant="outline" asChild>
-                  <button type="button" onClick={() => runExample(ex)}>
-                    {ex.term} · {ex.city}
-                  </button>
-                </Badge>
-              ))}
-            </div>
             {Array.from({ length: 4 }, (_, i) => (
               <PlaceholderCard key={i} />
             ))}
           </div>
-          <aside className="bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm">
+          <aside className="bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-md border p-4">
             <Empty className="border-0">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
@@ -236,12 +212,12 @@ export function SearchSection() {
 
       {status === "loading" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <div className="flex h-[70vh] flex-col gap-3 p-1">
-            {Array.from({ length: 5 }, (_, i) => (
-              <Skeleton key={i} className="h-28 shrink-0 rounded-xl" />
+          <div className="flex h-[70vh] flex-col gap-2 p-1">
+            {Array.from({ length: 7 }, (_, i) => (
+              <Skeleton key={i} className="h-[120px] shrink-0 rounded-md" />
             ))}
           </div>
-          <Skeleton className="h-[70vh] rounded-xl" />
+          <Skeleton className="h-[70vh] rounded-md" />
         </div>
       ) : null}
 
@@ -273,110 +249,108 @@ export function SearchSection() {
                 </>
               ) : null}
             </p>
-            <ul
+            <div
               className={cn(
-                "scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2 transition-opacity",
+                "divide-border bg-card flex min-h-0 flex-1 flex-col divide-y rounded-md border transition-opacity",
                 pending && "opacity-60",
               )}
             >
-              {results.map((j, i) => (
-                <li key={j.htidocid}>
-                  <div
-                    className={cn(
-                      "bg-card relative flex flex-col gap-0.5 rounded-xl border p-3 text-sm shadow-xs transition-colors",
-                      i === selectedIndex
-                        ? "bg-accent/40 ring-primary ring-2"
-                        : "hover:bg-accent/30",
-                    )}
-                  >
-                    <div className="flex items-start gap-2">
-                      <button
-                        ref={(el) => {
-                          cardRefs.current[i] = el;
-                        }}
-                        type="button"
-                        onClick={() => select(i)}
-                        className="min-w-0 flex-1 cursor-pointer truncate pt-0.5 text-left font-medium after:absolute after:inset-0"
-                      >
-                        {j.title}
-                      </button>
-                      <span className="text-muted-foreground text-xs tabular-nums">
-                        {i + 1}
-                      </span>
-                    </div>
-                    {j.companyName ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Building2 className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 truncate"
-                          title={j.companyName}
-                        >
-                          {j.companyName}
-                        </span>
-                      </div>
-                    ) : (
+              <div className="text-muted-foreground flex shrink-0 items-stretch text-[10px] font-medium tracking-[0.08em] uppercase">
+                <span className="border-border flex w-10 items-center justify-center border-r">
+                  {texts.registerIndexLabel}
+                </span>
+                <span className="flex items-center px-4 py-1.5">
+                  {texts.navJobOffers}
+                </span>
+              </div>
+              <ul className="scroll-list divide-border min-h-0 flex-1 divide-y overflow-y-auto">
+                {results.map((j, i) => (
+                  <li key={j.htidocid}>
+                    <div
+                      className={cn(
+                        "relative flex h-[120px] text-sm transition-colors",
+                        i === selectedIndex
+                          ? "bg-accent/60"
+                          : "hover:bg-muted/50",
+                      )}
+                    >
                       <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
-                      >
-                        &nbsp;
-                      </span>
-                    )}
-                    {j.location || j.postedAt ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <MapPin className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 truncate"
-                          title={[j.location, j.postedAt]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        >
-                          {[j.location, j.postedAt].filter(Boolean).join(" · ")}
-                        </span>
-                      </div>
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
-                      >
-                        &nbsp;
-                      </span>
-                    )}
-                    {j.via || j.salary ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        {j.via ? (
-                          <>
-                            <Globe className="size-3.5 shrink-0" />
-                            <span className="min-w-0 truncate" title={j.via}>
-                              {j.via}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <Banknote className="size-3.5 shrink-0" />
-                            <span className="truncate" title={j.salary}>
-                              {j.salary}
-                            </span>
-                          </>
+                        className={cn(
+                          "border-border flex w-10 shrink-0 items-center justify-center border-r font-mono text-xs font-medium tabular-nums",
+                          i === selectedIndex
+                            ? "bg-primary/10 text-primary"
+                            : "bg-muted/40 text-muted-foreground",
                         )}
-                        {j.salary && j.via ? (
-                          <span className="ml-auto shrink-0" title={j.salary}>
-                            {j.salary}
-                          </span>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
                       >
-                        &nbsp;
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                      <div className="min-w-0 flex-1 px-4 py-3">
+                        <button
+                          ref={(el) => {
+                            cardRefs.current[i] = el;
+                          }}
+                          type="button"
+                          onClick={() => select(i)}
+                          className="block w-full cursor-pointer truncate text-left leading-6 font-medium after:absolute after:inset-0"
+                        >
+                          {j.title}
+                        </button>
+                        <div className="text-muted-foreground mt-1 flex h-6 items-center gap-2 text-[13px]">
+                          {j.companyName ? (
+                            <>
+                              <Building2 className="size-3.5 shrink-0" />
+                              <span
+                                className="min-w-0 truncate"
+                                title={j.companyName}
+                              >
+                                {j.companyName}
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
+                        <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px]">
+                          {j.location || j.postedAt ? (
+                            <>
+                              <MapPin className="size-3.5 shrink-0" />
+                              <span
+                                className="min-w-0 truncate"
+                                title={[j.location, j.postedAt]
+                                  .filter(Boolean)
+                                  .join(" · ")}
+                              >
+                                {[j.location, j.postedAt]
+                                  .filter(Boolean)
+                                  .join(" · ")}
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
+                        <div className="text-muted-foreground flex h-6 items-center gap-4 text-[13px] tabular-nums">
+                          {j.via ? (
+                            <span
+                              className="flex min-w-0 items-center gap-2"
+                              title={j.via}
+                            >
+                              <Globe className="size-3.5 shrink-0" />
+                              <span className="truncate">{j.via}</span>
+                            </span>
+                          ) : null}
+                          {j.salary ? (
+                            <span
+                              className="flex min-w-0 items-center gap-2"
+                              title={j.salary}
+                            >
+                              <Banknote className="size-3.5 shrink-0" />
+                              <span className="truncate">{j.salary}</span>
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
             {nextPageToken ? (
               <Button
                 type="button"
@@ -392,13 +366,17 @@ export function SearchSection() {
 
           <aside
             className={cn(
-              "bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm transition-opacity",
+              "bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-md border p-4 transition-opacity",
               pending && "opacity-60",
             )}
           >
             {selected ? (
               <div className="flex flex-col gap-3 text-sm">
-                <div className="flex min-w-0 flex-col gap-0.5">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="text-primary font-mono text-[11px] font-medium tracking-[0.08em] uppercase">
+                    {texts.registerIndexLabel}{" "}
+                    {String((selectedIndex ?? 0) + 1).padStart(2, "0")}
+                  </span>
                   <h2 className="text-lg leading-snug font-semibold">
                     {selected.title}
                   </h2>
@@ -408,7 +386,7 @@ export function SearchSection() {
                     </p>
                   ) : null}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
                   {selected.location ? (
                     <p className="flex items-center gap-2">
                       <MapPin className="text-muted-foreground size-4 shrink-0" />
@@ -416,21 +394,19 @@ export function SearchSection() {
                     </p>
                   ) : null}
                   {selected.salary ? (
-                    <p className="flex items-center gap-2 font-medium">
+                    <p className="flex items-center gap-2 font-medium tabular-nums">
                       <Banknote className="text-muted-foreground size-4 shrink-0" />
                       <span>{selected.salary}</span>
                     </p>
                   ) : null}
-                  {selected.postedAt ? (
+                  {selected.postedAt || selected.via ? (
                     <p className="text-muted-foreground flex items-center gap-2">
                       <Clock className="size-4 shrink-0" />
-                      <span>{selected.postedAt}</span>
-                    </p>
-                  ) : null}
-                  {selected.via ? (
-                    <p className="text-muted-foreground flex items-center gap-2">
-                      <Globe className="size-4 shrink-0" />
-                      <span className="truncate">{selected.via}</span>
+                      <span className="truncate">
+                        {[selected.postedAt, selected.via]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
                     </p>
                   ) : null}
                 </div>
@@ -480,12 +456,15 @@ function PlaceholderCard() {
   return (
     <div
       aria-hidden="true"
-      className="bg-card/50 flex flex-col gap-1.5 rounded-xl border border-dashed p-3"
+      className="bg-card/50 flex h-[120px] items-center gap-3 rounded-md border border-dashed px-4 py-3"
     >
-      <span className="bg-muted h-4 w-2/3 rounded" />
-      <span className="bg-muted h-3 w-4/5 rounded" />
-      <span className="bg-muted h-3 w-3/5 rounded" />
-      <span className="bg-muted h-3 w-1/2 rounded" />
+      <span className="bg-muted h-3 w-5 rounded" />
+      <div className="flex flex-1 flex-col gap-1.5">
+        <span className="bg-muted h-4 w-2/3 rounded" />
+        <span className="bg-muted h-3 w-4/5 rounded" />
+        <span className="bg-muted h-3 w-3/5 rounded" />
+        <span className="bg-muted h-3 w-1/2 rounded" />
+      </div>
     </div>
   );
 }

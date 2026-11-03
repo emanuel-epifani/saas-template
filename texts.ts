@@ -69,7 +69,7 @@ export const texts = {
 
   dashboardGreeting: "Bentornato",
   dashboardPrompt: "Cosa cerchi oggi?",
-  dashboardExamplesLabel: "Prova:",
+  registerIndexLabel: "N°",
   dashboardCompaniesDesc: "Aziende da contattare per una partnership.",
   dashboardJobsDesc: "Offerte aperte dove proporre i tuoi candidati.",
 
@@ -77,7 +77,7 @@ export const texts = {
   companiesSubtitle:
     "Cerca aziende per settore e zona da contattare per una partnership.",
   companiesTermLabel: "Settore / attività",
-  companiesTermPlaceholder: "pizzeria, metalmeccaniche…",
+  companiesTermPlaceholder: "Settore, attività o prodotto",
   radiusLabel: "Raggio",
   radiusCenterOption: "Centro città",
   loadMore: "Carica altri",
@@ -86,9 +86,9 @@ export const texts = {
   jobOffersTitle: "Cerca offerte di lavoro",
   jobOffersSubtitle: "Cerca offerte aperte per i tuoi candidati.",
   jobOffersTermLabel: "Ruolo",
-  jobOffersTermPlaceholder: "pizzaiolo, manutentore…",
+  jobOffersTermPlaceholder: "Ruolo o mansione",
   cityLabel: "Zona",
-  cityPlaceholder: "Collegno…",
+  cityPlaceholder: "Città o provincia",
   searchAction: "Cerca",
   searching: "Ricerca in corso…",
   updating: "Aggiornamento…",

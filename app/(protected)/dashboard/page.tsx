@@ -1,19 +1,9 @@
-import { cn } from "cn";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight, Briefcase, Building2 } from "lucide-react";
+import { ArrowRight, Bookmark, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import type { NavTone } from "@/app/models";
-import { toneTileClasses } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/session";
 import { texts } from "@/texts";
 
@@ -23,21 +13,18 @@ const modules = [
   {
     href: "/companies",
     icon: Building2,
-    tone: "companies",
     title: texts.navCompanies,
     desc: texts.dashboardCompaniesDesc,
   },
   {
     href: "/job-offers",
     icon: Briefcase,
-    tone: "jobs",
     title: texts.navJobOffers,
     desc: texts.dashboardJobsDesc,
   },
 ] satisfies readonly {
   href: string;
   icon: LucideIcon;
-  tone: NavTone;
   title: string;
   desc: string;
 }[];
@@ -58,48 +45,47 @@ export default function DashboardPage() {
 
       <QuickSearch />
 
-      <section className="grid gap-4 sm:grid-cols-2">
-        {modules.map(({ href, icon: Icon, tone, title, desc }) => (
-          <Link key={href} href={href} className="group">
-            <Card className="h-full transition-shadow hover:shadow-md">
-              <CardHeader>
-                <div
-                  className={cn(
-                    "grid size-10 place-items-center rounded-xl",
-                    toneTileClasses[tone],
-                  )}
-                >
-                  <Icon className="size-5" />
-                </div>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{desc}</CardDescription>
-                <span className="text-primary mt-2 flex items-center gap-1 text-sm font-medium">
-                  {texts.openAction}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+      <section className="bg-card divide-border rounded-md border">
+        <div className="divide-y">
+          {modules.map(({ href, icon: Icon, title, desc }) => (
+            <Link
+              key={href}
+              href={href}
+              className="hover:bg-muted/50 group flex items-center gap-4 px-4 py-4 transition-colors"
+            >
+              <Icon className="text-muted-foreground size-5 shrink-0" />
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="font-medium">{title}</span>
+                <span className="text-muted-foreground truncate text-sm">
+                  {desc}
                 </span>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
-      </section>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {texts.savedTitle}
-            <Badge variant="secondary">{texts.soonBadge}</Badge>
-          </CardTitle>
-          <CardDescription>{texts.savedEmptyDesc}</CardDescription>
-          <CardAction>
+              </span>
+              <span className="text-primary flex items-center gap-1 text-sm font-medium">
+                {texts.openAction}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          ))}
+          <div className="flex items-center gap-4 px-4 py-4">
+            <Bookmark className="text-muted-foreground size-5 shrink-0" />
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="flex items-center gap-2 font-medium">
+                {texts.savedTitle}
+                <Badge variant="secondary">{texts.soonBadge}</Badge>
+              </span>
+              <span className="text-muted-foreground truncate text-sm">
+                {texts.savedEmptyDesc}
+              </span>
+            </span>
             <Link
               href="/saved"
               className={buttonVariants({ variant: "ghost", size: "sm" })}
             >
               {texts.openAction}
             </Link>
-          </CardAction>
-        </CardHeader>
-      </Card>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

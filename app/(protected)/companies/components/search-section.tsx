@@ -6,9 +6,7 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { toneTileClasses } from "@/components/page-header";
 import { SearchBar } from "@/components/search-bar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -25,7 +23,6 @@ import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
 import {
-  COMPANY_EXAMPLES,
   companiesSearchHref,
   parseRadius,
   RADIUS_OPTIONS,
@@ -106,14 +103,6 @@ export function SearchSection() {
 
   function onSubmit() {
     const params = { term, city, radius };
-    router.replace(companiesSearchHref(params), { scroll: false });
-    runSearch(params);
-  }
-
-  // Idle-state example chips set the fields too, so the URL mirrors the form.
-  function runExample(params: { term: string; city: string; radius: number }) {
-    setTerm(params.term);
-    setCity(params.city);
     router.replace(companiesSearchHref(params), { scroll: false });
     runSearch(params);
   }
@@ -216,13 +205,8 @@ export function SearchSection() {
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
           <div className="flex h-[70vh] flex-col gap-3 p-1">
             <div className="flex items-start gap-3">
-              <div
-                className={cn(
-                  "grid size-10 shrink-0 place-items-center rounded-xl",
-                  toneTileClasses.companies,
-                )}
-              >
-                <Building2 className="size-5" />
+              <div className="border-border grid size-10 shrink-0 place-items-center rounded-md border">
+                <Building2 className="text-muted-foreground size-5" />
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-heading text-sm font-medium">
@@ -233,29 +217,11 @@ export function SearchSection() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {COMPANY_EXAMPLES.map((ex) => (
-                <Badge key={ex.term} variant="outline" asChild>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      runExample({
-                        term: ex.term,
-                        city: ex.city,
-                        radius,
-                      })
-                    }
-                  >
-                    {ex.term} · {ex.city}
-                  </button>
-                </Badge>
-              ))}
-            </div>
             {Array.from({ length: 4 }, (_, i) => (
               <PlaceholderCard key={i} />
             ))}
           </div>
-          <div className="sticky top-4 h-[70vh] self-start overflow-hidden rounded-xl border shadow-sm">
+          <div className="border-border sticky top-4 h-[70vh] self-start overflow-hidden rounded-md border">
             <CompaniesMap
               companies={[]}
               center={null}
@@ -265,7 +231,7 @@ export function SearchSection() {
               onSelect={() => {}}
               onHover={() => {}}
             />
-            <div className="bg-card/90 text-muted-foreground absolute top-3 left-1/2 z-[400] -translate-x-1/2 rounded-full px-3 py-1 text-xs shadow-sm">
+            <div className="bg-card text-muted-foreground absolute top-3 left-1/2 z-[400] -translate-x-1/2 rounded-md border px-2.5 py-1 text-xs">
               {texts.mapIdleHint}
             </div>
           </div>
@@ -274,12 +240,12 @@ export function SearchSection() {
 
       {status === "loading" ? (
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <div className="flex h-[70vh] flex-col gap-3 p-1">
-            {Array.from({ length: 5 }, (_, i) => (
-              <Skeleton key={i} className="h-28 shrink-0 rounded-xl" />
+          <div className="flex h-[70vh] flex-col gap-2 p-1">
+            {Array.from({ length: 7 }, (_, i) => (
+              <Skeleton key={i} className="h-[120px] shrink-0 rounded-md" />
             ))}
           </div>
-          <Skeleton className="h-[70vh] rounded-xl" />
+          <Skeleton className="h-[70vh] rounded-md" />
         </div>
       ) : null}
 
@@ -311,93 +277,111 @@ export function SearchSection() {
                 </>
               ) : null}
             </p>
-            <ul
+            <div
               className={cn(
-                "scroll-list flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1 pr-2 transition-opacity",
+                "divide-border bg-card flex min-h-0 flex-1 flex-col divide-y rounded-md border transition-opacity",
                 pending && "opacity-60",
               )}
             >
-              {results.map((c, i) => (
-                <li
-                  key={c.key}
-                  onMouseEnter={() => setHoveredIndex(i)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <div
-                    className={cn(
-                      "bg-card relative flex flex-col gap-0.5 rounded-xl border p-3 text-sm shadow-xs transition-colors",
-                      i === highlightedIndex
-                        ? "bg-accent/40 ring-primary ring-2"
-                        : "hover:bg-accent/30",
-                    )}
+              <div className="text-muted-foreground flex shrink-0 items-stretch text-[10px] font-medium tracking-[0.08em] uppercase">
+                <span className="border-border flex w-10 items-center justify-center border-r">
+                  {texts.registerIndexLabel}
+                </span>
+                <span className="flex items-center px-4 py-1.5">
+                  {texts.navCompanies}
+                </span>
+              </div>
+              <ul className="scroll-list divide-border min-h-0 flex-1 divide-y overflow-y-auto">
+                {results.map((c, i) => (
+                  <li
+                    key={c.key}
+                    onMouseEnter={() => setHoveredIndex(i)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                   >
-                    <div className="flex items-start gap-2">
-                      <button
-                        ref={(el) => {
-                          cardRefs.current[i] = el;
-                        }}
-                        type="button"
-                        onClick={() => select(i)}
-                        className="min-w-0 flex-1 cursor-pointer truncate pt-0.5 text-left font-medium after:absolute after:inset-0"
-                      >
-                        {c.name}
-                      </button>
-                      <span className="text-muted-foreground text-xs tabular-nums">
-                        {i + 1}
-                      </span>
-                    </div>
-                    {c.address ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <MapPin className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate" title={c.address}>
-                          {c.address}
-                        </span>
-                      </div>
-                    ) : (
+                    <div
+                      className={cn(
+                        "relative flex h-[120px] text-sm transition-colors",
+                        i === highlightedIndex
+                          ? "bg-accent/60"
+                          : "hover:bg-muted/50",
+                      )}
+                    >
                       <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
+                        className={cn(
+                          "border-border flex w-10 shrink-0 items-center justify-center border-r font-mono text-xs font-medium tabular-nums",
+                          i === highlightedIndex
+                            ? "bg-primary/10 text-primary"
+                            : "bg-muted/40 text-muted-foreground",
+                        )}
                       >
-                        &nbsp;
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                    )}
-                    {c.phone ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Phone className="size-3.5 shrink-0" />
-                        <span className="min-w-0 truncate" title={c.phone}>
-                          {c.phone}
-                        </span>
-                      </div>
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
-                      >
-                        &nbsp;
-                      </span>
-                    )}
-                    {c.website ? (
-                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
-                        <Globe className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 truncate"
-                          title={hostname(c.website)}
+                      <div className="min-w-0 flex-1 px-4 py-3">
+                        <button
+                          ref={(el) => {
+                            cardRefs.current[i] = el;
+                          }}
+                          type="button"
+                          onClick={() => select(i)}
+                          onFocus={() => setHoveredIndex(i)}
+                          onBlur={() => setHoveredIndex(null)}
+                          className="block w-full cursor-pointer truncate text-left leading-6 font-medium after:absolute after:inset-0"
                         >
-                          {hostname(c.website)}
-                        </span>
+                          {c.name}
+                        </button>
+                        <div className="text-muted-foreground mt-1 flex h-6 items-center gap-2 text-[13px]">
+                          {c.address ? (
+                            <>
+                              <MapPin className="size-3.5 shrink-0" />
+                              <span
+                                className="min-w-0 truncate"
+                                title={c.address}
+                              >
+                                {c.address}
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
+                        <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px] tabular-nums">
+                          {c.phone ? (
+                            <a
+                              href={`tel:${c.phone.replace(/[^+\d]/g, "")}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="hover:text-foreground relative z-10 flex min-w-0 items-center gap-2 hover:underline"
+                              title={c.phone}
+                            >
+                              <Phone className="size-3.5 shrink-0" />
+                              <span className="truncate">{c.phone}</span>
+                            </a>
+                          ) : null}
+                        </div>
+                        <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px]">
+                          {c.website ? (
+                            <a
+                              href={
+                                c.website.startsWith("http")
+                                  ? c.website
+                                  : `https://${c.website}`
+                              }
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-primary relative z-10 flex min-w-0 items-center gap-2 hover:underline"
+                              title={c.website}
+                            >
+                              <Globe className="size-3.5 shrink-0" />
+                              <span className="truncate">
+                                {hostname(c.website)}
+                              </span>
+                            </a>
+                          ) : null}
+                        </div>
                       </div>
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="-mx-1 block px-1 py-1 text-sm"
-                      >
-                        &nbsp;
-                      </span>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
             {hasMore ? (
               <Button
                 type="button"
@@ -411,7 +395,7 @@ export function SearchSection() {
             ) : null}
           </div>
 
-          <div className="relative sticky top-4 h-[70vh] self-start overflow-hidden rounded-xl border shadow-sm">
+          <div className="border-border relative sticky top-4 h-[70vh] self-start overflow-hidden rounded-md border">
             <CompaniesMap
               companies={results}
               center={center}
@@ -424,7 +408,7 @@ export function SearchSection() {
             {pending ? (
               // La mappa resta leggibile e interattiva: solo un chip
               // leggero in angolo segnala l'aggiornamento in corso.
-              <div className="bg-card/90 text-muted-foreground pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs shadow backdrop-blur">
+              <div className="bg-card text-muted-foreground pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs">
                 <LoaderCircle className="size-3.5 animate-spin" />
                 {texts.updating}
               </div>
@@ -443,12 +427,15 @@ function PlaceholderCard() {
   return (
     <div
       aria-hidden="true"
-      className="bg-card/50 flex flex-col gap-1.5 rounded-xl border border-dashed p-3"
+      className="bg-card/50 flex h-[120px] items-center gap-3 rounded-md border border-dashed px-4 py-3"
     >
-      <span className="bg-muted h-4 w-2/3 rounded" />
-      <span className="bg-muted h-3 w-4/5 rounded" />
-      <span className="bg-muted h-3 w-3/5 rounded" />
-      <span className="bg-muted h-3 w-1/2 rounded" />
+      <span className="bg-muted h-3 w-5 rounded" />
+      <div className="flex flex-1 flex-col gap-1.5">
+        <span className="bg-muted h-4 w-2/3 rounded" />
+        <span className="bg-muted h-3 w-4/5 rounded" />
+        <span className="bg-muted h-3 w-3/5 rounded" />
+        <span className="bg-muted h-3 w-1/2 rounded" />
+      </div>
     </div>
   );
 }

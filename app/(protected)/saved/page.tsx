@@ -16,11 +16,7 @@ import { texts } from "@/texts";
 export default function SavedPage() {
   return (
     <main className="flex flex-1 flex-col gap-6 p-6">
-      <PageHeader
-        icon={Bookmark}
-        title={texts.savedTitle}
-        description={texts.savedSubtitle}
-      />
+      <PageHeader title={texts.savedTitle} description={texts.savedSubtitle} />
       <Empty className="border">
         <EmptyHeader>
           <EmptyMedia variant="icon">
@@ -35,14 +31,14 @@ export default function SavedPage() {
               href="/companies"
               className={buttonVariants({ variant: "outline" })}
             >
-              <Building2 className="text-companies" />
+              <Building2 />
               {texts.navCompanies}
             </Link>
             <Link
               href="/job-offers"
               className={buttonVariants({ variant: "outline" })}
             >
-              <Briefcase className="text-jobs" />
+              <Briefcase />
               {texts.navJobOffers}
             </Link>
           </div>

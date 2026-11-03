@@ -1,4 +1,4 @@
-import { LoaderCircle, MapPin, Search } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 import type { SearchBarProps } from "@/app/models";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { texts } from "@/texts";
 
-// Segmented search bar shared by the dashboard and both search pages —
-// presentational only: parents own the state and the submit side-effects.
+const cell =
+  "border-border flex-1 cursor-text border-b px-3.5 pt-2 pb-2 transition-colors focus-within:bg-accent/50 sm:border-r sm:border-b-0";
+const cellLabel =
+  "text-muted-foreground block text-[10px] font-medium tracking-[0.08em] uppercase";
+const field =
+  "h-8 border-0 bg-transparent px-0 text-sm font-medium shadow-none focus-visible:ring-0 placeholder:font-normal placeholder:text-muted-foreground/70";
+
+// Segmented search band shared by the dashboard and both search pages —
+// each cell carries its own uppercase label, like a form on a register.
+// Presentational only: parents own the state and the submit side-effects.
 export function SearchBar({
   idPrefix,
   term,
@@ -33,56 +40,40 @@ export function SearchBar({
         e.preventDefault();
         onSubmit();
       }}
-      className="bg-card ring-border flex flex-col gap-1 rounded-2xl p-2 shadow-md ring-1 sm:flex-row sm:items-center"
+      className="bg-card border-border flex flex-col overflow-hidden rounded-sm border sm:flex-row sm:items-stretch"
     >
-      <label htmlFor={`${idPrefix}-term`} className="sr-only">
-        {termLabel}
-      </label>
-      <div className="relative flex-1">
-        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+      <label htmlFor={`${idPrefix}-term`} className={cell}>
+        <span className={cellLabel}>{termLabel}</span>
         <Input
           id={`${idPrefix}-term`}
           value={term}
           onChange={(e) => onTermChange(e.target.value)}
           placeholder={termPlaceholder}
           required
-          className="h-11 border-0 bg-transparent pl-9 shadow-none focus-visible:ring-0"
+          className={field}
         />
-      </div>
-      <Separator
-        orientation="vertical"
-        className="hidden h-6 self-center sm:block"
-      />
-      <label htmlFor={`${idPrefix}-city`} className="sr-only">
-        {texts.cityLabel}
       </label>
-      <div className="relative flex-1">
-        <MapPin className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+      <label htmlFor={`${idPrefix}-city`} className={cell}>
+        <span className={cellLabel}>{texts.cityLabel}</span>
         <Input
           id={`${idPrefix}-city`}
           value={city}
           onChange={(e) => onCityChange(e.target.value)}
           placeholder={texts.cityPlaceholder}
           required
-          className="h-11 border-0 bg-transparent pl-9 shadow-none focus-visible:ring-0"
+          className={field}
         />
-      </div>
+      </label>
       {radius ? (
-        <>
-          <Separator
-            orientation="vertical"
-            className="hidden h-6 self-center sm:block"
-          />
-          <label htmlFor={`${idPrefix}-radius`} className="sr-only">
-            {texts.radiusLabel}
-          </label>
+        <label htmlFor={`${idPrefix}-radius`} className={`${cell} flex-none`}>
+          <span className={cellLabel}>{texts.radiusLabel}</span>
           <Select
             value={String(radius.value)}
             onValueChange={(v) => radius.onChange(Number(v))}
           >
             <SelectTrigger
               id={`${idPrefix}-radius`}
-              className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"
+              className={`${field} w-auto min-w-20`}
             >
               <SelectValue />
             </SelectTrigger>
@@ -94,9 +85,14 @@ export function SearchBar({
               ))}
             </SelectContent>
           </Select>
-        </>
+        </label>
       ) : null}
-      <Button type="submit" size="xl" disabled={pending}>
+      <Button
+        type="submit"
+        size="lg"
+        disabled={pending}
+        className="min-h-12 rounded-none px-6 sm:h-auto sm:min-h-0"
+      >
         {pending ? <LoaderCircle className="animate-spin" /> : null}
         {pending ? texts.searching : texts.searchAction}
       </Button>
