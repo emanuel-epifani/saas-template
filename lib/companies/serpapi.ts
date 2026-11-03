@@ -26,6 +26,8 @@ export interface CompanyResult {
   address?: string;
   phone?: string;
   website?: string;
+  /** Google place id — used to build exact Maps links (directions). */
+  placeId?: string;
   lat?: number;
   lon?: number;
 }
@@ -75,6 +77,7 @@ export async function searchCompany({
       address: p.address,
       phone: p.phone,
       website: p.website,
+      placeId: p.place_id,
       lat: p.gps_coordinates?.latitude,
       lon: p.gps_coordinates?.longitude,
     }),

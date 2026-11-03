@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { Copy, ExternalLink, Globe, MapPin, Phone } from "lucide-react";
+import { Globe, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { texts } from "@/texts";
@@ -88,19 +88,14 @@ export function ProductPreview() {
                   <span className="flex min-w-0 items-center gap-1.5">
                     <MapPin className="size-3.5 shrink-0" />
                     <span className="flex-1 truncate">{c.address}</span>
-                    <Copy className="size-3 shrink-0" />
                   </span>
                   <span className="flex min-w-0 items-center gap-1.5">
                     <Phone className="size-3.5 shrink-0" />
                     <span className="flex-1 truncate">{c.phone}</span>
-                    <Phone className="size-3 shrink-0" />
-                    <Copy className="size-3 shrink-0" />
                   </span>
                   <span className="flex min-w-0 items-center gap-1.5">
                     <Globe className="size-3.5 shrink-0" />
                     <span className="flex-1 truncate">{c.site}</span>
-                    <ExternalLink className="size-3 shrink-0" />
-                    <Copy className="size-3 shrink-0" />
                   </span>
                 </div>
               </div>

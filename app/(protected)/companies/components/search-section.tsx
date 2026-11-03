@@ -1,14 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import {
-  Building2,
-  Copy,
-  ExternalLink,
-  Globe,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Building2, Globe, MapPin, Phone } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -25,16 +18,12 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { findCompanies } from "@/lib/companies/actions";
 import type { CompanyResult } from "@/lib/companies/serpapi";
 import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { consumeSearchIntent } from "../../lib/search-intent";
+import { mapsDirectionsUrl } from "../lib/maps-url";
 import {
   COMPANY_EXAMPLES,
   companiesSearchHref,
@@ -306,124 +295,47 @@ export function SearchSection() {
                       </span>
                     </div>
                     {c.address ? (
-                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                      <a
+                        href={mapsDirectionsUrl(c)}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`${texts.directionsAction}: ${c.address}`}
+                        aria-label={`${texts.directionsAction}: ${c.address}`}
+                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                      >
                         <MapPin className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 flex-1 truncate"
-                          title={c.address}
-                        >
+                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
                           {c.address}
                         </span>
-                        <span className="relative z-10 flex shrink-0 items-center">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={() =>
-                                  copy(c.address ?? "", texts.addressCopied)
-                                }
-                              >
-                                <Copy />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{texts.copyAddress}</TooltipContent>
-                          </Tooltip>
-                        </span>
-                      </div>
+                      </a>
                     ) : null}
                     {c.phone ? (
-                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                      <a
+                        href={`tel:${c.phone.replace(/\s+/g, "")}`}
+                        title={`${texts.callAction}: ${c.phone}`}
+                        aria-label={`${texts.callAction}: ${c.phone}`}
+                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                      >
                         <Phone className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 flex-1 truncate"
-                          title={c.phone}
-                        >
+                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
                           {c.phone}
                         </span>
-                        <span className="relative z-10 flex shrink-0 items-center">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                className="text-muted-foreground hover:text-foreground"
-                                asChild
-                              >
-                                <a href={`tel:${c.phone.replace(/\s+/g, "")}`}>
-                                  <Phone />
-                                </a>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{texts.callAction}</TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={() =>
-                                  copy(c.phone ?? "", texts.phoneCopied)
-                                }
-                              >
-                                <Copy />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{texts.copyPhone}</TooltipContent>
-                          </Tooltip>
-                        </span>
-                      </div>
+                      </a>
                     ) : null}
                     {c.website ? (
-                      <div className="text-muted-foreground hover:bg-muted/50 -mx-1 flex items-center gap-2 rounded-md px-1 py-0.5">
+                      <a
+                        href={c.website}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`${texts.openSiteAction}: ${c.website}`}
+                        aria-label={`${texts.openSiteAction}: ${c.website}`}
+                        className="group/row text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:ring-ring relative z-10 -mx-1 flex items-center gap-2 rounded-md px-1 py-1 text-sm outline-none focus-visible:ring-2"
+                      >
                         <Globe className="size-3.5 shrink-0" />
-                        <span
-                          className="min-w-0 flex-1 truncate"
-                          title={c.website}
-                        >
+                        <span className="min-w-0 truncate underline-offset-2 group-hover/row:underline">
                           {hostname(c.website)}
                         </span>
-                        <span className="relative z-10 flex shrink-0 items-center">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                className="text-muted-foreground hover:text-foreground"
-                                asChild
-                              >
-                                <a
-                                  href={c.website}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  <ExternalLink />
-                                </a>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              {texts.openSiteAction}
-                            </TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={() =>
-                                  copy(c.website ?? "", texts.websiteCopied)
-                                }
-                              >
-                                <Copy />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{texts.copyWebsite}</TooltipContent>
-                          </Tooltip>
-                        </span>
-                      </div>
+                      </a>
                     ) : null}
                   </div>
                 </li>
@@ -455,13 +367,6 @@ export function SearchSection() {
         </div>
       ) : null}
     </div>
-  );
-}
-
-function copy(value: string, message: string) {
-  navigator.clipboard.writeText(value).then(
-    () => toast.success(message),
-    () => toast.error(texts.copyError),
   );
 }
 
