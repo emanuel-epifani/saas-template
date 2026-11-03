@@ -3,11 +3,9 @@
 import { cn } from "cn";
 import {
   Banknote,
-  Bookmark,
   Briefcase,
   Building2,
   Clock,
-  Copy,
   ExternalLink,
   Globe,
   MapPin,
@@ -29,14 +27,9 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { findJobOffers } from "@/lib/job-offers/actions";
 import type { JobOfferResult } from "@/lib/job-offers/serpapi";
-import { initials } from "@/lib/utils";
+import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
@@ -246,7 +239,7 @@ export function SearchSection() {
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
           <div className="flex h-[70vh] flex-col gap-3 p-1">
             {Array.from({ length: 5 }, (_, i) => (
-              <Skeleton key={i} className="h-30 shrink-0 rounded-xl" />
+              <Skeleton key={i} className="h-28 shrink-0 rounded-xl" />
             ))}
           </div>
           <Skeleton className="h-[70vh] rounded-xl" />
@@ -289,15 +282,7 @@ export function SearchSection() {
                         : "hover:bg-accent/30",
                     )}
                   >
-                    <div className="flex items-start gap-3">
-                      <span
-                        className={cn(
-                          "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-semibold",
-                          toneTileClasses.jobs,
-                        )}
-                      >
-                        {initials(j.companyName ?? j.title)}
-                      </span>
+                    <div className="flex items-start gap-2">
                       <button
                         ref={(el) => {
                           cardRefs.current[i] = el;
@@ -312,91 +297,92 @@ export function SearchSection() {
                         {i + 1}
                       </span>
                     </div>
-                    <div className="text-muted-foreground flex flex-col gap-0.5 pl-12">
-                      {j.companyName ? (
-                        <span className="flex min-w-0 items-center gap-1.5">
-                          <Building2 className="size-3.5 shrink-0" />
-                          <span className="truncate">{j.companyName}</span>
+                    {j.companyName ? (
+                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        <Building2 className="text-jobs size-3.5 shrink-0" />
+                        <span
+                          className="min-w-0 truncate"
+                          title={j.companyName}
+                        >
+                          {j.companyName}
                         </span>
-                      ) : null}
-                      {j.location ? (
-                        <span className="flex min-w-0 items-center gap-1.5">
-                          <MapPin className="size-3.5 shrink-0" />
-                          <span className="truncate">{j.location}</span>
+                      </div>
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
+                      </span>
+                    )}
+                    {j.location || j.postedAt ? (
+                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span
+                          className="min-w-0 truncate"
+                          title={[j.location, j.postedAt]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        >
+                          {[j.location, j.postedAt].filter(Boolean).join(" · ")}
                         </span>
-                      ) : null}
-                    </div>
-                    {j.via || j.postedAt || j.salary ? (
-                      <div className="mt-1 flex flex-wrap gap-1.5 pl-12">
-                        {j.via ? (
-                          <Badge variant="outline">{j.via}</Badge>
-                        ) : null}
-                        {j.postedAt ? (
-                          <Badge variant="secondary">{j.postedAt}</Badge>
-                        ) : null}
-                        {j.salary ? (
-                          <Badge variant="jobs">{j.salary}</Badge>
+                      </div>
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
+                      </span>
+                    )}
+                    {j.via || j.applyLink || j.salary ? (
+                      <div className="text-muted-foreground -mx-1 flex items-center gap-2 px-1 py-1 text-sm">
+                        {j.applyLink ? (
+                          <a
+                            href={j.applyLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={texts.jobApplyAction}
+                            className="relative z-10 flex min-w-0 flex-1 items-center gap-2 rounded-sm hover:underline"
+                          >
+                            <Globe className="size-3.5 shrink-0" />
+                            <span
+                              className="min-w-0 truncate"
+                              title={j.via ?? hostname(j.applyLink)}
+                            >
+                              {j.via ?? hostname(j.applyLink)}
+                            </span>
+                            <ExternalLink className="size-3 shrink-0" />
+                          </a>
+                        ) : j.via ? (
+                          <>
+                            <Globe className="size-3.5 shrink-0" />
+                            <span className="min-w-0 truncate" title={j.via}>
+                              {j.via}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Banknote className="size-3.5 shrink-0" />
+                            <span className="truncate" title={j.salary}>
+                              {j.salary}
+                            </span>
+                          </>
+                        )}
+                        {j.salary && (j.via || j.applyLink) ? (
+                          <span className="ml-auto shrink-0" title={j.salary}>
+                            {j.salary}
+                          </span>
                         ) : null}
                       </div>
-                    ) : null}
-                    <Separator className="my-2" />
-                    <div className="relative z-10 flex items-center gap-1">
-                      {j.applyLink ? (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon-sm" asChild>
-                              <a
-                                href={j.applyLink}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                <ExternalLink />
-                              </a>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            {texts.jobApplyAction}
-                          </TooltipContent>
-                        </Tooltip>
-                      ) : null}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => {
-                              navigator.clipboard
-                                .writeText(
-                                  [
-                                    j.title,
-                                    j.companyName,
-                                    j.location,
-                                    j.applyLink,
-                                  ]
-                                    .filter(Boolean)
-                                    .join("\n"),
-                                )
-                                .then(() => toast.success(texts.copied));
-                            }}
-                          >
-                            <Copy />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {texts.copyContactsAction}
-                        </TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="ml-auto">
-                            <Button variant="ghost" size="icon-sm" disabled>
-                              <Bookmark />
-                            </Button>
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent>{texts.saveSoon}</TooltipContent>
-                      </Tooltip>
-                    </div>
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="-mx-1 block px-1 py-1 text-sm"
+                      >
+                        &nbsp;
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}
@@ -416,25 +402,15 @@ export function SearchSection() {
           <aside className="bg-card sticky top-4 h-[70vh] self-start overflow-y-auto rounded-xl border p-4 shadow-sm">
             {selected ? (
               <div className="flex flex-col gap-3 text-sm">
-                <div className="flex items-start gap-3">
-                  <span
-                    className={cn(
-                      "grid size-9 shrink-0 place-items-center rounded-lg text-xs font-semibold",
-                      toneTileClasses.jobs,
-                    )}
-                  >
-                    {initials(selected.companyName ?? selected.title)}
-                  </span>
-                  <div className="flex min-w-0 flex-col gap-0.5">
-                    <h2 className="text-lg leading-snug font-semibold">
-                      {selected.title}
-                    </h2>
-                    {selected.companyName ? (
-                      <p className="text-muted-foreground truncate">
-                        {selected.companyName}
-                      </p>
-                    ) : null}
-                  </div>
+                <div className="flex min-w-0 flex-col gap-0.5">
+                  <h2 className="text-lg leading-snug font-semibold">
+                    {selected.title}
+                  </h2>
+                  {selected.companyName ? (
+                    <p className="text-muted-foreground truncate">
+                      {selected.companyName}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="flex flex-col gap-2">
                   {selected.location ? (
@@ -462,8 +438,8 @@ export function SearchSection() {
                     </p>
                   ) : null}
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  {selected.applyLink ? (
+                {selected.applyLink ? (
+                  <div className="flex flex-wrap items-center gap-2">
                     <Button asChild>
                       <a
                         href={selected.applyLink}
@@ -473,18 +449,8 @@ export function SearchSection() {
                         {texts.jobApplyAction}
                       </a>
                     </Button>
-                  ) : null}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span>
-                        <Button variant="ghost" size="icon" disabled>
-                          <Bookmark />
-                        </Button>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>{texts.saveSoon}</TooltipContent>
-                  </Tooltip>
-                </div>
+                  </div>
+                ) : null}
                 {selected.description ? (
                   <>
                     <Separator />
@@ -518,22 +484,12 @@ function PlaceholderCard() {
   return (
     <div
       aria-hidden="true"
-      className="bg-card/50 flex flex-col gap-2 rounded-xl border border-dashed p-3"
+      className="bg-card/50 flex flex-col gap-1.5 rounded-xl border border-dashed p-3"
     >
-      <div className="flex items-center gap-3">
-        <span className="bg-muted size-9 rounded-lg" />
-        <span className="bg-muted h-4 w-2/3 rounded" />
-      </div>
-      <div className="flex flex-col gap-1.5 pl-12">
-        <span className="bg-muted h-3 w-4/5 rounded" />
-        <span className="bg-muted h-3 w-3/5 rounded" />
-      </div>
-      <div className="mt-1 flex gap-1">
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted size-8 rounded-lg" />
-        <span className="bg-muted ml-auto size-8 rounded-lg" />
-      </div>
+      <span className="bg-muted h-4 w-2/3 rounded" />
+      <span className="bg-muted h-3 w-4/5 rounded" />
+      <span className="bg-muted h-3 w-3/5 rounded" />
+      <span className="bg-muted h-3 w-1/2 rounded" />
     </div>
   );
 }

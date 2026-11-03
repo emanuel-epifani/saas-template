@@ -155,7 +155,6 @@ export default function CompaniesMap({
 
   // Pan to the selected card only when the SELECTION changes — load-more
   // appends must not re-pan.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: gated on selectedIndex
   useEffect(() => {
     if (!map || selectedIndex == null) return;
     const c = companiesRef.current[selectedIndex];

@@ -101,9 +101,6 @@ export const texts = {
   searchError: "Ricerca non riuscita. Riprova tra poco.",
   jobApplyAction: "Vai all'offerta",
   jobDetailsEmpty: "Seleziona un'offerta per vedere i dettagli.",
-  copyContactsAction: "Copia contatti",
-  saveSoon: "Salvataggio presto disponibile",
-  copied: "Contatti copiati",
   mapIdleHint: "I risultati compariranno sulla mappa",
   jobDetailsIdle: "Avvia una ricerca: qui vedrai il dettaglio dell'offerta.",
 
