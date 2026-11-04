@@ -1,4 +1,4 @@
-import { Bookmark, Briefcase, Building2 } from "lucide-react";
+import { Archive, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/page-header";
@@ -20,7 +20,7 @@ export default function SavedPage() {
       <Empty className="border">
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <Bookmark />
+            <Archive />
           </EmptyMedia>
           <EmptyTitle>{texts.savedEmptyTitle}</EmptyTitle>
           <EmptyDescription>{texts.savedEmptyDesc}</EmptyDescription>

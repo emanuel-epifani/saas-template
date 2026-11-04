@@ -1,4 +1,4 @@
-import { Bookmark, Briefcase, Building2, LayoutDashboard } from "lucide-react";
+import { Archive, Briefcase, Building2, LayoutDashboard } from "lucide-react";
 
 import type { NavGroup } from "@/app/models";
 import { texts } from "@/texts";
@@ -26,9 +26,9 @@ export const navGroups: readonly NavGroup[] = [
     ],
   },
   {
-    label: texts.navGroupWork,
+    label: texts.navGroupArchive,
     items: [
-      { href: "/saved", label: texts.navSaved, icon: Bookmark, soon: true },
+      { href: "/saved", label: texts.navSaved, icon: Archive, soon: true },
     ],
   },
 ];

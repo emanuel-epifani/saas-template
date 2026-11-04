@@ -204,8 +204,8 @@
     color: var(--primary);
   }
 
-  /* Flat geography: tiles sit back so numbered pins and the radius ring
-     carry the reading, not the basemap's own color. */
+  /* Flat geography: tiles sit back so the numbered pins carry the
+     reading, not the basemap's own color. */
   .leaflet-tile {
     filter: saturate(0.7) contrast(1.03);
   }

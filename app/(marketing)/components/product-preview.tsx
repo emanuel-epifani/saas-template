@@ -55,10 +55,6 @@ export function ProductPreview() {
             <span className={cellLabel}>{texts.cityLabel}</span>
             <span className="block text-sm font-medium">Torino</span>
           </div>
-          <div className="border-border border-r px-3.5 pt-2 pb-2.5">
-            <span className={cellLabel}>{texts.radiusLabel}</span>
-            <span className="block text-sm font-medium">25 km</span>
-          </div>
           <Button disabled size="lg" className="h-auto rounded-none px-6">
             {texts.searchAction}
           </Button>

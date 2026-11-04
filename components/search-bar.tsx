@@ -3,13 +3,6 @@ import { LoaderCircle } from "lucide-react";
 import type { SearchBarProps } from "@/app/models";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { texts } from "@/texts";
 
 const cell =
@@ -30,7 +23,6 @@ export function SearchBar({
   termPlaceholder,
   city,
   onCityChange,
-  radius,
   pending,
   onSubmit,
 }: SearchBarProps) {
@@ -64,29 +56,6 @@ export function SearchBar({
           className={field}
         />
       </label>
-      {radius ? (
-        <label htmlFor={`${idPrefix}-radius`} className={`${cell} flex-none`}>
-          <span className={cellLabel}>{texts.radiusLabel}</span>
-          <Select
-            value={String(radius.value)}
-            onValueChange={(v) => radius.onChange(Number(v))}
-          >
-            <SelectTrigger
-              id={`${idPrefix}-radius`}
-              className={`${field} w-auto min-w-20`}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {radius.options.map((o) => (
-                <SelectItem key={o.km} value={String(o.km)}>
-                  {o.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-      ) : null}
       <Button
         type="submit"
         size="lg"

@@ -37,14 +37,31 @@ The SAME number links: list row ↔ map pin ↔ detail pane ↔ map popup
 - List panel header: `N° | <entità>` micro-label row on top, same
   ledger column.
 - Selected/hovered row → `bg-accent/60`; ledger cell → `bg-primary/10`
-  + `text-primary`.
+  - `text-primary`.
 - Map pin → SVG teardrop `.map-pin`: paper body (`.map-pin-shape` fill
   card + ink stroke), dark number inside the head; active → blue fill
-  + light number. Search center → `.map-origin` radar blip inside the
-  dashed radius ring.
+  - light number. The map fits the result pins' bounds on each new search.
 - Selecting a row opens the pin's popup as the eye's anchor; the map
   re-centers only when the pin is off-view or hugging the edge
   (`bounds.pad(-0.15)`).
+
+## Two search directions
+
+The product has two opposed search modes that must stay visually
+distinct (see PRODUCT.md):
+
+- **PROSPEZIONE** (outbound, the radar): `/companies`, `/job-offers`.
+  Results are _register entries_ — numbered, transient, thrown away
+  after evaluation.
+- **ARCHIVIO** (inbound, the schedario): `/saved` → future qualified DB.
+  Entries are _schede_ — cards in a grid (ragione sociale, P.IVA, fido,
+  contatti), a different document type inside the same paper-office
+  world. Cards ≠ register rows; that's the whole distinction. No second
+  accent color — separation is carried by structure + labels.
+
+Sidebar groups: `PROSPEZIONE` / `ARCHIVIO` micro-labels. Dashboard is
+split into two labeled zones matching them; the archive zone shows
+dashed scheda ghosts until the feature lands.
 
 ## Surface idioms
 
@@ -90,4 +107,4 @@ The SAME number links: list row ↔ map pin ↔ detail pane ↔ map popup
 - `app/(protected)/{companies,job-offers}/components/search-section.tsx`
   — the register idiom in production.
 - `app/(protected)/companies/components/companies-map.tsx` — numbered
-  Leaflet pins + dashed radius ring.
+  Leaflet pins, bounds-fitted to the active search.

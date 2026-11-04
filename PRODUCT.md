@@ -33,7 +33,7 @@ Daily prospecting sessions at a desk: set sector or role plus a zone, scan resul
 
 ## Capabilities and Constraints
 
-- Companies search by sector/activity + city/radius: name, address, phone, website, position on map (SerpApi data).
+- Companies search by sector/activity + city: name, address, phone, website, position on map (SerpApi data).
 - Job offers search by role + zone: details, salary when available, source, direct link to the original posting.
 - Saved items: announced "presto" — surface exists, feature pending.
 - Auth and account via Better Auth (daveyplate better-auth-ui views).

@@ -22,12 +22,7 @@ import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";
-import {
-  companiesSearchHref,
-  parseRadius,
-  RADIUS_OPTIONS,
-  radiusLabel,
-} from "../lib/search-params";
+import { companiesSearchHref } from "../lib/search-params";
 
 const CompaniesMap = dynamic(() => import("./companies-map"), { ssr: false });
 
@@ -35,10 +30,9 @@ const PAGE_SIZE = 20;
 
 interface Snapshot {
   results: CompanyResult[];
-  center: { lat: number; lng: number } | null;
   hasMore: boolean;
   offset: number;
-  resultQuery: { term: string; city: string; radius: number };
+  resultQuery: { term: string; city: string };
   selectedIndex: number | null;
 }
 
@@ -49,12 +43,6 @@ export function SearchSection() {
   const searchParams = useSearchParams();
   const [term, setTerm] = useState(searchParams.get("term") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
-  const [radius, setRadius] = useState<number>(() =>
-    parseRadius(searchParams.get("radius")),
-  );
-  const [center, setCenter] = useState<{ lat: number; lng: number } | null>(
-    null,
-  );
   const [results, setResults] = useState<CompanyResult[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -62,7 +50,6 @@ export function SearchSection() {
   const [resultQuery, setResultQuery] = useState<{
     term: string;
     city: string;
-    radius: number;
   } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -80,20 +67,18 @@ export function SearchSection() {
           ? "empty"
           : "results";
 
-  function runSearch(params: { term: string; city: string; radius: number }) {
+  function runSearch(params: { term: string; city: string }) {
     setSelectedIndex(null);
     startTransition(async () => {
       try {
         const data = await findCompanies({ ...params, start: 0 });
         setResults(data.companies);
         setHasMore(data.hasMore);
-        setCenter(data.center);
         setOffset(0);
         setSearched(true);
         setResultQuery({
           term: params.term,
           city: params.city,
-          radius: params.radius,
         });
       } catch {
         toast.error(texts.searchError);
@@ -102,7 +87,7 @@ export function SearchSection() {
   }
 
   function onSubmit() {
-    const params = { term, city, radius };
+    const params = { term, city };
     router.replace(companiesSearchHref(params), { scroll: false });
     runSearch(params);
   }
@@ -126,7 +111,8 @@ export function SearchSection() {
   }
 
   function select(index: number) {
-    setSelectedIndex(index);
+    // Click on the selected row/pin again deselects — closes the popup.
+    setSelectedIndex(index === selectedIndex ? null : index);
     cardRefs.current[index]?.scrollIntoView({
       behavior: "smooth",
       block: "nearest",
@@ -147,7 +133,7 @@ export function SearchSection() {
   useEffect(() => {
     if (autoSearched.current) return;
     autoSearched.current = true;
-    const params = { term, city, radius };
+    const params = { term, city };
     if (!params.term || !params.city) return;
     const href = companiesSearchHref(params);
     if (consumeSearchIntent(href)) {
@@ -157,7 +143,6 @@ export function SearchSection() {
     const snap = cache.restore(href);
     if (!snap) return;
     setResults(snap.results);
-    setCenter(snap.center);
     setHasMore(snap.hasMore);
     setOffset(snap.offset);
     setResultQuery(snap.resultQuery);
@@ -178,13 +163,12 @@ export function SearchSection() {
     if (!searched || !resultQuery) return;
     cache.save(companiesSearchHref(resultQuery), {
       results,
-      center,
       hasMore,
       offset,
       resultQuery,
       selectedIndex,
     });
-  }, [searched, results, center, hasMore, offset, resultQuery, selectedIndex]);
+  }, [searched, results, hasMore, offset, resultQuery, selectedIndex]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,7 +180,6 @@ export function SearchSection() {
         termPlaceholder={texts.companiesTermPlaceholder}
         city={city}
         onCityChange={setCity}
-        radius={{ value: radius, onChange: setRadius, options: RADIUS_OPTIONS }}
         pending={pending}
         onSubmit={onSubmit}
       />
@@ -224,10 +207,10 @@ export function SearchSection() {
           <div className="border-border sticky top-4 h-[70vh] self-start overflow-hidden rounded-md border">
             <CompaniesMap
               companies={[]}
-              center={null}
-              radiusM={radius * 1000}
+              searchKey=""
               highlightedIndex={null}
               selectedIndex={null}
+              hoveredIndex={null}
               onSelect={() => {}}
               onHover={() => {}}
             />
@@ -273,7 +256,7 @@ export function SearchSection() {
                 <>
                   {" "}
                   {texts.resultsForLabel} «{resultQuery.term} ·{" "}
-                  {resultQuery.city} · {radiusLabel(resultQuery.radius)}»
+                  {resultQuery.city}»
                 </>
               ) : null}
             </p>
@@ -398,10 +381,12 @@ export function SearchSection() {
           <div className="border-border relative sticky top-4 h-[70vh] self-start overflow-hidden rounded-md border">
             <CompaniesMap
               companies={results}
-              center={center}
-              radiusM={radius * 1000}
+              searchKey={
+                resultQuery ? `${resultQuery.term}|${resultQuery.city}` : ""
+              }
               highlightedIndex={highlightedIndex}
               selectedIndex={selectedIndex}
+              hoveredIndex={hoveredIndex}
               onSelect={select}
               onHover={setHoveredIndex}
             />

@@ -20,11 +20,6 @@ export interface SearchBarProps {
   termPlaceholder: string;
   city: string;
   onCityChange: (v: string) => void;
-  radius?: {
-    value: number;
-    onChange: (km: number) => void;
-    options: readonly { km: number; label: string }[];
-  };
   pending?: boolean;
   onSubmit: () => void;
 }

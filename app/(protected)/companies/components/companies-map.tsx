@@ -8,14 +8,14 @@ import "leaflet/dist/leaflet.css";
 
 interface CompaniesMapProps {
   companies: CompanyResult[];
-  /** Centro della ricerca (città geocodificata) — assente prima della 1a search. */
-  center: { lat: number; lng: number } | null;
-  /** Raggio selezionato in metri — disegna il cerchio dell'area di ricerca. */
-  radiusM: number;
+  /** Firma della ricerca attiva (term|city) — cambia → fitBounds sui marker. */
+  searchKey: string;
   /** Index highlighted on the map (click OR hover from the list). */
   highlightedIndex: number | null;
-  /** Index selected from the list — the map centers on it. */
+  /** Index selected from the list — the map centers on it and opens its popup. */
   selectedIndex: number | null;
+  /** Index under the pointer — a different one suppresses the pinned popup. */
+  hoveredIndex: number | null;
   onSelect: (index: number) => void;
   onHover: (index: number | null) => void;
 }
@@ -35,10 +35,10 @@ function markerIcon(i: number, active: boolean) {
 
 export default function CompaniesMap({
   companies,
-  center,
-  radiusM,
+  searchKey,
   highlightedIndex,
   selectedIndex,
+  hoveredIndex,
   onSelect,
   onHover,
 }: CompaniesMapProps) {
@@ -54,11 +54,9 @@ export default function CompaniesMap({
   const companiesRef = useRef(companies);
   companiesRef.current = companies;
 
-  // Fit only when the searched area changes — appending results ("Carica
-  // altri") must not reset the user's zoom/pan.
-  const fitKey = center
-    ? `${center.lat},${center.lng},${radiusM}`
-    : companies.map((c) => c.key).join("|");
+  // Fit only when the ACTIVE search changes — appending results ("Carica
+  // altri") keeps the same searchKey and must not reset the user's zoom/pan.
+  const fitKey = searchKey;
 
   // Imperative Leaflet: Next keeps hidden routes alive and re-runs effects on
   // restore; react-leaflet can't survive that (map container reused). We
@@ -84,31 +82,6 @@ export default function CompaniesMap({
   }, []);
 
   useEffect(() => {
-    if (!map || !center) return;
-    const circle = L.circle([center.lat, center.lng], {
-      radius: radiusM,
-      color: "var(--foreground)",
-      weight: 1.5,
-      dashArray: "6 6",
-      fillOpacity: 0.04,
-    }).addTo(map);
-    const origin = L.marker([center.lat, center.lng], {
-      icon: L.divIcon({
-        className: "",
-        html: `<div class="map-origin" aria-hidden="true"></div>`,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7],
-      }),
-      interactive: false,
-      keyboard: false,
-    }).addTo(map);
-    return () => {
-      circle.remove();
-      origin.remove();
-    };
-  }, [map, center, radiusM]);
-
-  useEffect(() => {
     if (!map) return;
     const markers = companies.map((c, i) => {
       if (c.lat == null || c.lon == null) return null;
@@ -124,14 +97,18 @@ export default function CompaniesMap({
         content.appendChild(document.createElement("br"));
         content.appendChild(document.createTextNode(c.address));
       }
-      return L.marker([c.lat, c.lon], {
-        icon: markerIcon(i, i === highlightedRef.current),
-      })
-        .on("click", () => onSelectRef.current(i))
-        .on("mouseover", () => onHoverRef.current(i))
-        .on("mouseout", () => onHoverRef.current(null))
-        .bindPopup(content)
-        .addTo(map);
+      return (
+        L.marker([c.lat, c.lon], {
+          icon: markerIcon(i, i === highlightedRef.current),
+        })
+          .on("click", () => onSelectRef.current(i))
+          .on("mouseover", () => onHoverRef.current(i))
+          .on("mouseout", () => onHoverRef.current(null))
+          // Offset negativo: la punta del popup sta SOPRA la testa del pin
+          // (32px) — altrimenti copre il marker evidenziato.
+          .bindPopup(content, { offset: [0, -36] })
+          .addTo(map)
+      );
     });
     markersRef.current = markers;
     return () => {
@@ -147,21 +124,17 @@ export default function CompaniesMap({
     });
   }, [map, highlightedIndex]);
 
-  // Fit sul cerchio del raggio quando c'è (mostra l'area cercata),
-  // altrimenti sui pin dei risultati — keyed on fitKey, not the data.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: fitKey gates the fit
+  // Fit sui pin dei risultati a ogni nuova ricerca — keyed on fitKey
+  // (firma della search), non sui dati: il load-more non deve ri-fittare.
   useEffect(() => {
     if (!map || !fitKey) return;
-    const cs = companiesRef.current;
-    const b = center
-      ? L.latLng(center.lat, center.lng).toBounds(radiusM * 2)
-      : cs
-          .filter(
-            (c): c is CompanyResult & { lat: number; lon: number } =>
-              c.lat != null && c.lon != null,
-          )
-          .map((c) => [c.lat, c.lon] as [number, number]);
-    if (Array.isArray(b) ? b.length > 0 : b) {
+    const b = companiesRef.current
+      .filter(
+        (c): c is CompanyResult & { lat: number; lon: number } =>
+          c.lat != null && c.lon != null,
+      )
+      .map((c) => [c.lat, c.lon] as [number, number]);
+    if (b.length > 0) {
       map.fitBounds(b, { padding: [30, 30] });
     }
   }, [map, fitKey]);
@@ -169,8 +142,18 @@ export default function CompaniesMap({
   // On selection the popup is the eye's anchor — the map re-centers only
   // when the pin is off-view or hugging the edge, so a click never makes
   // the user lose their bearings. Load-more appends must not re-pan.
+  // Hovering a DIFFERENT row hides the pinned popup: while scanning the
+  // list the map stays clean and the pins visible; it reopens when the
+  // pointer leaves the list (or returns on the selected row).
   useEffect(() => {
-    if (!map || selectedIndex == null) return;
+    if (!map) return;
+    const suppressed =
+      selectedIndex == null ||
+      (hoveredIndex != null && hoveredIndex !== selectedIndex);
+    if (suppressed) {
+      map.closePopup();
+      return;
+    }
     const c = companiesRef.current[selectedIndex];
     if (!c || c.lat == null || c.lon == null) return;
     const ll = L.latLng(c.lat, c.lon);
@@ -180,7 +163,7 @@ export default function CompaniesMap({
       map.setView(ll, map.getZoom(), { animate: false });
     }
     markersRef.current[selectedIndex]?.openPopup();
-  }, [map, selectedIndex]);
+  }, [map, selectedIndex, hoveredIndex]);
 
   return <div ref={containerRef} className="h-full w-full" />;
 }

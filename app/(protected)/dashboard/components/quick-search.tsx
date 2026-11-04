@@ -4,11 +4,7 @@ import { Briefcase, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import {
-  companiesSearchHref,
-  DEFAULT_RADIUS,
-  RADIUS_OPTIONS,
-} from "@/app/(protected)/companies/lib/search-params";
+import { companiesSearchHref } from "@/app/(protected)/companies/lib/search-params";
 import { jobOffersSearchHref } from "@/app/(protected)/job-offers/lib/search-params";
 import { markSearchIntent } from "@/app/(protected)/lib/search-intent";
 import { SearchBar } from "@/components/search-bar";
@@ -22,12 +18,11 @@ export function QuickSearch() {
   const [mode, setMode] = useState<Mode>("companies");
   const [term, setTerm] = useState("");
   const [city, setCity] = useState("");
-  const [radius, setRadius] = useState<number>(DEFAULT_RADIUS);
 
   function onSubmit() {
     const href =
       mode === "companies"
-        ? companiesSearchHref({ term, city, radius })
+        ? companiesSearchHref({ term, city })
         : jobOffersSearchHref({ term, city });
     markSearchIntent(href);
     router.push(href);
@@ -75,11 +70,6 @@ export function QuickSearch() {
         }
         city={city}
         onCityChange={setCity}
-        radius={
-          mode === "companies"
-            ? { value: radius, onChange: setRadius, options: RADIUS_OPTIONS }
-            : undefined
-        }
         onSubmit={onSubmit}
       />
     </section>

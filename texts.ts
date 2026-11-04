@@ -25,12 +25,12 @@ export const texts = {
     "Se non hai richiesto questa operazione, puoi ignorare questa email.",
 
   navGroupGeneral: "Generale",
-  navGroupProspecting: "Prospecting",
-  navGroupWork: "Il tuo lavoro",
+  navGroupProspecting: "Prospezione",
+  navGroupArchive: "Archivio",
   navDashboard: "Dashboard",
   navCompanies: "Aziende",
   navJobOffers: "Offerte di lavoro",
-  navSaved: "Salvati",
+  navSaved: "Le tue aziende",
   navAccount: "Account",
   navSignIn: "Accedi",
   navGetStarted: "Inizia ora",
@@ -57,7 +57,7 @@ export const texts = {
   stepContactDesc:
     "Chiama, scrivi o proponi un candidato: la partnership parte da qui.",
 
-  companiesBenefit1: "Ricerca per settore e raggio",
+  companiesBenefit1: "Ricerca per settore e zona",
   companiesBenefit2: "Telefono, indirizzo e sito in un click",
   companiesBenefit3: "Mappa dell'area con tutti i risultati",
   jobsBenefit1: "Offerte aperte per ruolo e zona",
@@ -70,16 +70,21 @@ export const texts = {
   dashboardGreeting: "Bentornato",
   dashboardPrompt: "Cosa cerchi oggi?",
   registerIndexLabel: "N°",
+  dashboardProspectingTitle: "Nuove opportunità",
+  dashboardArchiveTitle: "Il tuo archivio",
+  dashboardArchiveDesc:
+    "Le aziende qualificate dal team: le schede su cui proporre i candidati.",
+  dashboardArchiveHint:
+    "Le schede compariranno qui man mano che qualifichi le aziende dal radar.",
+  schedaLabel: "Scheda",
   dashboardCompaniesDesc: "Aziende da contattare per una partnership.",
   dashboardJobsDesc: "Offerte aperte dove proporre i tuoi candidati.",
 
-  companiesTitle: "Cerca aziende",
+  companiesTitle: "Cerca nuove aziende",
   companiesSubtitle:
     "Cerca aziende per settore e zona da contattare per una partnership.",
   companiesTermLabel: "Settore / attività",
   companiesTermPlaceholder: "Settore, attività o prodotto",
-  radiusLabel: "Raggio",
-  radiusCenterOption: "Centro città",
   loadMore: "Carica altri",
   resultsLabel: "risultati",
   resultsForLabel: "per",
@@ -105,9 +110,10 @@ export const texts = {
   mapIdleHint: "I risultati compariranno sulla mappa",
   jobDetailsIdle: "Avvia una ricerca: qui vedrai il dettaglio dell'offerta.",
 
-  savedTitle: "Salvati",
-  savedSubtitle: "Aziende e offerte che hai messo da parte.",
-  savedEmptyTitle: "Presto disponibile",
+  savedTitle: "Archivio",
+  savedSubtitle:
+    "Le aziende qualificate dal team — la fonte quando proponi candidati.",
+  savedEmptyTitle: "Le schede del tuo team",
   savedEmptyDesc:
-    "Potrai salvare aziende e offerte dai risultati per ritrovarle qui e ricontattarle.",
+    "Quando qualifichi un'azienda dal radar diventa una scheda qui — da cercare quando hai candidati da proporre.",
 } as const;
