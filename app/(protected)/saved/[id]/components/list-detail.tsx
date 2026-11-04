@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { PromptDialog } from "@/components/prompt-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -381,63 +382,6 @@ function DeleteItemButton({ onDelete }: { onDelete: () => void }) {
     >
       <Trash2 />
     </Button>
-  );
-}
-
-// Dialog generico con un singolo input (nuova colonna, rinomina lista).
-function PromptDialog({
-  open,
-  onOpenChange,
-  title,
-  initialValue = "",
-  placeholder,
-  submitLabel,
-  onSubmit,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  initialValue?: string;
-  placeholder?: string;
-  submitLabel: string;
-  onSubmit: (value: string) => void;
-}) {
-  const [value, setValue] = useState(initialValue);
-  useEffect(() => {
-    if (open) setValue(initialValue);
-  }, [open, initialValue]);
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        <Input
-          autoFocus
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={placeholder}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && value.trim()) {
-              onSubmit(value.trim());
-              onOpenChange(false);
-            }
-          }}
-        />
-        <DialogFooter>
-          <Button
-            disabled={!value.trim()}
-            onClick={() => {
-              onSubmit(value.trim());
-              onOpenChange(false);
-            }}
-          >
-            {submitLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
 

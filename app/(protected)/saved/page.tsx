@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { PageHeader } from "@/components/page-header";
+import { RegisterToScheda } from "@/components/register-to-scheda";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Empty,
@@ -43,20 +44,23 @@ async function SavedLists() {
           <EmptyDescription>{texts.savedEmptyDesc}</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
+          <div className="w-full max-w-md">
+            <RegisterToScheda />
+          </div>
           <div className="flex gap-2">
             <Link
               href="/companies"
               className={buttonVariants({ variant: "outline" })}
             >
               <Building2 />
-              {texts.navCompanies}
+              {texts.navSearchCompanies}
             </Link>
             <Link
               href="/job-offers"
               className={buttonVariants({ variant: "outline" })}
             >
               <Briefcase />
-              {texts.navJobOffers}
+              {texts.navSearchJobs}
             </Link>
           </div>
         </EmptyContent>

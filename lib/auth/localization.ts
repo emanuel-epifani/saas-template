@@ -1,14 +1,19 @@
 import type { AuthLocalization } from "@daveyplate/better-auth-ui";
 
-// better-auth-ui's localization object has its own key shape (dictated by
-// the library), so it can't live inside the flat `texts` object.
-// Covers the views this app enables: sign-in/up, forgot/reset password,
-// email verification, sign-out, the user menu and account settings.
+import { texts } from "@/texts";
+
+// better-auth-ui's localization object has its own key shape (UPPER_SNAKE,
+// dictated by the library), so it can't live inside the flat `texts`
+// object — but it borrows shared strings from it so the same words never
+// fork. Neutral file (no server-only imports): consumed by providers.tsx
+// in the client bundle. Covers the views this app enables: sign-in/up,
+// forgot/reset password, email verification, sign-out, the user menu and
+// account settings.
 export const authLocalization = {
-  APP: "Scout",
+  APP: texts.appName,
   USER: "Utente",
-  ACCOUNT: "Account",
-  ACCOUNTS: "Account",
+  ACCOUNT: texts.navAccount,
+  ACCOUNTS: texts.navAccount,
   ACCOUNTS_DESCRIPTION: "Passa da un account all'altro.",
   ACCOUNTS_INSTRUCTIONS: "Accedi a un altro account.",
   ADD_ACCOUNT: "Aggiungi account",
@@ -16,8 +21,8 @@ export const authLocalization = {
   SETTINGS: "Impostazioni",
   SECURITY: "Sicurezza",
 
-  SIGN_IN: "Accedi",
-  SIGN_IN_ACTION: "Accedi",
+  SIGN_IN: texts.navSignIn,
+  SIGN_IN_ACTION: texts.navSignIn,
   SIGN_IN_DESCRIPTION: "Inserisci la tua email per accedere al tuo account",
   SIGN_IN_USERNAME_DESCRIPTION:
     "Inserisci il tuo username o la tua email per accedere",
@@ -122,12 +127,12 @@ export const authLocalization = {
   SESSION_NOT_FRESH: "La tua sessione non è aggiornata. Accedi di nuovo.",
   SWITCH_ACCOUNT: "Cambia account",
 
-  CANCEL: "Annulla",
+  CANCEL: texts.cancelAction,
   CONTINUE: "Continua",
   DONE: "Fatto",
-  SAVE: "Salva",
+  SAVE: texts.saveConfirmAction,
   UPDATE: "Aggiorna",
-  DELETE: "Elimina",
+  DELETE: texts.deleteAction,
   GO_BACK: "Torna indietro",
   COPY_TO_CLIPBOARD: "Copia negli appunti",
   COPIED_TO_CLIPBOARD: "Copiato negli appunti",

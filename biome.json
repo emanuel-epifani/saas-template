@@ -50,7 +50,9 @@
         "noTsIgnore": "error"
       },
       "style": {
-        "noHeadElement": "error"
+        "noHeadElement": "error",
+        "noProcessEnv": "error",
+        "useImportType": "error"
       },
       "performance": {
         "noImgElement": "error",
@@ -102,6 +104,45 @@
     "variantFunctions": ["cva"]
   },
   "overrides": [
+    {
+      "includes": [
+        "env.ts",
+        "drizzle.config.ts",
+        "next.config.ts",
+        "lib/db/index.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/**", "components/**", "hooks/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/env"],
+                    "message": "env vars are read inside lib/ server modules — never in presentation code."
+                  },
+                  {
+                    "group": ["@/lib/db", "@/lib/db/**"],
+                    "message": "No direct DB access in presentation — go through lib/<provider> repos."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     {
       "includes": [
         "**/app/**/{page,layout,loading,error,not-found,template,default}.{ts,tsx}",

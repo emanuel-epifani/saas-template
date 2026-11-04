@@ -59,9 +59,23 @@ distinct (see PRODUCT.md):
   world. Cards ≠ register rows; that's the whole distinction. No second
   accent color — separation is carried by structure + labels.
 
-Sidebar groups: `PROSPEZIONE` / `ARCHIVIO` micro-labels. Dashboard is
-split into two labeled zones matching them; the archive zone shows
-dashed scheda ghosts until the feature lands.
+Sidebar groups: `PROSPEZIONE` / `ARCHIVIO` micro-labels. Prospezione
+entries carry the verb (`Cerca aziende`, `Cerca offerte`); archive
+carries the object (`Liste salvate`). Dashboard is split into two
+labeled zones matching them, side by side on desktop
+(`lg:grid-cols-[1.1fr_1fr]`), stacked on smaller screens.
+
+## Cycle idioms
+
+- **Routing-slip strip** (dashboard top): 3 bordered panels —
+  `CERCA → SALVA → DECIDI` — each a link with lucide icon + mono index;
+  `ArrowRight` sits in the gap between panels (sm+). Teaches the
+  workflow and navigates.
+- **Register → scheda mini-scena** (`components/register-to-scheda.tsx`):
+  educational diagram for archive empty states — a fictional register
+  row (ledger `01` cell) arrowing into a scheda card (`SCHEDA` micro-label,
+  `Check` + `P.IVA · fido · note`). `aria-hidden`, fictional data,
+  stacks vertically on narrow screens.
 
 ## Surface idioms
 

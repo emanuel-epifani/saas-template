@@ -7,9 +7,9 @@ import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 
-import { authLocalization } from "@/auth-localization";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/client";
+import { authLocalization } from "@/lib/auth/localization";
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();

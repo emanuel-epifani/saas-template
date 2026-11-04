@@ -14,7 +14,7 @@ export const env = createEnv({
     // "Onboarding <onboarding@resend.dev>" works without a verified domain.
     EMAIL_FROM: z.string().min(3),
     // SerpApi — optional while mocked; required once SERPAPI_MOCK is off.
-    SERPAPI_API_KEY: z.string(),
+    API_KEY_SERPAPI: z.string(),
     // "false" = real calls (consume credits). Missing/unset = mock ON.
     SERPAPI_MOCK: z.enum(["true", "false"]).default("true"),
   },
@@ -25,7 +25,7 @@ export const env = createEnv({
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
-    SERPAPI_API_KEY: process.env.API_KEY_SERPAPI,
+    API_KEY_SERPAPI: process.env.API_KEY_SERPAPI,
     SERPAPI_MOCK: process.env.SERPAPI_MOCK,
   },
   emptyStringAsUndefined: true,

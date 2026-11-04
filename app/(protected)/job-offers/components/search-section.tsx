@@ -14,6 +14,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { SaveDialog } from "@/components/save-dialog";
 import { SearchBar } from "@/components/search-bar";
+import { SelectionBar } from "@/components/selection-bar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -267,34 +268,19 @@ export function SearchSection() {
             </p>
             <div
               className={cn(
-                "bg-card flex min-h-0 flex-1 flex-col rounded-md border transition-opacity",
+                "bg-card relative flex min-h-0 flex-1 flex-col rounded-md border transition-opacity",
                 pending && "opacity-60",
               )}
             >
               <div className="scroll-list min-h-0 flex-1 overflow-y-auto">
-                <div className="bg-card text-muted-foreground border-border sticky top-0 z-10 flex items-stretch border-b text-[10px] font-medium tracking-[0.08em] uppercase">
+                <div className="bg-card text-muted-foreground border-border sticky top-0 z-20 flex h-9 items-stretch border-b text-[10px] font-medium tracking-[0.08em] uppercase">
                   <span className="border-border flex w-10 items-center justify-center border-r">
                     {texts.registerIndexLabel}
                   </span>
                   <span className="flex flex-1 items-center gap-3 px-4 py-1.5">
                     {texts.navJobOffers}
-                    <span className="ml-auto flex items-center gap-2.5 normal-case">
-                      {checked.size > 0 ? (
-                        <>
-                          <span className="text-foreground">
-                            {checked.size} {texts.selectedSuffix}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setSaveOpen(true)}
-                            className="text-primary font-medium tracking-[0.08em] uppercase hover:underline"
-                          >
-                            {texts.saveToListAction}
-                          </button>
-                        </>
-                      ) : (
-                        <span>{texts.selectToSaveHint}</span>
-                      )}
+                    <span className="ml-auto normal-case">
+                      {texts.selectToSaveHint}
                     </span>
                   </span>
                   <span className="flex w-10 items-center justify-center">
@@ -308,7 +294,12 @@ export function SearchSection() {
                     />
                   </span>
                 </div>
-                <ul className="divide-border divide-y">
+                <ul
+                  className={cn(
+                    "divide-border divide-y",
+                    checked.size > 0 && "pb-14",
+                  )}
+                >
                   {results.map((j, i) => (
                     <li key={j.externalId} className="scroll-mt-9">
                       <div
@@ -383,6 +374,11 @@ export function SearchSection() {
                   ))}
                 </ul>
               </div>
+              <SelectionBar
+                count={checked.size}
+                onClear={() => toggleAll(false)}
+                onSave={() => setSaveOpen(true)}
+              />
             </div>
             {nextPageToken ? (
               <Button

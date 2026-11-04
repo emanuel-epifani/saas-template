@@ -43,14 +43,14 @@ export function QuickSearch() {
           className="text-muted-foreground data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-xs"
         >
           <Building2 />
-          {texts.navCompanies}
+          {texts.navSearchCompanies}
         </ToggleGroupItem>
         <ToggleGroupItem
           value="jobs"
           className="text-muted-foreground data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-xs"
         >
           <Briefcase />
-          {texts.navJobOffers}
+          {texts.navSearchJobs}
         </ToggleGroupItem>
       </ToggleGroup>
 

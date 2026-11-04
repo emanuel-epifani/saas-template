@@ -117,7 +117,7 @@ type Engine = keyof typeof engines;
 async function fetchSerpApi(params: Record<string, string>): Promise<unknown> {
   const url = new URL(BASE_URL);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-  url.searchParams.set("api_key", env.SERPAPI_API_KEY ?? "");
+  url.searchParams.set("api_key", env.API_KEY_SERPAPI ?? "");
 
   // Timeout 30s: scrape "freschi" su query oscure misurati a 8-60s lato
   // SerpApi (poi la cache loro li rende istantanei per ~1h).
