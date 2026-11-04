@@ -16,7 +16,7 @@ export const env = createEnv({
     // SerpApi — optional while mocked; required once SERPAPI_MOCK is off.
     API_KEY_SERPAPI: z.string(),
     // "false" = real calls (consume credits). Missing/unset = mock ON.
-    SERPAPI_MOCK: z.enum(["true", "false"]).default("true"),
+    SERPAPI_MOCK: z.enum(["true", "false"]).default("false"),
   },
   client: {},
   runtimeEnv: {
