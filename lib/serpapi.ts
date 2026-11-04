@@ -8,7 +8,6 @@ import { env } from "@/env";
 /*
  * Layer condiviso SerpApi — usato dai repo delle feature (lib/<feature>/):
  *   - querySerpApi: call reale o fixture (SERPAPI_MOCK)
- *   - resolveCity:  geocoding Nominatim → coordinate + nome canonico
  *   - dedupe:       helper di deduplicazione generico
  *
  * MOCK: finché env.SERPAPI_MOCK !== "false" le call esterne non partono.
@@ -90,16 +89,25 @@ export type SerpJobsResponse = z.infer<typeof serpJobsResponseSchema>;
 // uscita: sopra c'è solo lo switch mock/reale.
 // Engine → schema del payload + file mock accanto al repo della feature:
 // una sola fonte di verità per real e mock.
+// `restrictor` = json_restrictor: chiede a SerpApi solo i campi usati
+// (payload più piccolo, parse più veloce). `error` incluso sempre — senza,
+// gli errori API tornerebbero {} e li leggeremmo come "0 risultati".
+// Il restrictor entra nella cache key SerpApi: è una costante, quindi le
+// query identiche condividono comunque la cache.
 // ---------------------------------------------------------------------------
 
 const engines = {
   google_maps: {
     schema: serpMapsResponseSchema,
     mockFile: join("lib", "companies", "serpapi.mock.json"),
+    restrictor:
+      "error, serpapi_pagination.next, local_results[].{place_id, title, address, type, phone, website, gps_coordinates.latitude, gps_coordinates.longitude}",
   },
   google_jobs: {
     schema: serpJobsResponseSchema,
     mockFile: join("lib", "job-offers", "serpapi.mock.json"),
+    restrictor:
+      "error, serpapi_pagination.next_page_token, jobs_results[].{job_id, title, company_name, location, via, description, apply_options[].link}",
   },
 } as const;
 
@@ -132,113 +140,22 @@ export function querySerpApi(
 export async function querySerpApi(
   params: Record<string, string> & { engine: Engine },
 ): Promise<SerpMapsResponse | SerpJobsResponse> {
-  const { schema, mockFile } = engines[params.engine];
-  const raw = USE_MOCK ? readMockFile(mockFile) : await fetchSerpApi(params);
+  const { schema, mockFile, restrictor } = engines[params.engine];
+  const raw = USE_MOCK
+    ? readMockFile(mockFile)
+    : await fetchSerpApi({ ...params, json_restrictor: restrictor });
   const response = schema.parse(raw);
-  // SerpApi segnala gli errori a livello API (quota esaurita, parametri
-  // invalidi) dentro HTTP 200, nel campo `error` — senza questo check
-  // il caller li leggerebbe come "0 risultati".
-  if (response.error) throw new Error(`SerpApi: ${response.error}`);
-  return response;
-}
-
-// ---------------------------------------------------------------------------
-// Geocoding — Nominatim (OpenStreetMap). Free, nessuna key.
-// locations.json di SerpApi non è utilizzabile: usa i nomi inglesi per le
-// città maggiori ("Torino" → "Rivalta di Torino", "Milano" → Texas).
-// Policy OSM: User-Agent identificativo, max 1 req/s → la cache copre.
-// ---------------------------------------------------------------------------
-
-const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
-
-const nominatimResultSchema = z.object({
-  /** Nominatim restituisce lat/lon come stringhe. */
-  lat: z.string(),
-  lon: z.string(),
-  address: z
-    .object({
-      city: z.string().optional(),
-      town: z.string().optional(),
-      village: z.string().optional(),
-      municipality: z.string().optional(),
-      /** Provincia/contea — fallback quando il top hit è un boundary amministrativo */
-      county: z.string().optional(),
-      state: z.string().optional(),
-      country: z.string().optional(),
-    })
-    .optional(),
-});
-
-export interface ResolvedLocation {
-  /** Nome canonico SerpApi, es. "Turin,Piedmont,Italy" */
-  canonicalName: string;
-  lat: number;
-  lng: number;
-}
-
-const locationCache = new Map<string, ResolvedLocation>();
-
-/** Città → coordinate + nome canonico SerpApi. Cache per processo, chiave normalizzata. */
-export async function resolveCity(city: string): Promise<ResolvedLocation> {
-  /*
-    todo:capire se serve per forza questo remappping (o magari metti già cities suggerite da maps in modo da poter passare in input sol una tra le opzioi giuste?)
-    opzioni:Google Places Autocomplete,mapbox,geoapify,locationIQ,phono(Komoot),lista istat locale, etc
-   */
-  const key = city.trim().toLowerCase();
-  const cached = locationCache.get(key);
-  if (cached) return cached;
-
-  const url = new URL(NOMINATIM_URL);
-  url.searchParams.set("q", city);
-  url.searchParams.set("format", "jsonv2");
-  // limit > 1: il primo risultato può essere la PROVINCIA (boundary "county")
-  // prima del comune — es. "vercelli". Serve scorrere qualche hit.
-  url.searchParams.set("limit", "5");
-  url.searchParams.set("countrycodes", "it");
-  url.searchParams.set("addressdetails", "1");
-  // In inglese Nominatim restituisce lo stesso nome canonico usato da SerpApi
-  // ("Torino" → "Turin,Piedmont,Italy"), che `location` risolve alla città esatta.
-  url.searchParams.set("accept-language", "en");
-
-  const res = await fetch(url, {
-    headers: { "User-Agent": "saas-template/1.0" },
-    signal: AbortSignal.timeout(10_000),
-  });
-  if (!res.ok) throw new Error(`Nominatim HTTP ${res.status}`);
-
-  const results = z.array(nominatimResultSchema).parse(await res.json());
-  // Preferisci il primo hit con una località vera (città/comune), non un
-  // boundary amministrativo. Se nessuno la espone, si ripiega sul primo.
-  const match =
-    results.find(
-      (r) =>
-        r.address?.city ??
-        r.address?.town ??
-        r.address?.village ??
-        r.address?.municipality,
-    ) ?? results[0];
-  if (!match) throw new Error(`Location not found: "${city}"`);
-
-  const address = match.address ?? {};
-  const locality =
-    address.city ??
-    address.town ??
-    address.village ??
-    address.municipality ??
-    address.county;
-  if (!locality || !address.country) {
-    throw new Error(`Incomplete address for "${city}"`);
+  // `error` in SerpApi copre DUE casi: errori API veri (quota, parametri
+  // invalidi) → lancia; e "0 risultati" ("<Engine> hasn't returned any
+  // results for this query.") → non è un errore, torna la response così
+  // com'è: gli array risultati sono assenti → il normalize dà lista vuota.
+  if (
+    response.error &&
+    !response.error.includes("hasn't returned any results")
+  ) {
+    throw new Error(`SerpApi: ${response.error}`);
   }
-
-  const resolved: ResolvedLocation = {
-    canonicalName: [locality, address.state, address.country]
-      .filter(Boolean)
-      .join(","),
-    lat: Number(match.lat),
-    lng: Number(match.lon),
-  };
-  locationCache.set(key, resolved);
-  return resolved;
+  return response;
 }
 
 // ---------------------------------------------------------------------------

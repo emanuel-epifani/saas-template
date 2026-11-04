@@ -6,12 +6,12 @@
  * `import type` dai client component (zero bundle server-side).
  */
 
-import { dedupe, jobHtidocid, querySerpApi, resolveCity } from "@/lib/serpapi";
+import { dedupe, jobHtidocid, querySerpApi } from "@/lib/serpapi";
 
 export interface JobOfferSearchInput {
   /** Ruolo libero ("pizzaiolo") → q */
   term: string;
-  /** Città libera ("Collegno") → location */
+  /** Città libera ("Collegno") → dentro q */
   city: string;
   /** Token della pagina successiva (load more) → next_page_token */
   nextPageToken?: string;
@@ -41,14 +41,12 @@ export async function searchJobOffer({
   city,
   nextPageToken,
 }: JobOfferSearchInput): Promise<JobOfferSearchResult> {
-  const { canonicalName } = await resolveCity(city);
   const params: Record<string, string> & { engine: "google_jobs" } = {
     engine: "google_jobs",
-    // La città va anche in `q`: `location` da solo filtra a livello di
-    // provincia, quindi "pizzaiolo" + Collegno restituiva tutta l'area
-    // torinese. Il match testuale restringe al comune.
+    // Niente `location`: SerpApi accetta solo località del suo DB (le città
+    // maggiori) e 400-erebbe sui paesi — es. "Borgomasino,Piedmont,Italy".
+    // Verificato live: con la città in `q` i risultati sono identici.
     q: `${term} ${city}`,
-    location: canonicalName,
     hl: "it",
     gl: "it",
   };
