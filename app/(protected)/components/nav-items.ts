@@ -27,8 +27,6 @@ export const navGroups: readonly NavGroup[] = [
   },
   {
     label: texts.navGroupArchive,
-    items: [
-      { href: "/saved", label: texts.navSaved, icon: Archive, soon: true },
-    ],
+    items: [{ href: "/saved", label: texts.navSaved, icon: Archive }],
   },
 ];

@@ -15,6 +15,13 @@
       "when": 1793140800033,
       "tag": "0001_hot_miracleman",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793796346016,
+      "tag": "0002_parallel_dagger",
+      "breakpoints": true
     }
   ]
 }

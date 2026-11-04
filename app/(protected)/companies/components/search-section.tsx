@@ -6,8 +6,10 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { SaveDialog } from "@/components/save-dialog";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Empty,
   EmptyDescription,
@@ -53,6 +55,8 @@ export function SearchSection() {
   } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [checked, setChecked] = useState<ReadonlySet<string>>(new Set());
+  const [saveOpen, setSaveOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const autoSearched = useRef(false);
@@ -69,6 +73,7 @@ export function SearchSection() {
 
   function runSearch(params: { term: string; city: string }) {
     setSelectedIndex(null);
+    setChecked(new Set());
     startTransition(async () => {
       try {
         const data = await findCompanies({ ...params, start: 0 });
@@ -108,6 +113,19 @@ export function SearchSection() {
         toast.error(texts.searchError);
       }
     });
+  }
+
+  function toggleChecked(id: string, on: boolean) {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
+  function toggleAll(on: boolean) {
+    setChecked(on ? new Set(results.map((c) => c.externalId)) : new Set());
   }
 
   function select(index: number) {
@@ -262,108 +280,149 @@ export function SearchSection() {
             </p>
             <div
               className={cn(
-                "divide-border bg-card flex min-h-0 flex-1 flex-col divide-y rounded-md border transition-opacity",
+                "bg-card flex min-h-0 flex-1 flex-col rounded-md border transition-opacity",
                 pending && "opacity-60",
               )}
             >
-              <div className="text-muted-foreground flex shrink-0 items-stretch text-[10px] font-medium tracking-[0.08em] uppercase">
-                <span className="border-border flex w-10 items-center justify-center border-r">
-                  {texts.registerIndexLabel}
-                </span>
-                <span className="flex items-center px-4 py-1.5">
-                  {texts.navCompanies}
-                </span>
-              </div>
-              <ul className="scroll-list divide-border min-h-0 flex-1 divide-y overflow-y-auto">
-                {results.map((c, i) => (
-                  <li
-                    key={c.externalId}
-                    onMouseEnter={() => setHoveredIndex(i)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
-                    <div
-                      className={cn(
-                        "relative flex h-[120px] text-sm transition-colors",
-                        i === highlightedIndex
-                          ? "bg-accent/60"
-                          : "hover:bg-muted/50",
+              <div className="scroll-list min-h-0 flex-1 overflow-y-auto">
+                <div className="bg-card text-muted-foreground border-border sticky top-0 z-10 flex items-stretch border-b text-[10px] font-medium tracking-[0.08em] uppercase">
+                  <span className="border-border flex w-10 items-center justify-center border-r">
+                    {texts.registerIndexLabel}
+                  </span>
+                  <span className="flex flex-1 items-center gap-3 px-4 py-1.5">
+                    {texts.navCompanies}
+                    <span className="ml-auto flex items-center gap-2.5 normal-case">
+                      {checked.size > 0 ? (
+                        <>
+                          <span className="text-foreground">
+                            {checked.size} {texts.selectedSuffix}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setSaveOpen(true)}
+                            className="text-primary font-medium tracking-[0.08em] uppercase hover:underline"
+                          >
+                            {texts.saveToListAction}
+                          </button>
+                        </>
+                      ) : (
+                        <span>{texts.selectToSaveHint}</span>
                       )}
+                    </span>
+                  </span>
+                  <span className="flex w-10 items-center justify-center">
+                    <Checkbox
+                      checked={
+                        results.length > 0 &&
+                        results.every((c) => checked.has(c.externalId))
+                      }
+                      onCheckedChange={(v) => toggleAll(v === true)}
+                      aria-label={texts.selectAllAction}
+                    />
+                  </span>
+                </div>
+                <ul className="divide-border divide-y">
+                  {results.map((c, i) => (
+                    <li
+                      key={c.externalId}
+                      className="scroll-mt-9"
+                      onMouseEnter={() => setHoveredIndex(i)}
+                      onMouseLeave={() => setHoveredIndex(null)}
                     >
-                      <span
+                      <div
                         className={cn(
-                          "border-border flex w-10 shrink-0 items-center justify-center border-r font-mono text-xs font-medium tabular-nums",
+                          "relative flex h-[120px] text-sm transition-colors",
                           i === highlightedIndex
-                            ? "bg-primary/10 text-primary"
-                            : "bg-muted/40 text-muted-foreground",
+                            ? "bg-accent/60"
+                            : "hover:bg-muted/50",
+                          checked.has(c.externalId) && "bg-primary/5",
                         )}
                       >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <div className="min-w-0 flex-1 px-4 py-3">
-                        <button
-                          ref={(el) => {
-                            cardRefs.current[i] = el;
-                          }}
-                          type="button"
-                          onClick={() => select(i)}
-                          onFocus={() => setHoveredIndex(i)}
-                          onBlur={() => setHoveredIndex(null)}
-                          className="block w-full cursor-pointer truncate text-left leading-6 font-medium after:absolute after:inset-0"
+                        <span
+                          className={cn(
+                            "border-border flex w-10 shrink-0 items-center justify-center border-r font-mono text-xs font-medium tabular-nums",
+                            i === highlightedIndex
+                              ? "bg-primary/10 text-primary"
+                              : "bg-muted/40 text-muted-foreground",
+                          )}
                         >
-                          {c.name}
-                        </button>
-                        <div className="text-muted-foreground mt-1 flex h-6 items-center gap-2 text-[13px]">
-                          {c.address ? (
-                            <>
-                              <MapPin className="size-3.5 shrink-0" />
-                              <span
-                                className="min-w-0 truncate"
-                                title={c.address}
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div className="min-w-0 flex-1 px-4 py-3">
+                          <button
+                            ref={(el) => {
+                              cardRefs.current[i] = el;
+                            }}
+                            type="button"
+                            onClick={() => select(i)}
+                            onFocus={() => setHoveredIndex(i)}
+                            onBlur={() => setHoveredIndex(null)}
+                            className="block w-full cursor-pointer truncate text-left leading-6 font-medium after:absolute after:inset-0"
+                          >
+                            {c.name}
+                          </button>
+                          <div className="text-muted-foreground mt-1 flex h-6 items-center gap-2 text-[13px]">
+                            {c.address ? (
+                              <>
+                                <MapPin className="size-3.5 shrink-0" />
+                                <span
+                                  className="min-w-0 truncate"
+                                  title={c.address}
+                                >
+                                  {c.address}
+                                </span>
+                              </>
+                            ) : null}
+                          </div>
+                          <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px] tabular-nums">
+                            {c.phone ? (
+                              <a
+                                href={`tel:${c.phone.replace(/[^+\d]/g, "")}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="hover:text-foreground relative z-10 flex min-w-0 items-center gap-2 hover:underline"
+                                title={c.phone}
                               >
-                                {c.address}
-                              </span>
-                            </>
-                          ) : null}
+                                <Phone className="size-3.5 shrink-0" />
+                                <span className="truncate">{c.phone}</span>
+                              </a>
+                            ) : null}
+                          </div>
+                          <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px]">
+                            {c.website ? (
+                              <a
+                                href={
+                                  c.website.startsWith("http")
+                                    ? c.website
+                                    : `https://${c.website}`
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="text-primary relative z-10 flex min-w-0 items-center gap-2 hover:underline"
+                                title={c.website}
+                              >
+                                <Globe className="size-3.5 shrink-0" />
+                                <span className="truncate">
+                                  {hostname(c.website)}
+                                </span>
+                              </a>
+                            ) : null}
+                          </div>
                         </div>
-                        <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px] tabular-nums">
-                          {c.phone ? (
-                            <a
-                              href={`tel:${c.phone.replace(/[^+\d]/g, "")}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="hover:text-foreground relative z-10 flex min-w-0 items-center gap-2 hover:underline"
-                              title={c.phone}
-                            >
-                              <Phone className="size-3.5 shrink-0" />
-                              <span className="truncate">{c.phone}</span>
-                            </a>
-                          ) : null}
-                        </div>
-                        <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px]">
-                          {c.website ? (
-                            <a
-                              href={
-                                c.website.startsWith("http")
-                                  ? c.website
-                                  : `https://${c.website}`
-                              }
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-primary relative z-10 flex min-w-0 items-center gap-2 hover:underline"
-                              title={c.website}
-                            >
-                              <Globe className="size-3.5 shrink-0" />
-                              <span className="truncate">
-                                {hostname(c.website)}
-                              </span>
-                            </a>
-                          ) : null}
-                        </div>
+                        <span className="relative z-10 flex w-10 shrink-0 items-center justify-center">
+                          <Checkbox
+                            checked={checked.has(c.externalId)}
+                            onCheckedChange={(v) =>
+                              toggleChecked(c.externalId, v === true)
+                            }
+                            aria-label={`${texts.selCheckboxLabel} ${c.name}`}
+                          />
+                        </span>
                       </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             {hasMore ? (
               <Button
@@ -401,6 +460,17 @@ export function SearchSection() {
           </div>
         </div>
       ) : null}
+
+      <SaveDialog
+        kind="company"
+        items={results.filter((c) => checked.has(c.externalId))}
+        defaultName={
+          resultQuery ? `${resultQuery.term} ${resultQuery.city}` : ""
+        }
+        open={saveOpen}
+        onOpenChange={setSaveOpen}
+        onSaved={() => setChecked(new Set())}
+      />
     </div>
   );
 }

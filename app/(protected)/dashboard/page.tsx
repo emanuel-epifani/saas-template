@@ -2,8 +2,8 @@ import type { LucideIcon } from "lucide-react";
 import { ArrowRight, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { buttonVariants } from "@/components/ui/button";
 import { requireUser } from "@/lib/auth/session";
+import { findListsByUser } from "@/lib/saved/repo";
 import { texts } from "@/texts";
 
 import { QuickSearch } from "./components/quick-search";
@@ -89,37 +89,66 @@ export default function DashboardPage() {
             {texts.dashboardArchiveDesc}
           </p>
         </div>
-        <div className="bg-card rounded-md border p-5">
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[1, 2, 3].map((n) => (
-              <div
-                key={n}
-                aria-hidden="true"
-                className="border-border flex flex-col gap-2 rounded-md border border-dashed p-3.5"
-              >
-                <span className="text-muted-foreground font-mono text-[10px] font-medium tracking-[0.08em] uppercase">
-                  {texts.schedaLabel} —
-                </span>
-                <span className="bg-muted h-4 w-2/3 rounded" />
-                <span className="bg-muted h-3 w-1/2 rounded" />
-                <span className="bg-muted h-3 w-3/5 rounded" />
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-muted-foreground text-sm">
-              {texts.dashboardArchiveHint}
-            </p>
-            <Link
-              href="/saved"
-              className={buttonVariants({ variant: "outline", size: "sm" })}
-            >
-              {texts.openAction}
-            </Link>
-          </div>
-        </div>
+        <Suspense
+          fallback={
+            <div className="bg-card h-40 animate-pulse rounded-md border" />
+          }
+        >
+          <RecentLists />
+        </Suspense>
       </section>
     </main>
+  );
+}
+
+// Le ultime liste dell'utente — dati veri, non placeholder: «roba mia» si
+// legge subito contro le azioni di prospezione sopra.
+async function RecentLists() {
+  const user = await requireUser();
+  const lists = (await findListsByUser(user.id)).slice(0, 3);
+
+  return (
+    <div className="bg-card rounded-md border">
+      {lists.length === 0 ? (
+        <p className="text-muted-foreground px-4 py-6 text-sm">
+          {texts.dashboardArchiveHint}
+        </p>
+      ) : (
+        <div className="divide-border divide-y">
+          {lists.map((l) => (
+            <Link
+              key={l.id}
+              href={`/saved/${l.id}`}
+              className="hover:bg-muted/50 group flex items-center gap-4 px-4 py-3.5 transition-colors"
+            >
+              <span className="bg-primary/10 text-primary grid size-8 shrink-0 place-items-center rounded-md">
+                {l.kind === "company" ? (
+                  <Building2 className="size-4" />
+                ) : (
+                  <Briefcase className="size-4" />
+                )}
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="truncate font-medium">{l.name}</span>
+                <span className="text-muted-foreground text-xs">
+                  {l.itemCount} {texts.savedItemsSuffix}
+                </span>
+              </span>
+              <ArrowRight className="text-muted-foreground size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          ))}
+        </div>
+      )}
+      <div className="border-border border-t px-4 py-2.5">
+        <Link
+          href="/saved"
+          className="text-primary flex items-center gap-1 text-sm font-medium"
+        >
+          {texts.dashboardSeeAll}
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
+    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 import { Archive, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
@@ -11,12 +12,28 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { requireUser } from "@/lib/auth/session";
+import { findListsByUser } from "@/lib/saved/repo";
 import { texts } from "@/texts";
+
+import { SavedBrowser } from "./components/saved-browser";
 
 export default function SavedPage() {
   return (
     <main className="flex flex-1 flex-col gap-6 p-6">
       <PageHeader title={texts.savedTitle} description={texts.savedSubtitle} />
+      <Suspense>
+        <SavedLists />
+      </Suspense>
+    </main>
+  );
+}
+
+async function SavedLists() {
+  const user = await requireUser();
+  const lists = await findListsByUser(user.id);
+  if (lists.length === 0) {
+    return (
       <Empty className="border">
         <EmptyHeader>
           <EmptyMedia variant="icon">
@@ -44,6 +61,7 @@ export default function SavedPage() {
           </div>
         </EmptyContent>
       </Empty>
-    </main>
-  );
+    );
+  }
+  return <SavedBrowser lists={lists} />;
 }
