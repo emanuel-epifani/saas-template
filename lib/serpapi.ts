@@ -25,18 +25,19 @@ const USE_MOCK = env.SERPAPI_MOCK !== "false";
 // e lancia subito se SerpApi cambia formato. Privati: internals del provider.
 // ---------------------------------------------------------------------------
 
-// Campi required = sempre presenti nei payload reali (verificato sulle
-// fixture): se mancano, SerpApi ha cambiato formato → il parse deve
-// lanciare, non restituire dati a metà. Optional = genuinamente assente
-// su parte dei risultati (solo website su maps).
+// Campi required = strutturali di un local_result (identità, nome, pin,
+// classificazione Google): se mancano SerpApi ha cambiato formato → il
+// parse deve lanciare. Optional = metadati di contatto che i thin listing
+// non hanno davvero (es. service-area business senza via/telefono:
+// verificato live — su aree sparse ~metà dei risultati li omette).
 const serpLocalResultSchema = z.object({
   /** Google Place ID — sempre presente nei local_results, chiave dedupe. */
   place_id: z.string(),
   title: z.string(),
-  address: z.string(),
   /** Categoria Google localizzata ("Lavorazione dei metalli"). */
   type: z.string(),
-  phone: z.string(),
+  address: z.string().optional(),
+  phone: z.string().optional(),
   website: z.string().optional(),
   gps_coordinates: z.object({
     latitude: z.number(),
@@ -118,7 +119,19 @@ async function fetchSerpApi(params: Record<string, string>): Promise<unknown> {
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
   url.searchParams.set("api_key", env.SERPAPI_API_KEY ?? "");
 
-  const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+  // Timeout 30s: scrape "freschi" su query oscure misurati a 8-60s lato
+  // SerpApi (poi la cache loro li rende istantanei per ~1h).
+  let res: Response;
+  try {
+    res = await fetch(url, { signal: AbortSignal.timeout(30_000) });
+  } catch (e) {
+    // DOMException: `message` getter-only → crasha la serializzazione
+    // errori di Next. Rilancia come Error normale.
+    if (e instanceof DOMException) {
+      throw new Error("SerpApi request timed out");
+    }
+    throw e;
+  }
   if (!res.ok) throw new Error(`SerpApi HTTP ${res.status}`);
   return res.json();
 }
