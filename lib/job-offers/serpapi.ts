@@ -18,16 +18,15 @@ export interface JobOfferSearchInput {
 }
 
 export interface JobOfferResult {
-  /** ID Google dell'annuncio (htidocid, estratto da job_id) — dedupe + key React. */
-  htidocid: string;
+  /** ID Google dell'annuncio (htidocid) — external_id su DB, dedupe + key React. */
+  externalId: string;
   title: string;
-  companyName?: string;
-  location?: string;
-  salary?: string;
-  postedAt?: string;
-  applyLink?: string;
-  via?: string;
-  description?: string;
+  companyName: string;
+  location: string;
+  /** Fonte dell'annuncio ("via LinkedIn"). */
+  via: string;
+  description: string;
+  applyLink: string;
 }
 
 export interface JobOfferSearchResult {
@@ -58,20 +57,18 @@ export async function searchJobOffer({
 
   const jobs = (response.jobs_results ?? []).map(
     (j): JobOfferResult => ({
-      htidocid: jobHtidocid(j.job_id),
-      title: j.title ?? "",
+      externalId: jobHtidocid(j.job_id),
+      title: j.title,
       companyName: j.company_name,
       location: j.location,
-      salary: j.detected_extensions?.salary,
-      postedAt: j.detected_extensions?.posted_at,
-      applyLink: j.apply_options?.[0]?.link,
       via: j.via,
       description: j.description,
+      applyLink: j.apply_options[0].link,
     }),
   );
 
   return {
-    jobs: dedupe(jobs, (j) => j.htidocid),
+    jobs: dedupe(jobs, (j) => j.externalId),
     nextPageToken: response.serpapi_pagination?.next_page_token,
   };
 }

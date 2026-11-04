@@ -26,36 +26,37 @@ const USE_MOCK = env.SERPAPI_MOCK !== "false";
 // e lancia subito se SerpApi cambia formato. Privati: internals del provider.
 // ---------------------------------------------------------------------------
 
+// Campi required = sempre presenti nei payload reali (verificato sulle
+// fixture): se mancano, SerpApi ha cambiato formato → il parse deve
+// lanciare, non restituire dati a metà. Optional = genuinamente assente
+// su parte dei risultati (solo website su maps).
 const serpLocalResultSchema = z.object({
   /** Google Place ID — sempre presente nei local_results, chiave dedupe. */
   place_id: z.string(),
-  title: z.string().optional(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
+  title: z.string(),
+  address: z.string(),
+  /** Categoria Google localizzata ("Lavorazione dei metalli"). */
+  type: z.string(),
+  phone: z.string(),
   website: z.string().optional(),
-  gps_coordinates: z
-    .object({
-      latitude: z.number().optional(),
-      longitude: z.number().optional(),
-    })
-    .optional(),
+  gps_coordinates: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
 });
 
 const serpJobResultSchema = z.object({
   job_id: z.string(),
-  title: z.string().optional(),
-  company_name: z.string().optional(),
-  location: z.string().optional(),
-  via: z.string().optional(),
-  description: z.string().optional(),
-  detected_extensions: z
-    .object({ posted_at: z.string().optional(), salary: z.string().optional() })
-    .optional(),
-  apply_options: z
-    .array(
-      z.object({ title: z.string().optional(), link: z.string().optional() }),
-    )
-    .optional(),
+  title: z.string(),
+  company_name: z.string(),
+  location: z.string(),
+  via: z.string(),
+  description: z.string(),
+  /** Sempre ≥1 opzione con link nei payload reali → tupla: [0] garantito a compile time. */
+  apply_options: z.tuple(
+    [z.object({ link: z.string() })],
+    z.object({ link: z.string() }),
+  ),
 });
 
 // Due schemi standalone, uno per engine — condividono solo `error`.

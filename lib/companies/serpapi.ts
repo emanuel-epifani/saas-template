@@ -18,14 +18,16 @@ export interface CompanySearchInput {
 }
 
 export interface CompanyResult {
-  /** Google Place ID: chiave dedupe + key React (+ future external_id su DB). */
-  key: string;
+  /** Google Place ID — external_id su DB, chiave dedupe + key React. */
+  externalId: string;
   name: string;
-  address?: string;
-  phone?: string;
+  address: string;
+  /** Categoria Google localizzata ("Lavorazione dei metalli") — filtro a DB. */
+  type: string;
+  phone: string;
   website?: string;
-  lat?: number;
-  lon?: number;
+  lat: number;
+  lon: number;
 }
 
 export interface CompanySearchResult {
@@ -54,18 +56,19 @@ export async function searchCompany({
 
   const companies = (response.local_results ?? []).map(
     (p): CompanyResult => ({
-      key: p.place_id,
-      name: p.title ?? "",
+      externalId: p.place_id,
+      name: p.title,
       address: p.address,
+      type: p.type,
       phone: p.phone,
       website: p.website,
-      lat: p.gps_coordinates?.latitude,
-      lon: p.gps_coordinates?.longitude,
+      lat: p.gps_coordinates.latitude,
+      lon: p.gps_coordinates.longitude,
     }),
   );
 
   return {
-    companies: dedupe(companies, (c) => c.key),
+    companies: dedupe(companies, (c) => c.externalId),
     hasMore: Boolean(response.serpapi_pagination?.next),
   };
 }

@@ -84,7 +84,6 @@ export default function CompaniesMap({
   useEffect(() => {
     if (!map) return;
     const markers = companies.map((c, i) => {
-      if (c.lat == null || c.lon == null) return null;
       const content = document.createElement("div");
       const num = document.createElement("span");
       num.className = "map-popup-num";
@@ -128,12 +127,9 @@ export default function CompaniesMap({
   // (firma della search), non sui dati: il load-more non deve ri-fittare.
   useEffect(() => {
     if (!map || !fitKey) return;
-    const b = companiesRef.current
-      .filter(
-        (c): c is CompanyResult & { lat: number; lon: number } =>
-          c.lat != null && c.lon != null,
-      )
-      .map((c) => [c.lat, c.lon] as [number, number]);
+    const b = companiesRef.current.map(
+      (c) => [c.lat, c.lon] as [number, number],
+    );
     if (b.length > 0) {
       map.fitBounds(b, { padding: [30, 30] });
     }
@@ -155,7 +151,7 @@ export default function CompaniesMap({
       return;
     }
     const c = companiesRef.current[selectedIndex];
-    if (!c || c.lat == null || c.lon == null) return;
+    if (!c) return;
     const ll = L.latLng(c.lat, c.lon);
     // No animate:true — the pan animation outlives <Activity> hide and
     // crashes on the detached node ("_leaflet_pos" of undefined).

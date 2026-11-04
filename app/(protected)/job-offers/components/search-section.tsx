@@ -2,10 +2,8 @@
 
 import { cn } from "cn";
 import {
-  Banknote,
   Briefcase,
   Building2,
-  Clock,
   Globe,
   LoaderCircle,
   MapPin,
@@ -265,7 +263,7 @@ export function SearchSection() {
               </div>
               <ul className="scroll-list divide-border min-h-0 flex-1 divide-y overflow-y-auto">
                 {results.map((j, i) => (
-                  <li key={j.htidocid}>
+                  <li key={j.externalId}>
                     <div
                       className={cn(
                         "relative flex h-[120px] text-sm transition-colors",
@@ -296,54 +294,28 @@ export function SearchSection() {
                           {j.title}
                         </button>
                         <div className="text-muted-foreground mt-1 flex h-6 items-center gap-2 text-[13px]">
-                          {j.companyName ? (
-                            <>
-                              <Building2 className="size-3.5 shrink-0" />
-                              <span
-                                className="min-w-0 truncate"
-                                title={j.companyName}
-                              >
-                                {j.companyName}
-                              </span>
-                            </>
-                          ) : null}
+                          <Building2 className="size-3.5 shrink-0" />
+                          <span
+                            className="min-w-0 truncate"
+                            title={j.companyName}
+                          >
+                            {j.companyName}
+                          </span>
                         </div>
                         <div className="text-muted-foreground flex h-6 items-center gap-2 text-[13px]">
-                          {j.location || j.postedAt ? (
-                            <>
-                              <MapPin className="size-3.5 shrink-0" />
-                              <span
-                                className="min-w-0 truncate"
-                                title={[j.location, j.postedAt]
-                                  .filter(Boolean)
-                                  .join(" · ")}
-                              >
-                                {[j.location, j.postedAt]
-                                  .filter(Boolean)
-                                  .join(" · ")}
-                              </span>
-                            </>
-                          ) : null}
+                          <MapPin className="size-3.5 shrink-0" />
+                          <span className="min-w-0 truncate" title={j.location}>
+                            {j.location}
+                          </span>
                         </div>
                         <div className="text-muted-foreground flex h-6 items-center gap-4 text-[13px] tabular-nums">
-                          {j.via ? (
-                            <span
-                              className="flex min-w-0 items-center gap-2"
-                              title={j.via}
-                            >
-                              <Globe className="size-3.5 shrink-0" />
-                              <span className="truncate">{j.via}</span>
-                            </span>
-                          ) : null}
-                          {j.salary ? (
-                            <span
-                              className="flex min-w-0 items-center gap-2"
-                              title={j.salary}
-                            >
-                              <Banknote className="size-3.5 shrink-0" />
-                              <span className="truncate">{j.salary}</span>
-                            </span>
-                          ) : null}
+                          <span
+                            className="flex min-w-0 items-center gap-2"
+                            title={j.via}
+                          >
+                            <Globe className="size-3.5 shrink-0" />
+                            <span className="truncate">{j.via}</span>
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -380,57 +352,35 @@ export function SearchSection() {
                   <h2 className="text-lg leading-snug font-semibold">
                     {selected.title}
                   </h2>
-                  {selected.companyName ? (
-                    <p className="text-muted-foreground truncate">
-                      {selected.companyName}
-                    </p>
-                  ) : null}
+                  <p className="text-muted-foreground truncate">
+                    {selected.companyName}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  {selected.location ? (
-                    <p className="flex items-center gap-2">
-                      <MapPin className="text-muted-foreground size-4 shrink-0" />
-                      <span className="truncate">{selected.location}</span>
-                    </p>
-                  ) : null}
-                  {selected.salary ? (
-                    <p className="flex items-center gap-2 font-medium tabular-nums">
-                      <Banknote className="text-muted-foreground size-4 shrink-0" />
-                      <span>{selected.salary}</span>
-                    </p>
-                  ) : null}
-                  {selected.postedAt || selected.via ? (
-                    <p className="text-muted-foreground flex items-center gap-2">
-                      <Clock className="size-4 shrink-0" />
-                      <span className="truncate">
-                        {[selected.postedAt, selected.via]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </span>
-                    </p>
-                  ) : null}
+                  <p className="flex items-center gap-2">
+                    <MapPin className="text-muted-foreground size-4 shrink-0" />
+                    <span className="truncate">{selected.location}</span>
+                  </p>
+                  <p className="text-muted-foreground flex items-center gap-2">
+                    <Globe className="size-4 shrink-0" />
+                    <span className="truncate">{selected.via}</span>
+                  </p>
                 </div>
-                {selected.applyLink ? (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Button asChild>
-                      <a
-                        href={selected.applyLink}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {texts.jobApplyAction}
-                      </a>
-                    </Button>
-                  </div>
-                ) : null}
-                {selected.description ? (
-                  <>
-                    <Separator />
-                    <p className="text-muted-foreground whitespace-pre-line">
-                      {selected.description}
-                    </p>
-                  </>
-                ) : null}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button asChild>
+                    <a
+                      href={selected.applyLink}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {texts.jobApplyAction}
+                    </a>
+                  </Button>
+                </div>
+                <Separator />
+                <p className="text-muted-foreground whitespace-pre-line">
+                  {selected.description}
+                </p>
               </div>
             ) : (
               <Empty className="border-0">
@@ -474,6 +424,6 @@ function appendUnique(
   prev: JobOfferResult[],
   next: JobOfferResult[],
 ): JobOfferResult[] {
-  const seen = new Set(prev.map((j) => j.htidocid));
-  return [...prev, ...next.filter((j) => !seen.has(j.htidocid))];
+  const seen = new Set(prev.map((j) => j.externalId));
+  return [...prev, ...next.filter((j) => !seen.has(j.externalId))];
 }

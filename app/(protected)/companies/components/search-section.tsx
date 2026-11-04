@@ -277,7 +277,7 @@ export function SearchSection() {
               <ul className="scroll-list divide-border min-h-0 flex-1 divide-y overflow-y-auto">
                 {results.map((c, i) => (
                   <li
-                    key={c.key}
+                    key={c.externalId}
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >
@@ -430,12 +430,12 @@ function appendUnique(
   prev: CompanyResult[],
   next: CompanyResult[],
 ): CompanyResult[] {
-  const seen = new Set(prev.map((c) => c.key));
+  const seen = new Set(prev.map((c) => c.externalId));
   return [
     ...prev,
     ...next.filter((c) => {
-      if (seen.has(c.key)) return false;
-      seen.add(c.key);
+      if (seen.has(c.externalId)) return false;
+      seen.add(c.externalId);
       return true;
     }),
   ];
