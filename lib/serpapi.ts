@@ -6,14 +6,17 @@ import { z } from "zod";
 import { env } from "@/env";
 
 /*
- * Layer condiviso SerpApi — usato dai repo delle feature (lib/<feature>/):
- *   - querySerpApi: call reale o fixture (SERPAPI_MOCK)
- *   - dedupe:       helper di deduplicazione generico
+ * SerpApi provider — client condiviso + repo di ricerca (companies, job offers):
+ *   - querySerpApi:                  call reale o fixture (SERPAPI_MOCK), parse zod
+ *   - searchCompany/searchJobOffer:  params + normalize per engine
+ *   - dedupe:                        helper di deduplicazione generico
  *
  * MOCK: finché env.SERPAPI_MOCK !== "false" le call esterne non partono.
- * Ogni engine legge UN file json accanto al repo della feature
- * (lib/<feature>/serpapi.mock.json), con la STESSA forma del payload reale
- * salvato da una call live — sono tracciati in git.
+ * Ogni engine legge UN file json qui in lib/ (serpapi.<engine>.mock.json),
+ * con la STESSA forma del payload reale salvato da una call live — tracciati in git.
+ *
+ * Tipi esportati (CompanyResult, JobOfferResult, …): firma delle action in
+ * lib/actions.ts, importabili via `import type` dai client component.
  */
 
 const BASE_URL = "https://serpapi.com/search.json";
@@ -100,13 +103,13 @@ export type SerpJobsResponse = z.infer<typeof serpJobsResponseSchema>;
 const engines = {
   google_maps: {
     schema: serpMapsResponseSchema,
-    mockFile: join("lib", "companies", "serpapi.mock.json"),
+    mockFile: join("lib", "serpapi.companies.mock.json"),
     restrictor:
       "error, serpapi_pagination.next, local_results[].{place_id, title, address, type, phone, website, gps_coordinates.latitude, gps_coordinates.longitude}",
   },
   google_jobs: {
     schema: serpJobsResponseSchema,
-    mockFile: join("lib", "job-offers", "serpapi.mock.json"),
+    mockFile: join("lib", "serpapi.jobs.mock.json"),
     restrictor:
       "error, serpapi_pagination.next_page_token, jobs_results[].{job_id, title, company_name, location, via, description, apply_options[].link}",
   },
@@ -202,3 +205,138 @@ export const dedupe = <T>(items: T[], key: (x: T) => string): T[] => {
     return true;
   });
 };
+
+// ---------------------------------------------------------------------------
+// Repos — params + normalize per engine. Sopra c'è solo plumbing; qui la
+// forma pubblica dei risultati (firma delle action, tipi per il client).
+// ---------------------------------------------------------------------------
+
+export interface CompanySearchInput {
+  /** Tipo azienda libero ("pizzeria") → q */
+  term: string;
+  /** Città libera ("Grugliasco") → concatenata in q, risolve Google */
+  city: string;
+  /** Offset per il load more (0, 20, 40…) → start */
+  start: number;
+}
+
+export interface CompanyResult {
+  /** Google Place ID — external_id su DB, chiave dedupe + key React. */
+  externalId: string;
+  name: string;
+  address?: string;
+  /** Categoria Google localizzata ("Lavorazione dei metalli") — filtro a DB. */
+  type: string;
+  phone?: string;
+  website?: string;
+  lat: number;
+  lon: number;
+}
+
+export interface CompanySearchResult {
+  companies: CompanyResult[];
+  /** true se SerpApi espone una pagina successiva */
+  hasMore: boolean;
+}
+
+/** Aziende per tipo + città → google_maps */
+export async function searchCompany({
+  term,
+  city,
+  start,
+}: CompanySearchInput): Promise<CompanySearchResult> {
+  const params: Record<string, string> & { engine: "google_maps" } = {
+    engine: "google_maps",
+    // q libera "cosa dove": Google risolve tutto (geocoding + ranking).
+    // Limite noto e accettato: senza anchor `ll` la coda dei risultati può
+    // derivare fuori zona su ricerche oscure — se torna il problema,
+    // l'anchor va ripresa (comuni dataset o autocomplete lato FE).
+    q: `${term} ${city}`,
+    start: String(start),
+    type: "search",
+    hl: "it",
+    gl: "it",
+  };
+  const response = await querySerpApi(params);
+
+  const companies = (response.local_results ?? []).map(
+    (p): CompanyResult => ({
+      externalId: p.place_id,
+      name: p.title,
+      address: p.address,
+      type: p.type,
+      phone: p.phone,
+      website: p.website,
+      lat: p.gps_coordinates.latitude,
+      lon: p.gps_coordinates.longitude,
+    }),
+  );
+
+  return {
+    companies: dedupe(companies, (c) => c.externalId),
+    hasMore: Boolean(response.serpapi_pagination?.next),
+  };
+}
+
+export interface JobOfferSearchInput {
+  /** Ruolo libero ("pizzaiolo") → q */
+  term: string;
+  /** Città libera ("Collegno") → dentro q */
+  city: string;
+  /** Token della pagina successiva (load more) → next_page_token */
+  nextPageToken?: string;
+}
+
+export interface JobOfferResult {
+  /** ID Google dell'annuncio (htidocid) — external_id su DB, dedupe + key React. */
+  externalId: string;
+  title: string;
+  companyName: string;
+  location: string;
+  /** Fonte dell'annuncio ("via LinkedIn"). */
+  via: string;
+  description: string;
+  applyLink: string;
+}
+
+export interface JobOfferSearchResult {
+  jobs: JobOfferResult[];
+  /** Token per la pagina successiva; assente quando non c'è altro. */
+  nextPageToken?: string;
+}
+
+/** Offerte per ruolo + città → google_jobs */
+export async function searchJobOffer({
+  term,
+  city,
+  nextPageToken,
+}: JobOfferSearchInput): Promise<JobOfferSearchResult> {
+  const params: Record<string, string> & { engine: "google_jobs" } = {
+    engine: "google_jobs",
+    // Niente `location`: SerpApi accetta solo località del suo DB (le città
+    // maggiori) e 400-erebbe sui paesi — es. "Borgomasino,Piedmont,Italy".
+    // Verificato live: con la città in `q` i risultati sono identici.
+    q: `${term} ${city}`,
+    hl: "it",
+    gl: "it",
+  };
+  if (nextPageToken) params.next_page_token = nextPageToken;
+  const response = await querySerpApi(params);
+
+  const jobs = (response.jobs_results ?? []).map(
+    (j): JobOfferResult => ({
+      externalId: jobHtidocid(j.job_id),
+      title: j.title,
+      companyName: j.company_name,
+      location: j.location,
+      via: j.via,
+      description: j.description,
+      applyLink: j.apply_options[0].link,
+    }),
+  );
+
+  return {
+    jobs: dedupe(jobs, (j) => j.externalId),
+    nextPageToken: response.serpapi_pagination?.next_page_token,
+  };
+}

@@ -17,9 +17,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { deleteSavedList, renameSavedList } from "@/lib/saved/actions";
-import type { SavedListWithCount } from "@/lib/saved/repo";
-import type { SavedListKind } from "@/lib/saved/schemas";
+import { deleteSavedList, renameSavedList } from "@/lib/actions";
+import type { SavedListWithCount } from "@/lib/db/queries";
+import type { SavedListKind } from "@/lib/schemas";
 import { texts } from "@/texts";
 
 const itemClass =

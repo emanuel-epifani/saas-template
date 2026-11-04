@@ -133,8 +133,8 @@
                     "message": "env vars are read inside lib/ server modules — never in presentation code."
                   },
                   {
-                    "group": ["@/lib/db", "@/lib/db/**"],
-                    "message": "No direct DB access in presentation — go through lib/<provider> repos."
+                    "group": ["@/lib/db", "@/lib/db/**", "!@/lib/db/queries"],
+                    "message": "No direct DB access in presentation — only lib/db/queries is public."
                   }
                 ]
               }

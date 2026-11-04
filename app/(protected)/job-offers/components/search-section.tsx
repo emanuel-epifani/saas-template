@@ -26,8 +26,8 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { findJobOffers } from "@/lib/job-offers/actions";
-import type { JobOfferResult } from "@/lib/job-offers/serpapi";
+import { findJobOffers } from "@/lib/actions";
+import type { JobOfferResult } from "@/lib/serpapi";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";
 import { consumeSearchIntent } from "../../lib/search-intent";

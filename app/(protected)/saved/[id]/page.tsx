@@ -6,7 +6,7 @@ import {
   findCompanyItems,
   findJobItems,
   findListForUser,
-} from "@/lib/saved/repo";
+} from "@/lib/db/queries";
 
 import { ListDetail } from "./components/list-detail";
 

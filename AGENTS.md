@@ -33,12 +33,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Architecture
 
 - `app/` = presentation only, colocated per feature: `app/{feature}/` owns page, components/, hooks/, lib/ (local utils). NO `"use server"` files here, client code never calls providers/db directly
-- `lib/` = data layer, centralized per provider/resource. One flat group per provider (`lib/<provider>/{repo,schemas,actions}` conceptually — flat `<provider>-*.ts` files while small, folder when it grows):
-  - `lib/<provider>.ts` — connection/client + repo queries + parse/normalize of external payloads. Server-only imports OK (`fs`, `env`); never imported by client code
-  - `lib/<provider>-schemas.ts` — zod input/output schemas. NEUTRAL file: no server-only imports → safe for client bundles (RHF/zodResolver) and server. Types via `z.infer`
-  - `lib/<provider>-actions.ts` — `"use server"` RPC endpoints: validate input → call repo → return normalized data. Exports = async functions ONLY (zod/consts can't be exported from `"use server"` files)
-- Server components call repo/db functions directly (async RSC, no action needed); client components import only `*-actions.ts`, `*-schemas.ts` and `import type`s
-- `lib/db/`: client + schema + plain query functions — NEVER `"use server"` (would expose public RPC endpoints on the DB)
+- `lib/` = data layer, FLAT — one file per layer. At this size one file per concern beats per-feature folders; re-split only past ~400 lines/file or when a second external provider lands:
+  - `lib/actions.ts` — the ENTIRE public RPC surface (`"use server"`): session → zod → repo/provider → normalized data. Exports = async functions ONLY (zod/consts can't be exported from `"use server"` files)
+  - `lib/schemas.ts` — ALL zod input/output contracts. NEUTRAL file: no server-only imports → safe for client bundles (RHF/zodResolver) and server. Types via `z.infer`
+  - `lib/db/queries.ts` — ALL DB queries; the ONLY `lib/db` module importable from presentation (Biome-enforced). RSCs call it directly; client components import its types only
+  - `lib/serpapi.ts` — external provider: client + payload zod schemas + normalize + repo functions + `serpapi.<engine>.mock.json` fixtures. Server-only imports OK (`fs`, `env`); never imported by client code at runtime (types only)
+  - `lib/db/` — `index.ts` = drizzle client, `schema.ts` = tables, `auth-schema.ts` = generated (never edit), `migrations/` = generated SQL (never edit)
+  - `lib/auth/`, `lib/email/` — provider internals (server, client, session, localization, resend)
+- Server components call `lib/db/queries` functions directly (async RSC, no action needed); client components import only `lib/actions`, `lib/schemas` and `import type`s
+- Import boundaries are Biome-enforced (`noRestrictedImports` + `noProcessEnv`): `@/env`, `@/lib/db`, `@/lib/db/**` (except `@/lib/db/queries`) and `process.env` are errors inside `app/`, `components/`, `hooks/`
 - Imports: relative `./` within a module, `@/*` absolute cross-module; files `kebab-case`
 - Big features split 3 ways: `lib/{feature}-logic.ts` (pure, no React) · `lib/{feature}-store.ts` + hooks (Zustand + React glue) · `components/*.tsx` (dumb presentation)
 - Global, NOT feature-scoped: `app/models.ts` (ALL types, no per-feature `types/`), `app/globals.css` (only stylesheet), `texts.ts` (all copy, flat `as const`)
@@ -53,7 +56,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Project structure
 
 - `app/` — App Router presentation: routes, layouts, components, hooks, local state/utils; globals.css only stylesheet
-- `lib/` — data layer, one group per provider: `<provider>.ts` (repo) + `<provider>-schemas.ts` (zod) + `<provider>-actions.ts` (`"use server"`); `lib/db/` holds the DB layer (`schema.ts` = tables, `index.ts` = drizzle client, `migrations/` = generated SQL, never edit by hand)
+- `lib/` — data layer, flat: `actions.ts` (RPC boundary) + `schemas.ts` (zod contracts) + `serpapi.ts` (external provider) + `db/` (`index.ts` client, `schema.ts` tables, `queries.ts` all queries, `migrations/` generated SQL — never edit by hand)
 - `components/` — shared UI components (shadcn/ui lives in `components/ui/`)
 - `env.ts` (root) — env validation; app code imports `env` from `@/env`
 

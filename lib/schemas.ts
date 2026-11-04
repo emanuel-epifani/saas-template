@@ -1,10 +1,38 @@
 /*
- * Saved schemas — input/output condivisi del dominio "archivio".
+ * Zod contracts — input/output condivisi di tutta l'app.
  * File NEUTRO: niente import server-only → sicuro per client bundle
  * (componenti che passano i payload alle action) e server.
+ * Boundary types escono da qui: `z.infer<typeof Schema>` è la single source.
  */
 
 import { z } from "zod";
+
+// ---------------------------------------------------------------------------
+// Search inputs (SerpApi) — validati al boundary delle action prima di
+// spendere crediti sulle call esterne.
+// ---------------------------------------------------------------------------
+
+export const companySearchInputSchema = z.object({
+  /** Tipo azienda libero ("pizzeria") → q */
+  term: z.string().min(1),
+  /** Città libera ("Grugliasco") → concatenata in q */
+  city: z.string().min(1),
+  /** Offset per il load more (0, 20, 40…) → start */
+  start: z.number().int().min(0).default(0),
+});
+
+export const jobOfferSearchInputSchema = z.object({
+  /** Ruolo libero ("pizzaiolo") → q */
+  term: z.string().min(1),
+  /** Città libera ("Collegno") → location */
+  city: z.string().min(1),
+  /** Token della pagina successiva (load more) → next_page_token */
+  nextPageToken: z.string().optional(),
+});
+
+// ---------------------------------------------------------------------------
+// Saved domain (archivio utente)
+// ---------------------------------------------------------------------------
 
 export const savedListKindSchema = z.enum(["company", "job"]);
 export type SavedListKind = z.infer<typeof savedListKindSchema>;
@@ -17,7 +45,7 @@ export const extraColumnSchema = z.object({
 });
 export type ExtraColumn = z.infer<typeof extraColumnSchema>;
 
-// Snapshot azienda salvata — specchio di CompanyResult (lib/companies/serpapi).
+// Snapshot azienda salvata — specchio di CompanyResult (lib/serpapi).
 export const savedCompanyItemSchema = z.object({
   externalId: z.string().min(1),
   name: z.string().min(1),
@@ -30,7 +58,7 @@ export const savedCompanyItemSchema = z.object({
 });
 export type SavedCompanyItem = z.infer<typeof savedCompanyItemSchema>;
 
-// Snapshot offerta salvata — specchio di JobOfferResult (lib/job-offers/serpapi).
+// Snapshot offerta salvata — specchio di JobOfferResult (lib/serpapi).
 export const savedJobItemSchema = z.object({
   externalId: z.string().min(1),
   title: z.string().min(1),

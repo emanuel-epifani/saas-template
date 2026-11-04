@@ -21,9 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getMyLists, saveToList } from "@/lib/saved/actions";
-import type { SavedListWithCount } from "@/lib/saved/repo";
-import type { SavedCompanyItem, SavedJobItem } from "@/lib/saved/schemas";
+import { getMyLists, saveToList } from "@/lib/actions";
+import type { SavedListWithCount } from "@/lib/db/queries";
+import type { SavedCompanyItem, SavedJobItem } from "@/lib/schemas";
 import { texts } from "@/texts";
 
 const NEW_LIST = "__new__";

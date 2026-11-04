@@ -24,13 +24,13 @@ import {
   deleteSavedList,
   renameSavedList,
   updateSavedItem,
-} from "@/lib/saved/actions";
+} from "@/lib/actions";
 import type {
   SavedCompanyRow,
   SavedJobOfferRow,
   SavedListRow,
-} from "@/lib/saved/repo";
-import type { SavedListKind } from "@/lib/saved/schemas";
+} from "@/lib/db/queries";
+import type { SavedListKind } from "@/lib/schemas";
 import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 

@@ -1,20 +1,21 @@
 /*
- * Saved repo — query Drizzle per l'archivio utente.
- * MAI "use server": questo file resta privato, le action in ./actions
- * fanno da boundary RPC (sessione + zod) prima di chiamare qui.
+ * DB queries — l'UNICO modulo dentro lib/db/ importabile dalla presentation
+ * (RSC) e dalle action. Tutto l'accesso ai dati dell'app vive qui.
+ * MAI "use server": le action in lib/actions.ts fanno da boundary RPC
+ * (sessione + zod) prima di chiamare qui. I client component possono
+ * importare solo i tipi (`import type`), mai il modulo a runtime.
  */
 
 import { and, count, desc, eq, inArray } from "drizzle-orm";
-
-import { db } from "@/lib/db";
-import { savedCompany, savedJobOffer, savedList } from "@/lib/db/schema";
 
 import type {
   ExtraColumn,
   SavedCompanyItem,
   SavedJobItem,
   SavedListKind,
-} from "./schemas";
+} from "../schemas";
+import { db } from "./index";
+import { savedCompany, savedJobOffer, savedList } from "./schema";
 
 export type SavedListRow = typeof savedList.$inferSelect;
 export type SavedCompanyRow = typeof savedCompany.$inferSelect;

@@ -14,7 +14,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { requireUser } from "@/lib/auth/session";
-import { findListsByUser } from "@/lib/saved/repo";
+import { findListsByUser } from "@/lib/db/queries";
 import { texts } from "@/texts";
 
 import { SavedBrowser } from "./components/saved-browser";

@@ -19,8 +19,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import { findCompanies } from "@/lib/companies/actions";
-import type { CompanyResult } from "@/lib/companies/serpapi";
+import { findCompanies } from "@/lib/actions";
+import type { CompanyResult } from "@/lib/serpapi";
 import { hostname } from "@/lib/utils";
 import { texts } from "@/texts";
 import { createSearchCache } from "../../lib/search-cache";

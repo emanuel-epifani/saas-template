@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { SavedListWithCount } from "@/lib/saved/repo";
-import type { SavedListKind } from "@/lib/saved/schemas";
+import type { SavedListWithCount } from "@/lib/db/queries";
+import type { SavedListKind } from "@/lib/schemas";
 import { texts } from "@/texts";
 
 const itemClass =

@@ -3,7 +3,7 @@
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 
-import type { CompanyResult } from "@/lib/companies/serpapi";
+import type { CompanyResult } from "@/lib/serpapi";
 import "leaflet/dist/leaflet.css";
 
 interface CompaniesMapProps {

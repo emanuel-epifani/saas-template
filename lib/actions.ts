@@ -1,8 +1,10 @@
 "use server";
 
 /*
- * RPC boundary saved — ogni export è un endpoint POST pubblico:
- * sessione + zod + ownership verificati qui dentro, mai fidarsi del client.
+ * RPC boundary — l'intera superficie pubblica dell'app.
+ * Ogni export è un endpoint POST pubblico: sessione + zod + ownership
+ * verificati qui dentro, mai fidarsi del client. Regola Next: solo async
+ * function exportabili → gli schema zod stanno in ./schemas (neutro).
  * refresh() ri-renderizza la route corrente nella stessa response →
  * i componenti client non devono rifare fetch dopo una mutazione.
  */
@@ -11,16 +13,34 @@ import { refresh, revalidatePath } from "next/cache";
 
 import { requireSession } from "@/lib/auth/session";
 
-import * as repo from "./repo";
+import * as repo from "./db/queries";
 import {
   addColumnInputSchema,
+  companySearchInputSchema,
   deleteItemInputSchema,
+  jobOfferSearchInputSchema,
   listIdInputSchema,
   myListsInputSchema,
   renameListInputSchema,
   saveItemsInputSchema,
   updateItemInputSchema,
 } from "./schemas";
+import { searchCompany, searchJobOffer } from "./serpapi";
+
+// -- Search (SerpApi) — sessione + zod prima di spendere crediti -----------
+
+export async function findCompanies(input: unknown) {
+  await requireSession();
+  return searchCompany(companySearchInputSchema.parse(input));
+}
+
+export async function findJobOffers(input: unknown) {
+  //todo: why I don't see any date of publish of job offer? deep dive payload
+  await requireSession();
+  return searchJobOffer(jobOfferSearchInputSchema.parse(input));
+}
+
+// -- Saved (archivio utente) ------------------------------------------------
 
 export async function getMyLists(input: unknown) {
   const session = await requireSession();

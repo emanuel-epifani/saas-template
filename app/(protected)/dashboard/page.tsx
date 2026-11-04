@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { RegisterToScheda } from "@/components/register-to-scheda";
 import { requireUser } from "@/lib/auth/session";
-import { findListsByUser } from "@/lib/saved/repo";
+import { findListsByUser } from "@/lib/db/queries";
 import { texts } from "@/texts";
 
 import { ArchiveLists } from "./components/archive-lists";
