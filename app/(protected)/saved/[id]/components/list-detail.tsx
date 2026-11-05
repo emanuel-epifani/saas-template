@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, MapPin, Pencil, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   addSavedColumn,
   deleteSavedItem,
@@ -44,6 +44,11 @@ export function ListDetail(props: ListDetailProps) {
   const [colOpen, setColOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  // Azienda di cui mostrare la mappa — null = dialog chiuso.
+  const [mapTarget, setMapTarget] = useState<{
+    name: string;
+    address: string;
+  } | null>(null);
   const [, startTransition] = useTransition();
 
   const baseColCount = kind === "company" ? 5 : 5;
@@ -147,7 +152,23 @@ export function ListDetail(props: ListDetailProps) {
                   <Td className="text-muted-foreground" title={it.type}>
                     {it.type}
                   </Td>
-                  <Td title={it.address ?? undefined}>{it.address}</Td>
+                  <Td title={it.address ?? undefined}>
+                    {it.address ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setMapTarget({
+                            name: it.name,
+                            address: it.address ?? "",
+                          })
+                        }
+                        className="text-primary flex w-full items-center gap-1 hover:underline"
+                      >
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span className="truncate">{it.address}</span>
+                      </button>
+                    ) : null}
+                  </Td>
                   <Td title={it.phone ?? undefined}>
                     {it.phone ? (
                       <a
@@ -232,6 +253,7 @@ export function ListDetail(props: ListDetailProps) {
         submitLabel={texts.saveConfirmAction}
         onSubmit={(v) => mutate(renameSavedList({ listId: list.id, name: v }))}
       />
+      <AddressMapDialog target={mapTarget} onClose={() => setMapTarget(null)} />
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
@@ -281,6 +303,7 @@ function EditableCells({
       {list.columns.map((col) => (
         <td key={col.key} className="max-w-56 px-1 py-1">
           <EditableCell
+            label={col.label}
             value={item.extra[col.key] ?? ""}
             onCommit={(v) =>
               onMutate(
@@ -296,6 +319,7 @@ function EditableCells({
       ))}
       <td className="max-w-72 px-1 py-1">
         <EditableCell
+          label={texts.notesColumn}
           value={item.notes ?? ""}
           onCommit={(v) =>
             onMutate(
@@ -313,50 +337,91 @@ function EditableCells({
   );
 }
 
-// Cella editabile stile foglio: click → input, Enter/blur committa, Esc annulla.
+// Cella → Dialog con textarea: la cella resta un'anteprima troncata, il
+// click apre l'editor comodo per testi lunghi (note, colonne custom).
+// Cmd/Ctrl+Enter salva, Esc chiude senza committare.
 function EditableCell({
+  label,
   value,
   onCommit,
 }: {
+  label: string;
   value: string;
   onCommit: (v: string) => void;
 }) {
-  const [editing, setEditing] = useState(false);
+  const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(value);
 
-  if (!editing) {
-    return (
+  function commit() {
+    setOpen(false);
+    if (draft.trim() !== value) onCommit(draft.trim());
+  }
+
+  return (
+    <>
       <button
         type="button"
         onClick={() => {
           setDraft(value);
-          setEditing(true);
+          setOpen(true);
         }}
         className="hover:bg-muted/60 block w-full cursor-text truncate rounded px-2 py-1 text-left"
         title={value}
       >
         {value || "—"}
       </button>
-    );
-  }
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>{label}</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            autoFocus
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) commit();
+            }}
+            className="max-h-96 min-h-36"
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              {texts.cancelAction}
+            </Button>
+            <Button onClick={commit}>{texts.saveConfirmAction}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+// Click sull'indirizzo → embed Google Maps nel dialog. `output=embed` è
+// l'endpoint non ufficiale: niente API key, Google risolve l'indirizzo.
+function AddressMapDialog({
+  target,
+  onClose,
+}: {
+  target: { name: string; address: string } | null;
+  onClose: () => void;
+}) {
   return (
-    <Input
-      autoFocus
-      value={draft}
-      onChange={(e) => setDraft(e.target.value)}
-      onBlur={() => {
-        setEditing(false);
-        if (draft !== value) onCommit(draft.trim());
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") e.currentTarget.blur();
-        if (e.key === "Escape") {
-          setDraft(value);
-          setEditing(false);
-        }
-      }}
-      className="h-7 px-2 py-1"
-    />
+    <Dialog open={target !== null} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-5xl">
+        <DialogHeader>
+          <DialogTitle>{target?.name}</DialogTitle>
+          <DialogDescription>{target?.address}</DialogDescription>
+        </DialogHeader>
+        {target && (
+          <iframe
+            title={target.address}
+            src={`https://www.google.com/maps?q=${encodeURIComponent(target.address)}&output=embed`}
+            className="h-[60vh] w-full rounded-md border"
+            loading="lazy"
+          />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 

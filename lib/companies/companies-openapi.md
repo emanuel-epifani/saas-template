@@ -15,11 +15,10 @@ in base al `dataEnrichment` scelto → `dryRun` (gratis) prima di ogni call.
 
 ## Ambienti e auth
 
-| Env | Base URL | Costo |
-| --- | --- | --- |
-| Sandbox | `https://test.company.openapi.com` | gratis |
-| Production | `https://company.openapi.com` | per record |
-
+| Env        | Base URL                           | Costo      |
+| ---------- | ---------------------------------- | ---------- |
+| Sandbox    | `https://test.company.openapi.com` | gratis     |
+| Production | `https://company.openapi.com`      | per record |
 - **Auth**: `Authorization: Bearer <token>`. Il token si crea in
   console.openapi.com → sezione OAuth → New Token, assegnando gli scope
   (es. `GET:company.openapi.com/IT-search` per prod,
@@ -34,58 +33,58 @@ in base al `dataEnrichment` scelto → `dryRun` (gratis) prima di ogni call.
 
 ## GET /IT-search — parametri (da OAS)
 
-| Param | Tipo | Note |
-| --- | --- | --- |
-| `townCode` | string | **Comune esatto = codice catastale/Belfiore** (es. `H501` = Roma) — il filtro "dove" preciso |
-| `companyName` | string | **Ragione sociale**: parole intere oppure `*` wildcard (inizia/finisce/contiene, min 3 char). NON è la categoria né l'insegna del negozio |
-| `autocomplete` | string | Prefix search su ragione sociale (per autocomplete UI) |
-| `atecoCode` | string | Codice ATECO 2025 — è questo il "cosa" della ricerca |
-| `province` | string | Sigla provincia (`TO`, `RM`…) |
-| `lat` `long` `radius` | geo | Ricerca geografica, radius in metri |
-| `activityStatus` | enum | `ATTIVA` `CESSATA` `REGISTRATA` `INATTIVA` `SOSPESA` `IN_ISCRIZIONE` |
-| `cciaa` `reaCode` | string | Camera di Commercio / numero REA |
-| `minTurnover` `maxTurnover` | int | Fascia di fatturato |
-| `minEmployees` `maxEmployees` | int | Fascia dipendenti |
-| `sdiCode` `legalFormCode` `pec` `shareHolderTaxCode` | string | Filtri puntuali (forma giuridica da `GET /IT-legalforms`) |
-| `creationTimestamp` `lastUpdateTimestamp` | int | Solo aziende create/aggiornate dopo il timestamp |
-| `dryRun` | 0/1 | Torna solo **conteggio record + prezzo** — gratis |
-| `dataEnrichment` | enum | `start` `advanced` `pec` `address` `shareholders` `name` — vedi sotto |
-| `skip` `limit` | int | Paginazione offset; `limit` ≤ 1000 (default 1000) |
+| Param                                                | Tipo   | Note                                                                                                                                      |
+| ---------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `townCode`                                           | string | **Comune esatto = codice catastale/Belfiore** (es. `H501` = Roma) — il filtro "dove" preciso                                              |
+| `companyName`                                        | string | **Ragione sociale**: parole intere oppure `*` wildcard (inizia/finisce/contiene, min 3 char). NON è la categoria né l'insegna del negozio |
+| `autocomplete`                                       | string | Prefix search su ragione sociale (per autocomplete UI)                                                                                    |
+| `atecoCode`                                          | string | Codice ATECO 2025 — è questo il "cosa" della ricerca                                                                                      |
+| `province`                                           | string | Sigla provincia (`TO`, `RM`…)                                                                                                             |
+| `lat` `long` `radius`                                | geo    | Ricerca geografica, radius in metri                                                                                                       |
+| `activityStatus`                                     | enum   | `ATTIVA` `CESSATA` `REGISTRATA` `INATTIVA` `SOSPESA` `IN_ISCRIZIONE`                                                                      |
+| `cciaa` `reaCode`                                    | string | Camera di Commercio / numero REA                                                                                                          |
+| `minTurnover` `maxTurnover`                          | int    | Fascia di fatturato                                                                                                                       |
+| `minEmployees` `maxEmployees`                        | int    | Fascia dipendenti                                                                                                                         |
+| `sdiCode` `legalFormCode` `pec` `shareHolderTaxCode` | string | Filtri puntuali (forma giuridica da `GET /IT-legalforms`)                                                                                 |
+| `creationTimestamp` `lastUpdateTimestamp`            | int    | Solo aziende create/aggiornate dopo il timestamp                                                                                          |
+| `dryRun`                                             | 0/1    | Torna solo **conteggio record + prezzo** — gratis                                                                                         |
+| `dataEnrichment`                                     | enum   | `start` `advanced` `pec` `address` `shareholders` `name` — vedi sotto                                                                     |
+| `skip` `limit`                                       | int    | Paginazione offset; `limit` ≤ 1000 (default 1000)                                                                                         |
 
 Tutti i parametri sono opzionali e combinabili liberamente. Senza alcun
 parametro torna la lista di soli `id`.
 
 ## dataEnrichment — contenuto e prezzo PER RECORD restituito
 
-| `dataEnrichment` | €/record | Contenuto |
-| --- | --- | --- |
-| (assente) | 0,01/**call** dopo 100 free/gg | Solo `id` azienda |
-| `name` | 0,001 | id, P.IVA, CF, ragione sociale, comune sede legale, timestamp |
-| `address` | 0,010 | name + sede legale completa, **lat/lng**, `townCode` |
-| `pec` | 0,030 | name + PEC attuale e storico |
-| `shareholders` | 0,030 | name + soci >10% (nome/CF/quota) |
-| `start` | 0,050 | name + sede, **activityStatus**, codice SdI, data iscrizione CCIAA |
-| `advanced` | 0,100 | start + PEC, REA, forma giuridica, **ATECO, fatturato, utili, dipendenti, soci** |
+| `dataEnrichment` | €/record                       | Contenuto                                                                        |
+| ---------------- | ------------------------------ | -------------------------------------------------------------------------------- |
+| (assente)        | 0,01/**call** dopo 100 free/gg | Solo `id` azienda                                                                |
+| `name`           | 0,001                          | id, P.IVA, CF, ragione sociale, comune sede legale, timestamp                    |
+| `address`        | 0,010                          | name + sede legale completa, **lat/lng**, `townCode`                             |
+| `pec`            | 0,030                          | name + PEC attuale e storico                                                     |
+| `shareholders`   | 0,030                          | name + soci >10% (nome/CF/quota)                                                 |
+| `start`          | 0,050                          | name + sede, **activityStatus**, codice SdI, data iscrizione CCIAA               |
+| `advanced`       | 0,100                          | start + PEC, REA, forma giuridica, **ATECO, fatturato, utili, dipendenti, soci** |
 
 Senza abbonamento = prezzo base da wallet. Con abbonamento allo specifico
 dataset le call scalano dal piano.
 
 ## Endpoint singola azienda (`{piva|cf|id}`) — il "deep dive" on demand
 
-| Endpoint | €/call | Contenuto |
-| --- | --- | --- |
-| `GET /IT-name` | 0,001 | id, P.IVA, CF, denominazione, comune |
-| `GET /IT-address` | 0,010 | Indirizzo sede legale + gps |
-| `GET /IT-pec` | 0,030 | PEC (da 0,015 in abbonamento) |
-| `GET /IT-shareholders` | 0,030 | Soci e quote |
-| `GET /IT-start` | 0,050 | Base + stato/SdI (da 0,015) |
-| `GET /IT-advanced` | 0,100 | ATECO, fatturato, dipendenti, soci… (da 0,028) |
-| `GET /IT-marketing` | 0,200 | **Telefono, email, fax, sito, social**, sedi secondarie, ATECO 2025+storico, NACE/SIC, fatturato, dipendenti, contratti (da 0,085 in abbonamento; anche async via POST + `GET /IT-check_id`) |
-| `GET /IT-stakeholders` | 0,200 | Managers, soci, gruppi, collegate (da 0,086) |
-| `GET /IT-aml` | 0,200 | Antiriciclaggio (da 0,086) |
-| `GET /IT-full` | 0,300 | Tutto + bilancio completo (da 0,08) |
-| `GET /IT-legalforms` | — | Elenco forme giuridiche (per filtro `legalFormCode`) |
-| `GET /IT-check_id/{id}` | — | Stato di una richiesta async |
+| Endpoint                | €/call | Contenuto                                                                                                                                                                                    |
+| ----------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /IT-name`          | 0,001  | id, P.IVA, CF, denominazione, comune                                                                                                                                                         |
+| `GET /IT-address`       | 0,010  | Indirizzo sede legale + gps                                                                                                                                                                  |
+| `GET /IT-pec`           | 0,030  | PEC (da 0,015 in abbonamento)                                                                                                                                                                |
+| `GET /IT-shareholders`  | 0,030  | Soci e quote                                                                                                                                                                                 |
+| `GET /IT-start`         | 0,050  | Base + stato/SdI (da 0,015)                                                                                                                                                                  |
+| `GET /IT-advanced`      | 0,100  | ATECO, fatturato, dipendenti, soci… (da 0,028)                                                                                                                                               |
+| `GET /IT-marketing`     | 0,200  | **Telefono, email, fax, sito, social**, sedi secondarie, ATECO 2025+storico, NACE/SIC, fatturato, dipendenti, contratti (da 0,085 in abbonamento; anche async via POST + `GET /IT-check_id`) |
+| `GET /IT-stakeholders`  | 0,200  | Managers, soci, gruppi, collegate (da 0,086)                                                                                                                                                 |
+| `GET /IT-aml`           | 0,200  | Antiriciclaggio (da 0,086)                                                                                                                                                                   |
+| `GET /IT-full`          | 0,300  | Tutto + bilancio completo (da 0,08)                                                                                                                                                          |
+| `GET /IT-legalforms`    | —      | Elenco forme giuridiche (per filtro `legalFormCode`)                                                                                                                                         |
+| `GET /IT-check_id/{id}` | —      | Stato di una richiesta async                                                                                                                                                                 |
 
 ## Paginazione
 
@@ -94,10 +93,16 @@ Response sempre `{data: [...], success, message, error}` — **nessun
 `dryRun=1`, poi le pagine si calcolano lato nostro:
 
 ```
-dryRun → count (gratis)
+dryRun → {data: [], count, cost, success, ...}   // shape verificata live
 totPages = ceil(count / limit)
 page i → skip = i * limit    // offset determinato, dataset stabile (registro)
 ```
+
+**Verificato su sandbox** (Nov 2026): query senza filtri → HTTP **204**
+con body vuoto (non un envelope JSON). Parametri invalidi (es. townCode
+inesistente) → **422** `{success:false, message:"invalid townCode",
+error:314}`. Token sbagliato → `401 {success:false, message:"Wrong
+Token", error:125.xx}`.
 
 `limit` max 1000 per call; dataset >1000 → più call con `skip`.
 

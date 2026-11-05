@@ -13,6 +13,11 @@ import { refresh, revalidatePath } from "next/cache";
 
 import { requireSession } from "@/lib/auth/session";
 
+import {
+  countCompaniesOpenApi,
+  getCompanyMarketingOpenApi,
+  searchCompaniesOpenApi,
+} from "./companies/openapi";
 import * as repo from "./db/queries";
 import { searchCompany, searchJobOffer } from "./serpapi";
 import {
@@ -22,6 +27,8 @@ import {
   jobOfferSearchInputSchema,
   listIdInputSchema,
   myListsInputSchema,
+  openApiCompanyIdInputSchema,
+  openApiCompanySearchInputSchema,
   renameListInputSchema,
   saveItemsInputSchema,
   updateItemInputSchema,
@@ -38,6 +45,24 @@ export async function findJobOffers(input: unknown) {
   //todo: why I don't see any date of publish of job offer? deep dive payload
   await requireSession();
   return searchJobOffer(jobOfferSearchInputSchema.parse(input));
+}
+
+// -- Search (OpenApi Company) — dryRun gratis, poi fetch a pagamento ---------
+
+export async function estimateOpenApiCompanies(input: unknown) {
+  await requireSession();
+  return countCompaniesOpenApi(openApiCompanySearchInputSchema.parse(input));
+}
+
+export async function searchOpenApiCompanies(input: unknown) {
+  await requireSession();
+  return searchCompaniesOpenApi(openApiCompanySearchInputSchema.parse(input));
+}
+
+export async function getOpenApiCompany(input: unknown) {
+  await requireSession();
+  const { id } = openApiCompanyIdInputSchema.parse(input);
+  return getCompanyMarketingOpenApi(id);
 }
 
 // -- Saved (archivio utente) ------------------------------------------------

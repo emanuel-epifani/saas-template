@@ -35,6 +35,78 @@ export const jobOfferSearchInputSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
+// Search inputs (OpenApi Company) — filtri strutturati verso /IT-search.
+// dryRun=1 è gratis e torna {count, cost} → stima prima di spendere.
+// ---------------------------------------------------------------------------
+
+export const openApiDataEnrichmentSchema = z.enum([
+  "name",
+  "address",
+  "pec",
+  "shareholders",
+  "start",
+  "advanced",
+]);
+
+export const openApiCompanySearchInputSchema = z
+  .object({
+    /** Ragione sociale (min 3 char, `*` wildcard) → companyName */
+    companyName: z
+      .string()
+      .trim()
+      .min(3, "Ragione sociale: minimo 3 caratteri")
+      .max(120)
+      .optional(),
+    /** Codice catastale/Belfiore comune ("H501" = Roma) → townCode */
+    townCode: z
+      .string()
+      .trim()
+      .regex(/^[a-zA-Z][0-9a-zA-Z]{3}$/, "Codice comune non valido")
+      .transform((v) => v.toUpperCase())
+      .optional(),
+    /** Sigla provincia ("TO") → province */
+    province: z
+      .string()
+      .trim()
+      .regex(/^[a-zA-Z]{2}$/, "Sigla provincia non valida")
+      .transform((v) => v.toUpperCase())
+      .optional(),
+    /** Codice ATECO 2025 canonico ("56" … "56.11.11" — più preciso = più stretto) */
+    atecoCode: z
+      .string()
+      .trim()
+      .regex(
+        /^[0-9]{2}(\.[0-9](\.[0-9](\.[0-9](\.[0-9])?)?)?)?$/,
+        "Codice ATECO non valido",
+      )
+      .optional(),
+    activityStatus: z
+      .enum([
+        "ATTIVA",
+        "CESSATA",
+        "REGISTRATA",
+        "INATTIVA",
+        "SOSPESA",
+        "IN_ISCRIZIONE",
+      ])
+      .optional(),
+    skip: z.number().int().min(0).default(0),
+    limit: z.number().int().min(1).max(1000).default(20),
+    /** Solo per la stima: l'enrichment scelto cambia il prezzo. */
+    dataEnrichment: openApiDataEnrichmentSchema.optional(),
+  })
+  // L'API torna 204 su query senza filtri: almeno un filtro è obbligatorio.
+  .refine(
+    (v) => v.companyName || v.townCode || v.province || v.atecoCode,
+    "Serve almeno un filtro",
+  );
+
+export const openApiCompanyIdInputSchema = z.object({
+  /** P.IVA, C.F. o id interno Openapi → /IT-marketing/{id} */
+  id: z.string().min(1),
+});
+
+// ---------------------------------------------------------------------------
 // Saved domain (archivio utente)
 // ---------------------------------------------------------------------------
 

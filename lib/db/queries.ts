@@ -65,22 +65,24 @@ export async function findListForUser(listId: string, userId: string) {
   return rows[0] ?? null;
 }
 
-/** Item di una lista aziende, ordine di inserimento. */
+/** Item di una lista aziende. createdAt+id: chiavi immutabili → ordine
+ *  stabile anche dopo UPDATE (i batch insert hanno createdAt identico,
+ *  l'uuid rompe i pari merito in modo deterministico). */
 export async function findCompanyItems(listId: string) {
   return db
     .select()
     .from(savedCompany)
     .where(eq(savedCompany.listId, listId))
-    .orderBy(savedCompany.createdAt);
+    .orderBy(savedCompany.createdAt, savedCompany.id);
 }
 
-/** Item di una lista offerte, ordine di inserimento. */
+/** Item di una lista offerte — vedi findCompanyItems. */
 export async function findJobItems(listId: string) {
   return db
     .select()
     .from(savedJobOffer)
     .where(eq(savedJobOffer.listId, listId))
-    .orderBy(savedJobOffer.createdAt);
+    .orderBy(savedJobOffer.createdAt, savedJobOffer.id);
 }
 
 /** Crea la lista o riusa quella con lo stesso nome (unique user+kind+name). */

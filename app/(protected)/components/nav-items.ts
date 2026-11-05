@@ -1,4 +1,10 @@
-import { Archive, Briefcase, Building2, LayoutDashboard } from "lucide-react";
+import {
+  Archive,
+  Briefcase,
+  Building2,
+  Landmark,
+  LayoutDashboard,
+} from "lucide-react";
 
 import type { NavGroup } from "@/app/models";
 import { texts } from "@/texts";
@@ -22,6 +28,11 @@ export const navGroups: readonly NavGroup[] = [
         href: "/job-offers",
         label: texts.navSearchJobs,
         icon: Briefcase,
+      },
+      {
+        href: "/companies-openapi",
+        label: texts.navRegistryCompanies,
+        icon: Landmark,
       },
     ],
   },

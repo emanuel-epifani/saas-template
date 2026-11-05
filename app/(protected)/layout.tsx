@@ -26,7 +26,10 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
       <Suspense fallback={<AppSidebarSkeleton />}>
         <AppSidebar />
       </Suspense>
-      <SidebarInset>
+      {/* min-w-0: without it the flex item refuses to shrink below the
+          widest child's intrinsic width — a wide table would stretch the
+          whole inset and scroll the PAGE instead of its own container. */}
+      <SidebarInset className="min-w-0">
         <Suspense>
           <AppTopbar />
         </Suspense>

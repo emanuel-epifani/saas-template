@@ -32,8 +32,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Must be static literals (Next.js parses this at build time) — keep in sync
-  // with PROTECTED_PREFIXES above.
+  // DEVE rispecchiare PROTECTED_PREFIXES — Next.js esige stringhe statiche,
+  // non si può derivare con .map().
   matcher: [
     "/dashboard/:path*",
     "/account/:path*",
