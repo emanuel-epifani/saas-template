@@ -17,6 +17,11 @@ export const env = createEnv({
     API_KEY_SERPAPI: z.string(),
     // "false" = real calls (consume credits). Missing/unset = mock ON.
     SERPAPI_MOCK: z.enum(["true", "false"]).default("false"),
+    // Openapi Company — bearer token from console.openapi.com (scopes on
+    // {test.}company.openapi.com). Optional while experimenting in sandbox.
+    OPENAPI_TOKEN: z.string().optional(),
+    // "false" = production (charges per record). Missing/unset = sandbox ON.
+    OPENAPI_SANDBOX: z.enum(["true", "false"]).default("true"),
   },
   client: {},
   runtimeEnv: {
@@ -27,6 +32,8 @@ export const env = createEnv({
     EMAIL_FROM: process.env.EMAIL_FROM,
     API_KEY_SERPAPI: process.env.API_KEY_SERPAPI,
     SERPAPI_MOCK: process.env.SERPAPI_MOCK,
+    OPENAPI_TOKEN: process.env.OPENAPI_TOKEN,
+    OPENAPI_SANDBOX: process.env.OPENAPI_SANDBOX,
   },
   emptyStringAsUndefined: true,
 });

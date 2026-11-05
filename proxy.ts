@@ -32,6 +32,13 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Derivato da PROTECTED_PREFIXES — una sola lista da mantenere.
-  matcher: PROTECTED_PREFIXES.map((p) => `${p}/:path*`),
+  // Must be static literals (Next.js parses this at build time) — keep in sync
+  // with PROTECTED_PREFIXES above.
+  matcher: [
+    "/dashboard/:path*",
+    "/account/:path*",
+    "/companies/:path*",
+    "/job-offers/:path*",
+    "/saved/:path*",
+  ],
 };
