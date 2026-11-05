@@ -19,7 +19,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { deleteSavedList, renameSavedList } from "@/lib/actions";
 import type { SavedListWithCount } from "@/lib/db/queries";
-import type { SavedListKind } from "@/lib/schemas";
+import type { SavedListKind } from "@/lib/zod-schemas";
 import { texts } from "@/texts";
 
 const itemClass =

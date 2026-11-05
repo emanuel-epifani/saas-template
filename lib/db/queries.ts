@@ -13,7 +13,7 @@ import type {
   SavedCompanyItem,
   SavedJobItem,
   SavedListKind,
-} from "../schemas";
+} from "../zod-schemas";
 import { db } from "./index";
 import { savedCompany, savedJobOffer, savedList } from "./schema";
 

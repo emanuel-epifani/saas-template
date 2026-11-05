@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { getMyLists, saveToList } from "@/lib/actions";
 import type { SavedListWithCount } from "@/lib/db/queries";
-import type { SavedCompanyItem, SavedJobItem } from "@/lib/schemas";
+import type { SavedCompanyItem, SavedJobItem } from "@/lib/zod-schemas";
 import { texts } from "@/texts";
 
 const NEW_LIST = "__new__";

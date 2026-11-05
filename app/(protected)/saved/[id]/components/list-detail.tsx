@@ -30,8 +30,8 @@ import type {
   SavedJobOfferRow,
   SavedListRow,
 } from "@/lib/db/queries";
-import type { SavedListKind } from "@/lib/schemas";
 import { hostname } from "@/lib/utils";
+import type { SavedListKind } from "@/lib/zod-schemas";
 import { texts } from "@/texts";
 
 type ListDetailProps =

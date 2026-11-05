@@ -4,7 +4,7 @@
  * RPC boundary — l'intera superficie pubblica dell'app.
  * Ogni export è un endpoint POST pubblico: sessione + zod + ownership
  * verificati qui dentro, mai fidarsi del client. Regola Next: solo async
- * function exportabili → gli schema zod stanno in ./schemas (neutro).
+ * function exportabili → gli schema zod stanno in ./zod-schemas (neutro).
  * refresh() ri-renderizza la route corrente nella stessa response →
  * i componenti client non devono rifare fetch dopo una mutazione.
  */
@@ -14,6 +14,7 @@ import { refresh, revalidatePath } from "next/cache";
 import { requireSession } from "@/lib/auth/session";
 
 import * as repo from "./db/queries";
+import { searchCompany, searchJobOffer } from "./serpapi";
 import {
   addColumnInputSchema,
   companySearchInputSchema,
@@ -24,8 +25,7 @@ import {
   renameListInputSchema,
   saveItemsInputSchema,
   updateItemInputSchema,
-} from "./schemas";
-import { searchCompany, searchJobOffer } from "./serpapi";
+} from "./zod-schemas";
 
 // -- Search (SerpApi) — sessione + zod prima di spendere crediti -----------
 

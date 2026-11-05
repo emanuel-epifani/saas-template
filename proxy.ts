@@ -32,11 +32,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/account/:path*",
-    "/companies/:path*",
-    "/job-offers/:path*",
-    "/saved/:path*",
-  ],
+  // Derivato da PROTECTED_PREFIXES — una sola lista da mantenere.
+  matcher: PROTECTED_PREFIXES.map((p) => `${p}/:path*`),
 };

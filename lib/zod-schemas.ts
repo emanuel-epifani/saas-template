@@ -5,6 +5,10 @@
  * Boundary types escono da qui: `z.infer<typeof Schema>` è la single source.
  */
 
+// Side-effect: abilita il JIT compiler di Zod — gli schemi sotto vengono
+// compilati (new Function) al primo parse; fallback automatico al runtime
+// parser su feature non supportate o ambienti senza eval (Edge/jitless).
+import "zod/compile";
 import { z } from "zod";
 
 // ---------------------------------------------------------------------------
