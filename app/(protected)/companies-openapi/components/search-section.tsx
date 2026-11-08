@@ -235,7 +235,7 @@ export function SearchSection() {
           e.preventDefault();
           onSubmit();
         }}
-        className="bg-card border-border grid rounded-sm border sm:grid-cols-[1.6fr_1.3fr_0.7fr_auto]"
+        className="bg-card border-border grid rounded-lg border sm:grid-cols-[1.6fr_1.3fr_0.7fr_auto]"
       >
         {/* overflow-hidden rimosso: i dropdown dei picker escono dal form */}
         <label htmlFor="oa-ateco" className={cell}>
@@ -296,7 +296,7 @@ export function SearchSection() {
 
       {/* Stima gratuita: count + costo PRIMA di spendere. */}
       {estimate ? (
-        <div className="bg-card border-border flex flex-wrap items-center gap-x-4 gap-y-2 rounded-sm border px-4 py-3">
+        <div className="bg-card border-border flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border px-4 py-3">
           <p className="text-sm font-medium">
             {int0.format(total)} {texts.openapiCompaniesWord}
             <span className="text-muted-foreground font-normal">
@@ -683,7 +683,7 @@ function CodePicker({
         autoComplete="off"
       />
       {open && filtered.length > 0 ? (
-        <ul className="bg-popover text-popover-foreground absolute inset-x-0 top-full z-50 mt-1 max-h-56 overflow-y-auto rounded-sm border py-1 shadow-md">
+        <ul className="bg-popover text-popover-foreground absolute inset-x-0 top-full z-50 mt-1 max-h-56 overflow-y-auto rounded-md border py-1 shadow-md">
           {filtered.map((item, i) => (
             <li key={item.value}>
               <button

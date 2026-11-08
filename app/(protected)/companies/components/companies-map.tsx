@@ -87,7 +87,7 @@ export default function CompaniesMap({
       const content = document.createElement("div");
       const num = document.createElement("span");
       num.className = "map-popup-num";
-      num.textContent = `N° ${String(i + 1).padStart(2, "0")}`;
+      num.textContent = String(i + 1);
       content.appendChild(num);
       const title = document.createElement("strong");
       title.textContent = c.name;

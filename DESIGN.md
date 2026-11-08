@@ -1,124 +1,168 @@
 # DESIGN.md — Scout visual system
 
-> Direction chosen via Impeccable decision (seed `3c1a088fde05b743`):
-> **"Ordine di Servizio"** — assigned card #7 (griglia disciplinata).
+> Direction: **Istituzionale** (preview `design/previews/a-istituzionale.html`).
+> A quiet, reliable work tool: hairline structure, one institutional blue,
+> nothing decorative. Chosen because the product must be obvious at first
+> glance — few things, done plainly.
 
-## Thesis
+## Intent
 
-The register of a working desk: every prospect is a numbered entry and
-every drop of accent is an action.
+Daily prospecting tool for recruiters at agenzie per il lavoro: they search,
+evaluate, contact. Primary viewport desktop; mobile must never break.
+Feel: affidabile, intuitivo, robusto — like a well-made banking back-office.
 
-## World
+## Dials
 
-- **Ground**: warm paper (`oklch(0.963 0.007 95)`), dark-ink sidebar rail.
-- **Rules**: hairline borders carry elevation — no decorative shadows.
-- **One accent**: action blue (`--primary`, `oklch(0.45 0.185 264)`) spent
-  ONLY where the user can act: buttons, links, selected row/pin state.
-  Never decoration.
-- **Type**: one grotesque (Geist Sans) + Geist Mono for protocol numbers,
-  counts and tabular data (`font-mono` + `tabular-nums`).
-- **Radius**: `0.375rem` (6px) — `rounded-md` default; the search band
-  goes squarer (`rounded-sm`); no xl/2xl/3xl.
-- **Density**: desk tool used for hours — compact rows, tight leading.
+- Density: compact-medium (rows 40–44px, card padding 16px, body 13.5–14px)
+- Radius: `3px` base (`0.1875rem`) — squared professional, no pills
+- Contrast: stark-leaning, cool greys
+- Colour: monochrome + ONE institutional blue, semantic colours only for status
+- Type: IBM Plex Sans + IBM Plex Mono (numbers, tabular data)
+- Depth: hairline borders everywhere; shadows ONLY on overlays (menu, dialog, toast)
+- Motion: minimal (120–160ms ease-out, colour/transform only)
+- Theme: light-first, dark variant provided and intentional
 
-## Protocol-number idiom
+## Tokens
 
-Each search result is a numbered register entry (`01`, `02`, … in mono).
-The SAME number links: list row ↔ map pin ↔ detail pane ↔ map popup
-(`N° 03`).
+```css
+:root {
+  --background: oklch(0.978 0.003 250);
+  --foreground: oklch(0.23 0.02 255);
+  --card: oklch(0.998 0.002 250);
+  --card-foreground: oklch(0.23 0.02 255);
+  --popover: oklch(0.998 0.002 250);
+  --popover-foreground: oklch(0.23 0.02 255);
+  --primary: oklch(0.42 0.12 255);
+  --primary-foreground: oklch(0.98 0.005 250);
+  --secondary: oklch(0.95 0.005 250);
+  --secondary-foreground: oklch(0.3 0.02 255);
+  --muted: oklch(0.95 0.005 250);
+  --muted-foreground: oklch(0.47 0.015 250);
+  --accent: oklch(0.92 0.02 255);
+  --accent-foreground: oklch(0.36 0.1 255);
+  --destructive: oklch(0.5 0.17 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+  --success: oklch(0.45 0.1 155);
+  --warning: oklch(0.6 0.12 75);
+  --info: oklch(0.45 0.1 235);
+  --border: oklch(0.87 0.008 250);
+  --input: oklch(0.8 0.01 250);
+  --ring: var(--primary);
+  --radius: 0.1875rem;
+  --chart-1: oklch(0.42 0.12 255); --chart-2: oklch(0.55 0.1 200);
+  --chart-3: oklch(0.5 0.1 155);   --chart-4: oklch(0.6 0.12 75);
+  --chart-5: oklch(0.55 0.14 30);
+  --sidebar: oklch(0.985 0.004 250);
+  --sidebar-foreground: oklch(0.35 0.02 255);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: oklch(0.88 0.008 250);
+  --sidebar-ring: var(--primary);
+}
 
-- Rows: fixed height `h-[120px]`, 4 slots (title `leading-6` + 3 meta
-  lines at `h-6`) — missing fields never collapse the row. The number
-  lives in a full-height ledger column `w-10 border-r` (`bg-muted/40`),
-  like a register margin.
-- Companies rows expose real actions: phone → `tel:` link, website →
-  external link (`relative z-10` above the row's stretched-button
-  overlay).
-- List panel header: `N° | <entità>` micro-label row on top, same
-  ledger column.
-- Selected/hovered row → `bg-accent/60`; ledger cell → `bg-primary/10`
-  - `text-primary`.
-- Map pin → SVG teardrop `.map-pin`: paper body (`.map-pin-shape` fill
-  card + ink stroke), dark number inside the head; active → blue fill
-  - light number. The map fits the result pins' bounds on each new search.
-- Selecting a row opens the pin's popup as the eye's anchor; the map
-  re-centers only when the pin is off-view or hugging the edge
-  (`bounds.pad(-0.15)`).
+.dark {
+  --background: oklch(0.185 0.012 255);
+  --foreground: oklch(0.92 0.005 250);
+  --card: oklch(0.215 0.012 255);
+  --card-foreground: oklch(0.92 0.005 250);
+  --popover: oklch(0.215 0.012 255);
+  --popover-foreground: oklch(0.92 0.005 250);
+  --primary: oklch(0.64 0.11 255);
+  --primary-foreground: oklch(0.16 0.03 255);
+  --secondary: oklch(0.26 0.012 255);
+  --secondary-foreground: oklch(0.92 0.005 250);
+  --muted: oklch(0.26 0.012 255);
+  --muted-foreground: oklch(0.67 0.01 255);
+  --accent: oklch(0.3 0.03 255);
+  --accent-foreground: oklch(0.8 0.06 255);
+  --destructive: oklch(0.65 0.16 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+  --success: oklch(0.68 0.1 155);
+  --warning: oklch(0.72 0.12 75);
+  --info: oklch(0.66 0.1 235);
+  --border: oklch(0.3 0.012 255);
+  --input: oklch(0.34 0.012 255);
+  --ring: var(--primary);
+  --sidebar: oklch(0.16 0.012 255);
+  --sidebar-foreground: oklch(0.75 0.01 255);
+  --sidebar-accent: oklch(0.3 0.03 255);
+  --sidebar-accent-foreground: oklch(0.8 0.06 255);
+  --sidebar-border: oklch(0.28 0.012 255);
+  --sidebar-ring: var(--primary);
+}
+```
 
-## Two search directions
+Fonts loaded via `next/font` → `--font-plex-sans`, `--font-plex-mono` vars.
 
-The product has two opposed search modes that must stay visually
-distinct (see PRODUCT.md):
+## Typography
 
-- **PROSPEZIONE** (outbound, the radar): `/companies`, `/job-offers`.
-  Results are _register entries_ — numbered, transient, thrown away
-  after evaluation.
-- **ARCHIVIO** (inbound, the schedario): `/saved` → future qualified DB.
-  Entries are _schede_ — cards in a grid (ragione sociale, P.IVA, fido,
-  contatti), a different document type inside the same paper-office
-  world. Cards ≠ register rows; that's the whole distinction. No second
-  accent color — separation is carried by structure + labels.
+- **IBM Plex Sans** everywhere: body 400, emphasis 500, headings/UI 600–700.
+- **IBM Plex Mono** for numbers only: KPI values, phone numbers, counts,
+  dates in tables (`font-mono` + `tabular-nums`).
+- Scale: h1 26–28 (hero up to 44), h2 19, h3 15, h4 13.5, body 13.5–14,
+  small/caption 11–12.
+- Headings `tracking-tight` (-0.015em); uppercase micro-labels
+  `text-[11px] tracking-[0.07em] uppercase` — used sparingly (panel titles,
+  table headers), never on every line.
+- Line-height: body 1.5, headings 1.15–1.25.
 
-Sidebar groups: `PROSPEZIONE` / `ARCHIVIO` micro-labels. Prospezione
-entries carry the verb (`Cerca aziende`, `Cerca offerte`); archive
-carries the object (`Liste salvate`). Dashboard is split into two
-labeled zones matching them, side by side on desktop
-(`lg:grid-cols-[1.1fr_1fr]`), stacked on smaller screens.
+## Layout
 
-## Cycle idioms
+- App shell: **light** sidebar rail (`--sidebar`, ~224px) + main column
+  (max ~1200px, padding 20–24). On mobile the rail collapses to a top bar.
+- Density: table rows 40–44px, card padding 16px, sections spaced 16–24px.
+- Group by spacing, not by extra boxes: avoid cards inside cards.
+- Tables scroll horizontally inside their panel on small screens.
 
-- **Routing-slip strip** (dashboard top): 3 bordered panels —
-  `CERCA → SALVA → DECIDI` — each a link with lucide icon + mono index;
-  `ArrowRight` sits in the gap between panels (sm+). Teaches the
-  workflow and navigates.
-- **Register → scheda mini-scena** (`components/register-to-scheda.tsx`):
-  educational diagram for archive empty states — a fictional register
-  row (ledger `01` cell) arrowing into a scheda card (`SCHEDA` micro-label,
-  `Check` + `P.IVA · fido · note`). `aria-hidden`, fictional data,
-  stacks vertically on narrow screens.
+## Components
 
-## Surface idioms
+- **One primary action per view.** Everything else secondary/outline/ghost.
+- **Panels**: `border` + `rounded` (3px), header strip + `divide-y` rows.
+  No shadow on static surfaces.
+- **Buttons**: solid primary; secondary = `bg-secondary` + border;
+  outline = transparent + `--input` border; ghost; destructive; link.
+  Heights sm 28 / md 34 / lg 42.
+- **Badges**: 11px, tint bg + coloured text, `rounded` (3px) — statuses:
+  Nuova = accent blue, Contattata = success, Da valutare = warning,
+  Scartata = destructive, Archivio = neutral.
+- **Inputs**: `--input` border, focus `ring-2 ring-ring` no offset.
+- **Nav**: light rail; active item `bg-accent text-accent-foreground`.
+- **KPI cards**: bordered card, mono value, muted label, delta in
+  success/destructive.
+- **Tables**: `th` uppercase 11px muted; hover `bg-muted`; selected row
+  `bg-accent`; numbers in mono.
+- **Map** (companies): keep the row↔pin counter link in mono, but plain —
+  a number, not a "N° nn" protocol label. Pins stay teardrop: card body +
+  ink stroke, active = primary fill.
+- **Search band**: one bordered band with labelled cells is allowed ONLY on
+  search pages; elsewhere plain inputs. Focus highlights the cell, never a
+  ring on the bare input.
+- **States**: skeleton rows in final shape; empty = icon + sentence +
+  primary action; error = what happened + retry.
 
-- **Search band** (`SearchBar`): squared `rounded-sm` bordered band,
-  cells with visible uppercase micro-labels (`10px`, `tracking-[0.08em]`)
-  above each `h-8` value; focus highlights the whole cell
-  (`focus-within:bg-accent/50`), never a ring on the bare input. Chrome
-  autofill is re-skinned to card color in globals. The submit button is
-  the last solid-blue cell.
-- **Result lists**: bordered panel = header strip + `divide-y` rows;
-  `scroll-list` scrolls, count line stays above.
-- **Detail/map pane**: sticky `top-4 h-[70vh]` bordered panel; detail
-  header starts with `N° nn` mono uppercase.
-- **PageHeader**: hairline-bottom block, title + description only —
-  no icon tiles, no domain accent colors.
-- **Landing**: no eyebrow badge, no radial gradient; numbered steps use
-  bordered mono counters; CTA band = flat `bg-foreground` slab.
-- **No example chips**: search surfaces never pre-fill demo searches;
-  placeholders are descriptive hints, not fake queries.
+## Do / Don't
 
-## Removed / forbidden
-
-- Domain tone system (`--companies` blue, `--jobs` amber, `NavTone`,
-  badge variants `companies`/`jobs`) — gone. Neutral icons everywhere.
-- Icon-tile cards, `rounded-xl`+ cards with `shadow`, decorative
-  gradients, `bg-primary` CTA washes, Plus Jakarta Sans.
-- Do not reintroduce: gradient text, glassmorphism, blob decor,
-  multi-hue domain coloring.
-
-## States
-
-- Loading → squared `Skeleton` rows in the same register shape.
-- Idle → flat dashed placeholder rows / detail pane prompt.
-- Pending (refetch) → `opacity-60` on list + small update chip.
+- DO spend the blue only on things the user can act on (buttons, links,
+  active nav, focus ring, selected state, map pin active).
+- DO keep surfaces flat: borders carry all structure.
+- DO use real content and precise copy; buttons say what they do.
+- DO keep the mobile fallback honest (sidebar→topbar, table→scroll).
+- DON'T add gradients, glow, decorative shadows, icon tiles, large radii.
+- DON'T multiply accents or coloured badges without meaning.
+- DON'T repeat navigational idioms on every page (no routing strips,
+  no recurring "how it works" diagrams, no protocol prefixes on every row).
+- DON'T reintroduce: domain tone colors, protocol-number branding,
+  register margins, `rounded-xl`+ cards, Geist fonts, dark sidebar rail.
 
 ## Files that own the system
 
 - `app/globals.css` — tokens, `.map-pin`, `.scroll-list`, scrollbar,
-  selection color.
-- `components/search-bar.tsx` — the band idiom.
-- `components/page-header.tsx` — register header.
-- `app/(protected)/components/app-sidebar.tsx` + `brand-mark.tsx` — rail.
-- `app/(protected)/{companies,job-offers}/components/search-section.tsx`
-  — the register idiom in production.
-- `app/(protected)/companies/components/companies-map.tsx` — numbered
-  Leaflet pins, bounds-fitted to the active search.
+  selection, autofill reskin.
+- `app/layout.tsx` — font loading (IBM Plex Sans + IBM Plex Mono).
+- `components/search-bar.tsx` — the search-band idiom.
+- `components/page-header.tsx` — page header idiom.
+- `app/(protected)/components/app-sidebar.tsx` + `components/brand-mark.tsx`
+  — the light rail.
+- `app/(protected)/companies/components/companies-map.tsx` — pins.

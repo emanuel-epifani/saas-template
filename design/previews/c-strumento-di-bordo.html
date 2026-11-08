@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scout — C · Strumento di bordo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-sans: "IBM Plex Sans", sans-serif;
+    --font-head: "Space Grotesk", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --background: oklch(0.986 0.004 250);
+    --foreground: oklch(0.2 0.03 260);
+    --card: oklch(0.996 0.003 250);
+    --card-foreground: oklch(0.2 0.03 260);
+    --popover: oklch(0.996 0.003 250);
+    --popover-foreground: oklch(0.2 0.03 260);
+    --primary: oklch(0.45 0.17 255);
+    --primary-foreground: oklch(0.98 0.005 250);
+    --secondary: oklch(0.945 0.008 250);
+    --secondary-foreground: oklch(0.28 0.03 260);
+    --muted: oklch(0.945 0.008 250);
+    --muted-foreground: oklch(0.48 0.02 255);
+    --accent: oklch(0.935 0.03 255);
+    --accent-foreground: oklch(0.37 0.13 255);
+    --destructive: oklch(0.52 0.18 27);
+    --destructive-foreground: oklch(0.98 0.005 250);
+    --success: oklch(0.48 0.11 160);
+    --warning: oklch(0.6 0.13 70);
+    --info: oklch(0.45 0.17 255);
+    --border: oklch(0.855 0.012 250);
+    --input: oklch(0.79 0.015 250);
+    --ring: oklch(0.45 0.17 255);
+    --radius: 2px;
+    --grid-line: oklch(0.93 0.008 250);
+    --chart-1: oklch(0.45 0.17 255); --chart-2: oklch(0.35 0.05 260);
+    --chart-3: oklch(0.55 0.1 160); --chart-4: oklch(0.6 0.13 70); --chart-5: oklch(0.55 0.15 30);
+    --sidebar: oklch(0.996 0.003 250);
+    --sidebar-foreground: oklch(0.38 0.025 260);
+    --sidebar-primary: oklch(0.45 0.17 255);
+    --sidebar-border: oklch(0.855 0.012 250);
+    --shadow-sm: none;
+    --shadow-md: 0 4px 14px -4px oklch(0.25 0.04 260 / 0.16);
+    --shadow-lg: 0 12px 34px -8px oklch(0.25 0.04 260 / 0.2);
+    --ease: ease-out; --duration: 120ms;
+    --card-pad: 16px; --row-h: 42px; --btn-h: 36px; --btn-h-sm: 28px; --btn-h-lg: 44px;
+    --fs-body: 13.5px; --fs-small: 12px; --page-max: 1120px;
+  }
+  .dark {
+    --background: oklch(0.155 0.025 265);
+    --foreground: oklch(0.9 0.01 250);
+    --card: oklch(0.195 0.025 265);
+    --card-foreground: oklch(0.9 0.01 250);
+    --popover: oklch(0.195 0.025 265);
+    --popover-foreground: oklch(0.9 0.01 250);
+    --primary: oklch(0.68 0.15 235);
+    --primary-foreground: oklch(0.14 0.04 265);
+    --secondary: oklch(0.24 0.025 265);
+    --secondary-foreground: oklch(0.9 0.01 250);
+    --muted: oklch(0.24 0.025 265);
+    --muted-foreground: oklch(0.66 0.015 255);
+    --accent: oklch(0.28 0.05 255);
+    --accent-foreground: oklch(0.8 0.08 255);
+    --destructive: oklch(0.66 0.17 27);
+    --destructive-foreground: oklch(0.98 0.005 250);
+    --success: oklch(0.68 0.11 160);
+    --warning: oklch(0.72 0.13 70);
+    --info: oklch(0.68 0.15 235);
+    --border: oklch(0.29 0.02 265);
+    --input: oklch(0.33 0.02 265);
+    --ring: oklch(0.68 0.15 235);
+    --grid-line: oklch(0.22 0.02 265);
+    --sidebar: oklch(0.13 0.025 265);
+    --sidebar-foreground: oklch(0.72 0.015 255);
+    --sidebar-primary: oklch(0.68 0.15 235);
+    --sidebar-border: oklch(0.27 0.02 265);
+    --shadow-md: 0 4px 14px -4px oklch(0 0 0 / 0.55);
+    --shadow-lg: 0 12px 34px -8px oklch(0 0 0 / 0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-family: var(--font-sans); }
+  body {
+    background: var(--background); color: var(--foreground); font-size: var(--fs-body); line-height: 1.5;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1,h2,h3,h4 { font-family: var(--font-head); letter-spacing: -0.01em; line-height: 1.2; }
+  h1 { font-size: 26px; font-weight: 700; }
+  h2 { font-size: 19px; font-weight: 650; }
+  h3 { font-size: 15px; font-weight: 600; }
+  h4 { font-size: 13.5px; font-weight: 600; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { font-family: var(--font-mono); font-size: 0.88em; background: var(--muted); padding: 1px 5px; border-radius: var(--radius); }
+  ::selection { background: color-mix(in oklch, var(--primary) 20%, transparent); }
+
+  /* ---------- spec bar ---------- */
+  .spec-bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 10px 20px; font: 12px/1.4 system-ui, sans-serif;
+    background: #2b2b2b; color: #d8d8d8; border-bottom: 1px solid #111;
+  }
+  .spec-bar strong { color: #fff; font-size: 13px; }
+  .spec-bar .dials { color: #a8a8a8; }
+  .spec-bar button {
+    margin-left: auto; font: inherit; padding: 5px 12px; cursor: pointer;
+    background: #444; color: #eee; border: 1px solid #555; border-radius: 4px;
+  }
+
+  .preview-sec { max-width: var(--page-max); margin: 0 auto; padding: 40px 24px; }
+  .sec-title {
+    font: 600 10.5px/1 system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase;
+    color: oklch(0.55 0.01 250); margin-bottom: 14px;
+  }
+  .dark .sec-title { color: #999; }
+
+  /* ---------- primitives ---------- */
+  .btn {
+    font: 600 var(--fs-body)/1 var(--font-sans);
+    height: var(--btn-h); padding: 0 15px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border-radius: var(--radius); border: 1px solid transparent;
+    cursor: pointer; transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+    white-space: nowrap;
+  }
+  .btn.sm { height: var(--btn-h-sm); padding: 0 10px; font-size: var(--fs-small); }
+  .btn.lg { height: var(--btn-h-lg); padding: 0 20px; font-size: 14.5px; }
+  .btn.primary { background: var(--primary); color: var(--primary-foreground); border-bottom: 2px solid color-mix(in oklch, var(--primary) 72%, black); }
+  .btn.primary:hover, .btn.primary.is-hover { background: color-mix(in oklch, var(--primary) 90%, var(--foreground)); }
+  .btn.primary:active, .btn.primary.is-active { border-bottom-width: 1px; transform: translateY(1px); }
+  .btn.secondary { background: var(--secondary); color: var(--secondary-foreground); border-color: var(--border); }
+  .btn.secondary:hover, .btn.secondary.is-hover { background: var(--accent); }
+  .btn.outline { background: transparent; color: var(--foreground); border-color: var(--input); }
+  .btn.outline:hover, .btn.outline.is-hover { background: var(--muted); }
+  .btn.ghost { background: transparent; color: var(--foreground); }
+  .btn.ghost:hover, .btn.ghost.is-hover { background: var(--muted); }
+  .btn.destructive { background: var(--destructive); color: var(--destructive-foreground); border-bottom: 2px solid color-mix(in oklch, var(--destructive) 72%, black); }
+  .btn.destructive:hover, .btn.destructive.is-hover { background: color-mix(in oklch, var(--destructive) 86%, black); }
+  .btn.link { background: none; color: var(--primary); padding: 0; height: auto; }
+  .btn.link:hover { text-decoration: underline; }
+  .btn.is-focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .btn:disabled, .btn.is-disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+  .btn .spin {
+    width: 13px; height: 13px; border: 2px solid currentColor; border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+  .panel-head {
+    padding: 12px var(--card-pad); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .panel-head h3 { font-size: 14px; }
+  .panel-head .sub { font-size: var(--fs-small); color: var(--muted-foreground); font-family: var(--font-mono); }
+
+  .input, .select, .textarea {
+    font: inherit; font-size: var(--fs-body); color: var(--foreground);
+    background: var(--card); border: 1px solid var(--input);
+    border-radius: var(--radius); padding: 8px 10px; width: 100%;
+  }
+  .input:focus, .select:focus, .textarea:focus { outline: 2px solid var(--ring); outline-offset: 0; border-color: var(--ring); }
+  .input.is-error { border-color: var(--destructive); }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted-foreground); font-family: var(--font-mono); }
+  .help { font-size: var(--fs-small); color: var(--muted-foreground); }
+  .error { font-size: var(--fs-small); color: var(--destructive); font-weight: 500; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600; padding: 3px 8px; font-family: var(--font-mono);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    border-radius: var(--radius); border: 1px solid transparent; white-space: nowrap;
+  }
+  .badge.blue { background: var(--accent); color: var(--accent-foreground); }
+  .badge.green { background: color-mix(in oklch, var(--success) 14%, var(--card)); color: var(--success); }
+  .badge.amber { background: color-mix(in oklch, var(--warning) 16%, var(--card)); color: color-mix(in oklch, var(--warning) 75%, var(--foreground)); }
+  .badge.red { background: color-mix(in oklch, var(--destructive) 12%, var(--card)); color: var(--destructive); }
+  .badge.neutral { background: var(--muted); color: var(--muted-foreground); }
+  .badge.outline { background: transparent; border-color: var(--border); color: var(--muted-foreground); }
+
+  /* ---------- app shell ---------- */
+  .app { display: grid; grid-template-columns: 226px 1fr; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--card); min-height: 560px; }
+  .side { background: var(--sidebar); border-right: 1px solid var(--sidebar-border); padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+  .brand { display: flex; align-items: center; gap: 8px; padding: 6px 10px 14px; font-family: var(--font-head); font-weight: 700; font-size: 15px; }
+  .brand .mark {
+    width: 24px; height: 24px; border-radius: var(--radius); background: var(--sidebar-primary);
+    display: grid; place-items: center; color: var(--primary-foreground);
+  }
+  .nav-label { font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted-foreground); text-transform: uppercase; padding: 12px 10px 4px; font-family: var(--font-mono); }
+  .nav a {
+    display: flex; align-items: center; gap: 9px; padding: 7px 10px;
+    font-size: var(--fs-body); color: var(--sidebar-foreground); border-radius: var(--radius);
+  }
+  .nav a:hover { background: var(--muted); text-decoration: none; }
+  .nav a.on { background: var(--accent); color: var(--accent-foreground); font-weight: 600; box-shadow: inset 2px 0 0 var(--primary); }
+  .nav a svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .main { padding: 20px var(--card-pad) 24px; min-width: 0; }
+  .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .page-head p { color: var(--muted-foreground); font-size: var(--fs-body); margin-top: 3px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; border-top: 2px solid var(--border); }
+  .kpi .v { font-family: var(--font-mono); font-size: 24px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .kpi .l { font-size: var(--fs-small); color: var(--muted-foreground); margin-top: 2px; }
+  .kpi .d { font-size: 11px; font-weight: 600; margin-top: 6px; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+  .kpi .d.up { color: var(--success); } .kpi .d.down { color: var(--destructive); } .kpi .d.flat { color: var(--muted-foreground); }
+
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-body); }
+  th {
+    text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--muted-foreground); padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap;
+    font-family: var(--font-mono);
+  }
+  th .sort { cursor: pointer; user-select: none; }
+  th .sort::after { content: " ↕"; color: var(--muted-foreground); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); height: var(--row-h); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover { background: var(--muted); }
+  tbody tr.selected { background: var(--accent); box-shadow: inset 2px 0 0 var(--primary); }
+  td .co { font-weight: 600; }
+  td .sub { color: var(--muted-foreground); font-size: var(--fs-small); }
+  td.num { font-family: var(--font-mono); font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
+  .table-wrap { overflow-x: auto; }
+  .pager { display: flex; align-items: center; justify-content: space-between; padding: 10px var(--card-pad); font-size: var(--fs-small); color: var(--muted-foreground); font-family: var(--font-mono); }
+  .pager .pages { display: flex; gap: 4px; }
+  .pager .pages button { font: inherit; min-width: 26px; height: 26px; border: 1px solid var(--border); background: var(--card); border-radius: var(--radius); cursor: pointer; color: var(--foreground); }
+  .pager .pages button.on { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+  /* ---------- hero ---------- */
+  .hero { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 56px 48px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 28px 28px; pointer-events: none; }
+  .hero > * { position: relative; }
+  .hero h1 { font-size: 44px; letter-spacing: -0.02em; }
+  .hero .sub { font-size: 15.5px; color: var(--muted-foreground); margin: 14px 0 26px; max-width: 46ch; }
+  .hero .cta { display: flex; gap: 10px; }
+  .hero-visual { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 14px; }
+  .hero-visual .search-band { display: flex; gap: 8px; margin-bottom: 12px; }
+  .hero-visual .search-band .input { flex: 1; }
+  .hero-visual .mini-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-bottom: 6px; font-size: var(--fs-small); }
+  .hero-visual .mini-row .co { font-weight: 600; }
+  .hero-visual .mini-row span { color: var(--muted-foreground); }
+
+  /* ---------- typography ---------- */
+  .type-col { max-width: 68ch; display: flex; flex-direction: column; gap: 14px; }
+  .caption { font-size: var(--fs-small); color: var(--muted-foreground); font-family: var(--font-mono); }
+  blockquote { border-left: 3px solid var(--primary); padding: 4px 0 4px 16px; color: var(--muted-foreground); font-style: italic; }
+
+  /* ---------- buttons sec ---------- */
+  .btn-grid { display: flex; flex-direction: column; gap: 18px; }
+  .btn-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn-row .tag { font-size: var(--fs-small); color: var(--muted-foreground); width: 84px; flex-shrink: 0; font-family: var(--font-mono); }
+
+  /* ---------- form ---------- */
+  .form-card { max-width: 560px; display: flex; flex-direction: column; gap: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .check, .radio-opt { display: flex; align-items: center; gap: 8px; font-size: var(--fs-body); }
+  .check input, .radio-opt input { accent-color: var(--primary); width: 15px; height: 15px; }
+  .radio-group { display: flex; gap: 14px; }
+  .switch { display: flex; align-items: center; gap: 10px; font-size: var(--fs-body); }
+  .switch .track { width: 36px; height: 20px; border-radius: var(--radius); background: var(--primary); position: relative; }
+  .switch .track::after { content: ""; position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: var(--radius); background: var(--primary-foreground); }
+  .switch.off .track { background: var(--input); }
+  .switch.off .track::after { right: auto; left: 2px; background: var(--card); }
+
+  /* ---------- overlays ---------- */
+  .overlays { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .dialog { max-width: 400px; padding: 18px; border-top: 2px solid var(--primary); }
+  .dialog h3 { margin-bottom: 6px; }
+  .dialog p { font-size: var(--fs-body); color: var(--muted-foreground); margin-bottom: 16px; }
+  .dialog .acts { display: flex; justify-content: flex-end; gap: 8px; }
+  .menu { width: 200px; padding: 5px; }
+  .menu .mi { display: flex; align-items: center; gap: 8px; padding: 7px 9px; font-size: var(--fs-body); border-radius: var(--radius); cursor: pointer; }
+  .menu .mi:hover { background: var(--muted); }
+  .menu .mi.on { background: var(--accent); color: var(--accent-foreground); font-weight: 600; }
+  .menu hr { border: 0; border-top: 1px solid var(--border); margin: 5px 0; }
+  .menu .mi svg { width: 14px; height: 14px; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tabs .tab { padding: 9px 14px; font-size: var(--fs-small); font-weight: 600; color: var(--muted-foreground); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: var(--font-mono); letter-spacing: 0.02em; }
+  .tabs .tab.on { color: var(--primary); border-bottom-color: var(--primary); }
+  .tab-body { padding: 14px var(--card-pad); font-size: var(--fs-body); color: var(--muted-foreground); }
+  .toast { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--radius); background: var(--popover); box-shadow: var(--shadow-md); font-size: var(--fs-body); }
+  .toast .ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+  .toast.ok { border-left-color: var(--success); } .toast.ok .ic { color: var(--success); }
+  .toast.err { border-left-color: var(--destructive); } .toast.err .ic { color: var(--destructive); }
+  .toast .t { font-weight: 600; } .toast .m { color: var(--muted-foreground); font-size: var(--fs-small); }
+  .alert { display: flex; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--radius); background: var(--card); font-size: var(--fs-body); }
+  .alert.info { border-left-color: var(--info); }
+  .alert.warn { border-left-color: var(--warning); }
+  .alert .ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert.info .ic { color: var(--info); } .alert.warn .ic { color: var(--warning); }
+  .tooltip { display: inline-block; background: var(--foreground); color: var(--background); font-size: var(--fs-small); padding: 5px 9px; border-radius: var(--radius); position: relative; font-family: var(--font-mono); }
+  .tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--foreground); }
+
+  /* ---------- states ---------- */
+  .states { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 16px; align-items: start; }
+  .skel-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--border); height: var(--row-h); }
+  .skel { background: var(--muted); border-radius: var(--radius); animation: pulse 1.6s var(--ease) infinite; height: 12px; }
+  @keyframes pulse { 50% { opacity: 0.55; } }
+  .empty, .err-state { padding: 32px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .empty .ic, .err-state .ic { width: 30px; height: 30px; color: var(--muted-foreground); margin-bottom: 4px; }
+  .err-state .ic { color: var(--destructive); }
+  .empty h4, .err-state h4 { font-size: 14px; }
+  .empty p, .err-state p { font-size: var(--fs-small); color: var(--muted-foreground); max-width: 34ch; }
+
+  /* ---------- misc ---------- */
+  .misc { display: flex; flex-direction: column; gap: 18px; max-width: 560px; }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .avatars { display: flex; }
+  .avatar { width: 30px; height: 30px; border-radius: var(--radius); background: var(--secondary); border: 2px solid var(--card); display: grid; place-items: center; font-size: 10px; font-weight: 600; color: var(--secondary-foreground); margin-left: -8px; font-family: var(--font-mono); }
+  .avatar:first-child { margin-left: 0; }
+  .progress { height: 7px; background: var(--muted); border-radius: var(--radius); overflow: hidden; }
+  .progress > div { height: 100%; width: 68%; background: var(--primary); }
+  .progress-label { font-size: var(--fs-small); color: var(--muted-foreground); margin-bottom: 6px; font-family: var(--font-mono); }
+  hr.div { border: 0; border-top: 1px solid var(--border); }
+
+  footer { text-align: center; padding: 24px; font: 11px system-ui, sans-serif; color: #888; }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .side { flex-direction: row; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--sidebar-border); padding: 8px; }
+    .brand { padding: 4px 8px; }
+    .nav-label { display: none; }
+    .nav { display: flex; gap: 2px; }
+    .nav a { white-space: nowrap; padding: 6px 9px; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .hero { grid-template-columns: 1fr; padding: 32px 22px; }
+    .hero h1 { font-size: 30px; }
+    .overlays, .states { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-head { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spec-bar">
+  <strong>C — Strumento di bordo</strong>
+  <span class="dials">densità media · radius 2 · contrasto netto · blu blueprint · Space Grotesk + IBM Plex Sans + JetBrains Mono · hairline + griglia · light-first</span>
+  <button id="tt" type="button">Chiaro / scuro</button>
+</div>
+
+<!-- ============ 1 · APP SHELL ============ -->
+<section class="preview-sec">
+  <div class="sec-title">App shell</div>
+  <div class="app">
+    <aside class="side">
+      <div class="brand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Scout</div>
+      <div class="nav-label">Menu</div>
+      <nav class="nav">
+        <a href="#" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Panoramica</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Cerca aziende</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Cerca offerte</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>Archivio</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account</a>
+      </nav>
+    </aside>
+    <div class="main">
+      <header class="page-head">
+        <div>
+          <h1>Panoramica</h1>
+          <p>La situazione del prospecting oggi, 6 novembre.</p>
+        </div>
+        <button class="btn primary">Nuova ricerca</button>
+      </header>
+      <div class="kpis">
+        <div class="kpi"><div class="v">23</div><div class="l">Aziende trovate oggi</div><div class="d up">+5 vs ieri</div></div>
+        <div class="kpi"><div class="v">47</div><div class="l">Offerte aperte nel raggio</div><div class="d up">+12 vs ieri</div></div>
+        <div class="kpi"><div class="v">12</div><div class="l">Prospect salvati</div><div class="d up">+2 questa settimana</div></div>
+        <div class="kpi"><div class="v">19</div><div class="l">Con telefono diretto</div><div class="d flat">82% del totale</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Ultimi prospect</h3><span class="sub">Brescia e provincia · aggiornato 5 min fa</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th><span class="sort">Ragione sociale</span></th><th>Settore</th><th>Città</th><th>Telefono</th><th>Stato</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><div class="co">Officine Bresciane S.r.l.</div><div class="sub">Via Trieste 14</div></td><td>Carpenteria</td><td>Brescia</td><td class="num">030 2204411</td><td><span class="badge blue">Nuova</span></td></tr>
+              <tr class="selected"><td><div class="co">Fonderia Alpi S.p.A.</div><div class="sub">Via Industrie 8</div></td><td>Fonderia</td><td>Rovato</td><td class="num">030 7721090</td><td><span class="badge green">Contattata</span></td></tr>
+              <tr><td><div class="co">Serramenti Veneto S.r.l.</div><div class="sub">Via Garda 31</div></td><td>Serramenti</td><td>Desenzano</td><td class="num">030 9912844</td><td><span class="badge amber">Da valutare</span></td></tr>
+              <tr><td><div class="co">Autotrasporti Garda S.a.s.</div><div class="sub">Via Roveggia 55</div></td><td>Logistica</td><td>Lonato</td><td class="num">030 9130221</td><td><span class="badge blue">Nuova</span></td></tr>
+              <tr><td><div class="co">Termoidraulica Brixia S.r.l.</div><div class="sub">Via Milano 97</div></td><td>Impianti</td><td>Brescia</td><td class="num">030 3756648</td><td><span class="badge green">Contattata</span></td></tr>
+              <tr><td><div class="co">Plastica Lombarda S.p.A.</div><div class="sub">Via XIV Maggio 2</div></td><td>Stampaggio</td><td>Ghedi</td><td class="num">030 9031577</td><td><span class="badge amber">Da valutare</span></td></tr>
+              <tr><td><div class="co">Edilcostruzioni Martinelli</div><div class="sub">Via Cerchiara 19</div></td><td>Costruzioni</td><td>Montichiari</td><td class="num">030 9961243</td><td><span class="badge blue">Nuova</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span>7 di 23 aziende</span>
+          <div class="pages"><button type="button">‹</button><button type="button" class="on">1</button><button type="button">2</button><button type="button">3</button><button type="button">›</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · HERO ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Marketing hero</div>
+  <div class="hero">
+    <div>
+      <h1>Il radar dei recruiter.</h1>
+      <p class="sub">Trova aziende da contattare e offerte dove proporre candidati, organizzate per territorio. Da una sola schermata, in pochi minuti.</p>
+      <div class="cta"><button class="btn primary lg">Inizia a cercare</button><button class="btn lg outline">Vedi come funziona</button></div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="search-band"><input class="input" value="Logistica — Brescia" readonly><button class="btn primary sm">Cerca</button></div>
+      <div class="mini-row"><span class="co">Autotrasporti Garda S.a.s.</span><span>Lonato · 030 9130221</span></div>
+      <div class="mini-row"><span class="co">Corriere Express BS</span><span>Brescia · 030 2207780</span></div>
+      <div class="mini-row"><span class="co">Logistica Benacense S.r.l.</span><span>Desenzano · 030 9142093</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · TYPOGRAPHY ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Tipografia</div>
+  <div class="type-col">
+    <h1>Il radar dei recruiter</h1>
+    <h2>Prospect a Brescia e provincia</h2>
+    <h3>Officine Bresciane S.r.l.</h3>
+    <h4>Dettagli azienda</h4>
+    <p>Ogni mattina il team apre Scout e imposta settore e zona. I risultati arrivano con telefono, sito e posizione già visibili: si valuta, si salva in archivio, si contatta. Nessun passaggio nascosto, nessuna schermata da imparare.</p>
+    <p class="caption">Aggiornato 5 minuti fa · Fonte SerpApi</p>
+    <p>Vedi la <a href="#">scheda completa dell'azienda</a> oppure filtra con <code>settore=metalmeccanico</code>.</p>
+    <blockquote>«Ogni prospect è una voce: la valuti, la salvi, la contatti.»</blockquote>
+  </div>
+</section>
+
+<!-- ============ 4 · BUTTONS ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Bottoni</div>
+  <div class="btn-grid">
+    <div class="btn-row"><span class="tag">Varianti</span><button class="btn primary">Cerca</button><button class="btn secondary">Salva ricerca</button><button class="btn outline">Esporta</button><button class="btn ghost">Nascondi</button><button class="btn destructive">Elimina</button><button class="btn link">Vedi scheda</button></div>
+    <div class="btn-row"><span class="tag">Misure</span><button class="btn primary sm">Piccolo</button><button class="btn primary">Medio</button><button class="btn primary lg">Grande</button></div>
+    <div class="btn-row"><span class="tag">Stati</span><button class="btn primary">Default</button><button class="btn primary is-hover">Hover</button><button class="btn primary is-active">Active</button><button class="btn primary is-focus">Focus</button><button class="btn primary" disabled>Disabilitato</button><button class="btn primary"><span class="spin"></span>Cerco…</button></div>
+  </div>
+</section>
+
+<!-- ============ 5 · FORM ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Form</div>
+  <div class="panel" style="padding: var(--card-pad)">
+    <div class="form-card">
+      <div class="form-row">
+        <div class="field"><label class="label" for="f1">Settore o ruolo</label><input class="input" id="f1" value="Logistica"></div>
+        <div class="field"><label class="label" for="f2">Provincia</label><select class="select" id="f2"><option>Brescia</option><option>Bergamo</option><option>Milano</option><option>Verona</option></select></div>
+      </div>
+      <div class="field"><label class="label" for="f3">Note sul prospect</label><textarea class="textarea" id="f3" rows="3">Referente: sig. Ratti (ufficio acquisti). Richiamare dopo le 15.</textarea><span class="help">Visibili solo all'interno dell'agenzia.</span></div>
+      <div class="form-row">
+        <div class="field"><label class="label" for="f4">CAP</label><input class="input is-error" id="f4" value="25"><span class="error">CAP non valido — servono 5 cifre (es. 25122).</span></div>
+        <div class="field"><label class="label" for="f5">Telefono</label><input class="input" id="f5" value="030 2204411"><span class="help">La ricerca copre la provincia selezionata.</span></div>
+      </div>
+      <div class="check"><input type="checkbox" id="c1" checked><label for="c1">Solo aziende con telefono diretto</label></div>
+      <div class="field"><span class="label">Raggio di ricerca</span>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="r" checked>10 km</label>
+          <label class="radio-opt"><input type="radio" name="r">25 km</label>
+          <label class="radio-opt"><input type="radio" name="r">50 km</label>
+        </div>
+      </div>
+      <div class="switch"><span class="track"></span>Solo aziende verificate</div>
+      <div style="display:flex;gap:8px;margin-top:4px"><button class="btn primary">Salva prospect</button><button class="btn ghost">Annulla</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · OVERLAYS ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Feedback e overlay</div>
+  <div class="overlays">
+    <div class="panel dialog">
+      <h3>Eliminare il prospect?</h3>
+      <p>«Officine Bresciane S.r.l.» verrà rimossa dall'archivio. L'azione non si può annullare.</p>
+      <div class="acts"><button class="btn ghost">Annulla</button><button class="btn destructive">Elimina prospect</button></div>
+    </div>
+    <div class="panel menu">
+      <div class="mi on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Aziende</div>
+      <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Offerte di lavoro</div>
+      <hr>
+      <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Importa CSV</div>
+    </div>
+    <div class="panel">
+      <div class="tabs"><span class="tab on">Aziende (23)</span><span class="tab">Offerte (47)</span><span class="tab">Archivio (12)</span></div>
+      <div class="tab-body">23 aziende trovate a Brescia e provincia per «logistica».</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="toast ok"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><div class="t">Prospect salvato</div><div class="m">«Fonderia Alpi S.p.A.» è ora in archivio.</div></div></div>
+      <div class="toast err"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg><div><div class="t">Ricerca non riuscita</div><div class="m">Controlla la zona inserita e riprova.</div></div></div>
+    </div>
+    <div class="alert info"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><div>I dati si aggiornano ogni 24 ore. Ultima sincronizzazione: stamattina alle 06:00.</div></div>
+    <div class="alert warn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.7 18.3-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-2.7Z"/><path d="M12 9v4M12 17h.01"/></svg><div>3 prospect senza partita IVA — completa la qualifica prima di contattarli.</div></div>
+    <div><button class="btn sm outline">Copia numero</button> <span class="tooltip">Numero copiato</span></div>
+  </div>
+</section>
+
+<!-- ============ 7 · STATES ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Stati</div>
+  <div class="states">
+    <div class="panel">
+      <div class="panel-head"><h3>Caricamento</h3></div>
+      <div class="skel-row"><div class="skel" style="width:38%"></div><div class="skel" style="width:18%"></div><div class="skel" style="width:14%"></div><div class="skel" style="width:16%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:44%"></div><div class="skel" style="width:14%"></div><div class="skel" style="width:18%"></div><div class="skel" style="width:12%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:35%"></div><div class="skel" style="width:20%"></div><div class="skel" style="width:12%"></div><div class="skel" style="width:18%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:41%"></div><div class="skel" style="width:16%"></div><div class="skel" style="width:15%"></div><div class="skel" style="width:14%"></div></div>
+    </div>
+    <div class="panel empty">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+      <h4>Nessun prospect salvato</h4>
+      <p>Cerca aziende per iniziare a riempire l'archivio condiviso.</p>
+      <button class="btn primary sm">Cerca aziende</button>
+    </div>
+    <div class="panel err-state">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <h4>Caricamento non riuscito</h4>
+      <p>La ricerca «logistica — Brescia» non è andata a buon fine. Riprova.</p>
+      <button class="btn sm outline">Riprova</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · MISC ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Badge e vari</div>
+  <div class="misc">
+    <div class="badge-row">
+      <span class="badge blue">Nuova</span><span class="badge green">Contattata</span><span class="badge amber">Da valutare</span><span class="badge red">Scartata</span><span class="badge neutral">Archivio</span><span class="badge outline">Bozza</span>
+    </div>
+    <div class="avatars"><span class="avatar">MR</span><span class="avatar">GA</span><span class="avatar">SB</span><span class="avatar">+4</span></div>
+    <div><div class="progress-label">Prospect qualificati — 68%</div><div class="progress"><div></div></div></div>
+    <hr class="div">
+    <p class="caption">Separatore orizzontale sopra questa riga.</p>
+  </div>
+</section>
+
+<footer>Preview C — solo valutazione visiva, markup identico alle varianti A e B.</footer>
+<script>document.getElementById('tt').onclick=()=>document.documentElement.classList.toggle('dark')</script>
+</body>
+</html>

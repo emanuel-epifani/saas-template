@@ -403,7 +403,7 @@ export function SearchSection() {
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex min-w-0 flex-col gap-1">
                   <span className="text-primary font-mono text-[11px] font-medium tracking-[0.08em] uppercase">
-                    {texts.registerIndexLabel}{" "}
+                    {texts.registerIndexLabel}
                     {String((selectedIndex ?? 0) + 1).padStart(2, "0")}
                   </span>
                   <h2 className="text-lg leading-snug font-semibold">

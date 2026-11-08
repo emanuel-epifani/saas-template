@@ -1,15 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  ArrowRight,
-  BookmarkPlus,
-  Briefcase,
-  Building2,
-  ListChecks,
-  Radar,
-} from "lucide-react";
+import { ArrowRight, Briefcase, Building2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { RegisterToScheda } from "@/components/register-to-scheda";
 import { requireUser } from "@/lib/auth/session";
 import { findListsByUser } from "@/lib/db/queries";
 import { texts } from "@/texts";
@@ -37,32 +29,6 @@ const modules = [
   desc: string;
 }[];
 
-const flowSteps = [
-  {
-    href: "/companies",
-    icon: Radar,
-    title: texts.flowStepSearchTitle,
-    desc: texts.flowStepSearchDesc,
-  },
-  {
-    href: "/saved",
-    icon: BookmarkPlus,
-    title: texts.flowStepSaveTitle,
-    desc: texts.flowStepSaveDesc,
-  },
-  {
-    href: "/saved",
-    icon: ListChecks,
-    title: texts.flowStepDecideTitle,
-    desc: texts.flowStepDecideDesc,
-  },
-] satisfies readonly {
-  href: string;
-  icon: LucideIcon;
-  title: string;
-  desc: string;
-}[];
-
 const zoneLabel =
   "text-muted-foreground text-[10px] font-medium tracking-[0.08em] uppercase";
 
@@ -79,30 +45,7 @@ export default function DashboardPage() {
         <Greeting />
       </Suspense>
 
-      {/* The workflow as a 3-step routing slip — teaches the cycle */}
-      <div className="grid gap-3 sm:grid-cols-3">
-        {flowSteps.map(({ href, icon: Icon, title, desc }, i) => (
-          <Link
-            key={title}
-            href={href}
-            className="group bg-card hover:bg-muted/50 relative flex flex-col gap-1.5 rounded-md border p-4 transition-colors"
-          >
-            <span className="flex items-center justify-between">
-              <Icon className="text-muted-foreground size-4" />
-              <span className="text-muted-foreground font-mono text-xs tabular-nums">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-            </span>
-            <span className="font-medium">{title}</span>
-            <span className="text-muted-foreground text-sm">{desc}</span>
-            {i < flowSteps.length - 1 ? (
-              <ArrowRight className="text-muted-foreground/60 bg-background absolute top-1/2 -right-[7px] hidden size-4 -translate-y-1/2 sm:block" />
-            ) : null}
-          </Link>
-        ))}
-      </div>
-
-      {/* Two directions, side by side: fuori (radar) vs dentro (archivio) */}
+      {/* Two directions, side by side: prospezione vs archivio */}
       <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
         {/* Prospezione — the radar: find NEW companies and open offers */}
         <section className="flex min-w-0 flex-col gap-4">
@@ -174,12 +117,9 @@ async function RecentLists() {
   if (lists.length === 0) {
     return (
       <div className="bg-card rounded-md border">
-        <div className="flex flex-col gap-3 px-4 py-5">
-          <p className="text-muted-foreground text-sm">
-            {texts.dashboardArchiveHint}
-          </p>
-          <RegisterToScheda />
-        </div>
+        <p className="text-muted-foreground px-4 py-8 text-sm">
+          {texts.dashboardArchiveHint}
+        </p>
       </div>
     );
   }

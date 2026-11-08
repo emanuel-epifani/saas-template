@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scout — Style board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Archivo:wght@500;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: oklch(0.96 0.005 250);
+    color: oklch(0.25 0.02 260);
+    padding: 40px 32px 64px;
+  }
+  header.board-head { max-width: 720px; margin-bottom: 32px; }
+  header.board-head h1 { font-size: 22px; font-weight: 650; margin-bottom: 6px; }
+  header.board-head p { font-size: 14px; line-height: 1.5; color: oklch(0.5 0.02 260); }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+
+  .tile { display: flex; flex-direction: column; gap: 8px; }
+  .tile-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: oklch(0.5 0.02 260);
+  }
+  .dials { font-size: 11px; color: oklch(0.55 0.02 260); line-height: 1.4; }
+
+  /* ---------- shared card markup ---------- */
+  .card {
+    background: var(--card);
+    color: var(--fg);
+    border: var(--card-border, 1px solid var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow, none);
+    padding: var(--card-pad, 18px);
+    font-family: var(--font);
+    font-size: var(--fs-body, 13.5px);
+    line-height: 1.45;
+    display: flex; flex-direction: column; gap: 14px;
+    flex: 1;
+  }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .card h3 {
+    font-size: var(--h3-size, 15px);
+    font-weight: var(--h3-weight, 650);
+    font-family: var(--font-head, var(--font));
+    letter-spacing: var(--h3-track, -0.01em);
+    line-height: 1.2;
+  }
+  .badge {
+    font-size: var(--badge-size, 10.5px); font-weight: var(--badge-weight, 600);
+    font-family: var(--badge-font, var(--font));
+    padding: 3px 8px; border-radius: var(--badge-radius, 999px);
+    background: var(--badge-bg); color: var(--badge-fg);
+    border: var(--badge-border, none);
+    letter-spacing: var(--badge-track, 0);
+    text-transform: var(--badge-case, none);
+    white-space: nowrap;
+  }
+  .body { color: var(--muted-fg); font-size: var(--fs-small, 12.5px); }
+  .stat { display: flex; align-items: baseline; gap: 7px; }
+  .stat strong {
+    font-family: var(--num-font, var(--font));
+    font-size: var(--num-size, 26px); font-weight: var(--num-weight, 700);
+    letter-spacing: var(--num-track, -0.02em);
+    font-variant-numeric: tabular-nums;
+    color: var(--stat-fg, var(--fg));
+  }
+  .stat span { font-size: 11.5px; color: var(--muted-fg); }
+  .input {
+    font: inherit; font-size: var(--fs-small, 12.5px);
+    padding: var(--input-pad, 8px 10px);
+    border: var(--input-border, 1px solid var(--border));
+    border-radius: var(--input-radius, var(--radius));
+    background: var(--input-bg, var(--card));
+    color: var(--fg); width: 100%;
+  }
+  .input::placeholder { color: var(--muted-fg); opacity: 0.8; }
+  .list { list-style: none; }
+  .list li {
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: var(--li-pad, 7px 0);
+    font-size: var(--fs-small, 12.5px);
+    border-bottom: var(--li-border, 1px solid var(--border));
+  }
+  .list li:last-child { border-bottom: 0; }
+  .list li span { color: var(--muted-fg); font-size: 11.5px; font-family: var(--meta-font, var(--font)); }
+  .actions { display: flex; gap: 8px; margin-top: 2px; }
+  .btn {
+    font: inherit; font-size: var(--btn-size, 12.5px); font-weight: var(--btn-weight, 600);
+    padding: var(--btn-pad, 8px 14px);
+    border-radius: var(--btn-radius, var(--radius));
+    border: var(--btn-border, none);
+    cursor: pointer; letter-spacing: var(--btn-track, 0);
+    box-shadow: var(--btn-shadow, none);
+  }
+  .btn-primary { background: var(--primary); color: var(--primary-fg); }
+  .btn-secondary {
+    background: var(--secondary-bg, transparent); color: var(--secondary-fg, var(--fg));
+    border: var(--secondary-border, 1px solid var(--border));
+  }
+
+  /* ============ 01 · Enterprise / istituzionale ============ */
+  .t1 {
+    --card: oklch(0.995 0.002 250); --fg: oklch(0.24 0.02 255);
+    --border: oklch(0.87 0.008 250); --muted-fg: oklch(0.47 0.015 250);
+    --primary: oklch(0.42 0.12 255); --primary-fg: oklch(0.98 0.005 250);
+    --badge-bg: oklch(0.93 0.02 255); --badge-fg: oklch(0.4 0.1 255);
+    --radius: 3px; --font: "IBM Plex Sans", sans-serif;
+    --num-size: 24px;
+  }
+
+  /* ============ 02 · Precision dark tool ============ */
+  .t2 {
+    --card: oklch(0.19 0.008 265); --fg: oklch(0.92 0.005 265);
+    --border: oklch(0.29 0.008 265); --muted-fg: oklch(0.62 0.01 265);
+    --primary: oklch(0.78 0.13 195); --primary-fg: oklch(0.16 0.02 265);
+    --badge-bg: oklch(0.26 0.02 265); --badge-fg: oklch(0.78 0.13 195);
+    --secondary-border: 1px solid oklch(0.33 0.01 265);
+    --radius: 7px; --font: "Inter Tight", sans-serif;
+    --num-font: "Inter Tight", sans-serif;
+    --fs-body: 13px;
+  }
+  .t2 .card { background: oklch(0.19 0.008 265); }
+
+  /* ============ 03 · Monochrome typographic ============ */
+  .t3 {
+    --card: oklch(0.99 0 0); --fg: oklch(0.15 0 0);
+    --border: oklch(0.87 0 0); --muted-fg: oklch(0.46 0 0);
+    --primary: oklch(0.18 0 0); --primary-fg: oklch(0.98 0 0);
+    --badge-bg: oklch(0.15 0 0); --badge-fg: oklch(0.97 0 0);
+    --badge-radius: 2px; --badge-font: "Geist Mono", monospace; --badge-case: uppercase; --badge-track: 0.06em;
+    --radius: 4px; --font: "Geist", sans-serif; --num-font: "Geist Mono", monospace;
+    --h3-track: -0.02em; --meta-font: "Geist Mono", monospace;
+  }
+
+  /* ============ 04 · Polished premium ============ */
+  .t4 {
+    --card: oklch(0.999 0.001 270); --fg: oklch(0.27 0.03 275);
+    --border: oklch(0.9 0.008 270); --muted-fg: oklch(0.52 0.02 275);
+    --primary: linear-gradient(135deg, oklch(0.42 0.09 275), oklch(0.5 0.11 290));
+    --primary-fg: oklch(0.98 0.005 275);
+    --badge-bg: oklch(0.94 0.02 275); --badge-fg: oklch(0.42 0.09 275);
+    --secondary-border: 1px solid oklch(0.88 0.01 275);
+    --radius: 12px; --font: "Manrope", sans-serif;
+    --card-border: none;
+    --card-shadow: 0 1px 2px oklch(0.3 0.03 275 / 0.06), 0 8px 24px -8px oklch(0.3 0.03 275 / 0.12);
+    --btn-shadow: 0 4px 12px -4px oklch(0.42 0.09 275 / 0.4);
+    --card-pad: 22px; --num-weight: 800;
+  }
+
+  /* ============ 05 · Friendly / playful ============ */
+  .t5 {
+    --card: oklch(0.995 0.008 80); --fg: oklch(0.3 0.025 40);
+    --border: oklch(0.9 0.02 70); --muted-fg: oklch(0.5 0.03 50);
+    --primary: oklch(0.63 0.16 42); --primary-fg: oklch(0.99 0.005 80);
+    --badge-bg: oklch(0.92 0.06 60); --badge-fg: oklch(0.48 0.13 40);
+    --radius: 18px; --font: "DM Sans", sans-serif;
+    --card-shadow: 0 6px 20px -8px oklch(0.4 0.05 50 / 0.15);
+    --li-border: 1px dashed oklch(0.88 0.02 70);
+    --input-pad: 10px 14px;
+  }
+
+  /* ============ 06 · Editorial ============ */
+  .t6 {
+    --card: oklch(0.985 0.008 90); --fg: oklch(0.26 0.02 65);
+    --border: oklch(0.85 0.015 85); --muted-fg: oklch(0.5 0.02 70);
+    --primary: oklch(0.3 0.03 60); --primary-fg: oklch(0.97 0.01 90);
+    --badge-bg: transparent; --badge-fg: oklch(0.5 0.12 35);
+    --badge-border: 1px solid oklch(0.5 0.12 35); --badge-radius: 2px;
+    --radius: 2px; --font: "IBM Plex Sans", sans-serif;
+    --font-head: "Fraunces", serif; --num-font: "Fraunces", serif;
+    --h3-size: 18px; --h3-weight: 600;
+  }
+  .t6 .card-head { border-bottom: 2px solid var(--fg); padding-bottom: 10px; }
+
+  /* ============ 07 · Neo-brutalist ============ */
+  .t7 {
+    --card: oklch(0.97 0.02 95); --fg: oklch(0.15 0.01 60);
+    --border: oklch(0.15 0.01 60); --muted-fg: oklch(0.42 0.03 65);
+    --primary: oklch(0.84 0.17 95); --primary-fg: oklch(0.15 0.01 60);
+    --badge-bg: oklch(0.6 0.2 25); --badge-fg: oklch(0.98 0.01 90);
+    --badge-radius: 0; --badge-case: uppercase; --badge-track: 0.05em;
+    --radius: 4px; --font: "Archivo", sans-serif; --h3-weight: 800;
+    --card-border: 2.5px solid var(--border);
+    --card-shadow: 5px 5px 0 var(--border);
+    --btn-border: 2.5px solid var(--border);
+    --input-border: 2.5px solid var(--border);
+  }
+  .t7 .btn-primary { box-shadow: 3px 3px 0 var(--border); }
+  .t7 .badge { border: 2px solid var(--border); }
+
+  /* ============ 08 · Data-dense workbench ============ */
+  .t8 {
+    --card: oklch(0.99 0.003 240); --fg: oklch(0.24 0.015 250);
+    --border: oklch(0.89 0.006 240); --muted-fg: oklch(0.5 0.01 245);
+    --primary: oklch(0.45 0.09 225); --primary-fg: oklch(0.98 0.004 240);
+    --badge-bg: oklch(0.9 0.04 160); --badge-fg: oklch(0.35 0.08 160);
+    --badge-radius: 3px; --badge-font: "JetBrains Mono", monospace; --badge-size: 10px;
+    --radius: 4px; --font: "Inter Tight", sans-serif; --num-font: "JetBrains Mono", monospace;
+    --fs-body: 12.5px; --fs-small: 12px; --li-pad: 5px 0; --card-pad: 14px;
+    --num-size: 24px; --meta-font: "JetBrains Mono", monospace;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 24px 16px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="board-head">
+  <h1>Style board — Scout</h1>
+  <p>Otto direzioni sullo stesso mini-specimen (una ricerca aziende a Brescia). Segna quali ti attirano, quali ti respingono, e cosa mixeresti.</p>
+</header>
+
+<main class="board">
+
+  <section class="tile t1">
+    <div class="tile-label">01 — Enterprise / istituzionale</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">compatta · radius 3 · contrasto netto · un blu istituzionale · bordi · nessuna motion</p>
+  </section>
+
+  <section class="tile t2">
+    <div class="tile-label">02 — Precision dark tool</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">densa · radius 7 · scura di base · un accento ciano · hairline · motion lieve</p>
+  </section>
+
+  <section class="tile t3">
+    <div class="tile-label">03 — Monochrome typographic</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">compatta · radius 4 · monocromo · tipo fa tutto · bordi · statica</p>
+  </section>
+
+  <section class="tile t4">
+    <div class="tile-label">04 — Polished premium</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">aria · radius 12 · contrasto morbido · navy + un gradiente solo · ombre soffici</p>
+  </section>
+
+  <section class="tile t5">
+    <div class="tile-label">05 — Friendly / playful</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">aria · radius 18 · caldo · corallo · blocchi colore · motion allegra</p>
+  </section>
+
+  <section class="tile t6">
+    <div class="tile-label">06 — Editorial</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">media · radius 2 · caldo · serif + mattone · righe sottili · statica</p>
+  </section>
+
+  <section class="tile t7">
+    <div class="tile-label">07 — Neo-brutalist</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">compatta · radius 0–4 · pop · giallo + nero · bordi spessi + ombre nette</p>
+  </section>
+
+  <section class="tile t8">
+    <div class="tile-label">08 — Data-dense workbench</div>
+    <div class="card">
+      <div class="card-head"><h3>Aziende nel raggio</h3><span class="badge">23 nuove</span></div>
+      <p class="body">Prospect a Brescia e provincia, aggiornati oggi.</p>
+      <div class="stat"><strong>23</strong><span>aziende trovate</span></div>
+      <input class="input" placeholder="Settore, ruolo o città…">
+      <ul class="list">
+        <li>Officine Bresciane S.r.l. <span>Brescia</span></li>
+        <li>Fonderia Alpi S.p.A. <span>Rovato</span></li>
+        <li>Serramenti Veneto S.r.l. <span>Desenzano</span></li>
+      </ul>
+      <div class="actions"><button class="btn btn-primary">Cerca</button><button class="btn btn-secondary">Salva ricerca</button></div>
+    </div>
+    <p class="dials">densa · radius 4 · fredda · teal spento + mono numeri · bordi · statica</p>
+  </section>
+
+</main>
+</body>
+</html>

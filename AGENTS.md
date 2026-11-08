@@ -69,3 +69,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Finite constants → plain `enum` (never `const enum`, breaks under isolatedModules)
 - `satisfies` over `as`; `as` only when you know more than the compiler
 - Boundary types come from schemas: `z.infer<typeof Schema>` is the single source
+
+## Design system
+
+- Before any UI work, read DESIGN.md and follow it; never introduce values outside its tokens.

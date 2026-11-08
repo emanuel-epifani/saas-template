@@ -34,7 +34,7 @@ export function SelectionBar({
           size="icon"
           variant="ghost"
           aria-label={texts.clearSelectionAction}
-          className="text-background/70 hover:bg-background/10 hover:text-background size-7 rounded-full"
+          className="text-background/70 hover:bg-background/10 hover:text-background size-7 rounded-sm"
           onClick={onClear}
         >
           <X />

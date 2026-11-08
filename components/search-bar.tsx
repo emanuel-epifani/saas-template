@@ -32,7 +32,7 @@ export function SearchBar({
         e.preventDefault();
         onSubmit();
       }}
-      className="bg-card border-border flex flex-col overflow-hidden rounded-sm border sm:flex-row sm:items-stretch"
+      className="bg-card border-border flex flex-col overflow-hidden rounded-lg border sm:flex-row sm:items-stretch"
     >
       <label htmlFor={`${idPrefix}-term`} className={cell}>
         <span className={cellLabel}>{termLabel}</span>

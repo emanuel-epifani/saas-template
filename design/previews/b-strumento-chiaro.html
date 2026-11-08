@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scout — B · Strumento chiaro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-sans: "Inter Tight", sans-serif;
+    --font-head: "Inter Tight", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --background: oklch(0.972 0.008 90);
+    --foreground: oklch(0.26 0.025 265);
+    --card: oklch(0.995 0.004 90);
+    --card-foreground: oklch(0.26 0.025 265);
+    --popover: oklch(0.995 0.004 90);
+    --popover-foreground: oklch(0.26 0.025 265);
+    --primary: oklch(0.5 0.14 252);
+    --primary-foreground: oklch(0.985 0.005 250);
+    --secondary: oklch(0.945 0.01 90);
+    --secondary-foreground: oklch(0.33 0.025 265);
+    --muted: oklch(0.945 0.01 90);
+    --muted-foreground: oklch(0.5 0.02 90);
+    --accent: oklch(0.935 0.028 255);
+    --accent-foreground: oklch(0.4 0.11 252);
+    --destructive: oklch(0.53 0.17 28);
+    --destructive-foreground: oklch(0.985 0.005 250);
+    --success: oklch(0.5 0.11 155);
+    --warning: oklch(0.62 0.12 75);
+    --info: oklch(0.5 0.1 240);
+    --border: oklch(0.885 0.012 90);
+    --input: oklch(0.82 0.012 90);
+    --ring: oklch(0.5 0.14 252);
+    --radius: 8px;
+    --chart-1: oklch(0.5 0.14 252); --chart-2: oklch(0.6 0.1 200);
+    --chart-3: oklch(0.55 0.1 155); --chart-4: oklch(0.62 0.12 75); --chart-5: oklch(0.58 0.14 30);
+    --sidebar: oklch(0.955 0.008 90);
+    --sidebar-foreground: oklch(0.42 0.02 265);
+    --sidebar-primary: oklch(0.5 0.14 252);
+    --sidebar-border: oklch(0.895 0.012 90);
+    --shadow-sm: 0 1px 2px oklch(0.3 0.02 265 / 0.05);
+    --shadow-md: 0 6px 20px -6px oklch(0.3 0.02 265 / 0.14);
+    --shadow-lg: 0 16px 44px -12px oklch(0.3 0.02 265 / 0.2);
+    --ease: cubic-bezier(0.2, 0.8, 0.3, 1); --duration: 160ms;
+    --card-pad: 22px; --row-h: 48px; --btn-h: 38px; --btn-h-sm: 30px; --btn-h-lg: 46px;
+    --fs-body: 14px; --fs-small: 12.5px; --page-max: 1120px;
+  }
+  .dark {
+    --background: oklch(0.19 0.014 265);
+    --foreground: oklch(0.93 0.006 90);
+    --card: oklch(0.235 0.014 265);
+    --card-foreground: oklch(0.93 0.006 90);
+    --popover: oklch(0.235 0.014 265);
+    --popover-foreground: oklch(0.93 0.006 90);
+    --primary: oklch(0.68 0.12 252);
+    --primary-foreground: oklch(0.17 0.03 252);
+    --secondary: oklch(0.28 0.014 265);
+    --secondary-foreground: oklch(0.93 0.006 90);
+    --muted: oklch(0.28 0.014 265);
+    --muted-foreground: oklch(0.68 0.012 265);
+    --accent: oklch(0.32 0.04 252);
+    --accent-foreground: oklch(0.84 0.06 252);
+    --destructive: oklch(0.66 0.16 28);
+    --destructive-foreground: oklch(0.985 0.005 250);
+    --success: oklch(0.7 0.11 155);
+    --warning: oklch(0.74 0.12 75);
+    --info: oklch(0.68 0.1 240);
+    --border: oklch(0.32 0.014 265);
+    --input: oklch(0.36 0.014 265);
+    --ring: oklch(0.68 0.12 252);
+    --sidebar: oklch(0.165 0.014 265);
+    --sidebar-foreground: oklch(0.74 0.012 265);
+    --sidebar-primary: oklch(0.68 0.12 252);
+    --sidebar-border: oklch(0.3 0.014 265);
+    --shadow-md: 0 6px 20px -6px oklch(0 0 0 / 0.55);
+    --shadow-lg: 0 16px 44px -12px oklch(0 0 0 / 0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-family: var(--font-sans); }
+  body { background: var(--background); color: var(--foreground); font-size: var(--fs-body); line-height: 1.55; }
+  h1,h2,h3,h4 { font-family: var(--font-head); letter-spacing: -0.025em; line-height: 1.15; }
+  h1 { font-size: 28px; font-weight: 700; }
+  h2 { font-size: 20px; font-weight: 650; }
+  h3 { font-size: 15.5px; font-weight: 650; }
+  h4 { font-size: 14px; font-weight: 650; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { font-family: var(--font-mono); font-size: 0.88em; background: var(--muted); padding: 2px 6px; border-radius: var(--radius); }
+  ::selection { background: color-mix(in oklch, var(--primary) 20%, transparent); }
+
+  /* ---------- spec bar ---------- */
+  .spec-bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 10px 20px; font: 12px/1.4 system-ui, sans-serif;
+    background: #2b2b2b; color: #d8d8d8; border-bottom: 1px solid #111;
+  }
+  .spec-bar strong { color: #fff; font-size: 13px; }
+  .spec-bar .dials { color: #a8a8a8; }
+  .spec-bar button {
+    margin-left: auto; font: inherit; padding: 5px 12px; cursor: pointer;
+    background: #444; color: #eee; border: 1px solid #555; border-radius: 4px;
+  }
+
+  .preview-sec { max-width: var(--page-max); margin: 0 auto; padding: 44px 24px; }
+  .sec-title {
+    font: 600 10.5px/1 system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase;
+    color: oklch(0.55 0.01 250); margin-bottom: 14px;
+  }
+  .dark .sec-title { color: #999; }
+
+  /* ---------- primitives ---------- */
+  .btn {
+    font: 600 var(--fs-body)/1 var(--font-sans);
+    height: var(--btn-h); padding: 0 16px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border-radius: var(--radius); border: 1px solid transparent;
+    cursor: pointer; transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), color var(--duration) var(--ease), transform var(--duration) var(--ease);
+    white-space: nowrap;
+  }
+  .btn.sm { height: var(--btn-h-sm); padding: 0 12px; font-size: var(--fs-small); }
+  .btn.lg { height: var(--btn-h-lg); padding: 0 22px; font-size: 15px; }
+  .btn.primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn.primary:hover, .btn.primary.is-hover { background: color-mix(in oklch, var(--primary) 90%, var(--foreground)); }
+  .btn.primary:active, .btn.primary.is-active { transform: scale(0.98); background: color-mix(in oklch, var(--primary) 80%, var(--foreground)); }
+  .btn.secondary { background: var(--secondary); color: var(--secondary-foreground); }
+  .btn.secondary:hover, .btn.secondary.is-hover { background: var(--accent); }
+  .btn.outline { background: transparent; color: var(--foreground); border-color: var(--input); }
+  .btn.outline:hover, .btn.outline.is-hover { background: var(--muted); border-color: var(--muted-foreground); }
+  .btn.ghost { background: transparent; color: var(--muted-foreground); }
+  .btn.ghost:hover, .btn.ghost.is-hover { background: var(--muted); color: var(--foreground); }
+  .btn.destructive { background: var(--destructive); color: var(--destructive-foreground); }
+  .btn.destructive:hover, .btn.destructive.is-hover { background: color-mix(in oklch, var(--destructive) 86%, black); }
+  .btn.link { background: none; color: var(--primary); padding: 0; height: auto; }
+  .btn.link:hover { text-decoration: underline; }
+  .btn.is-focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .btn:disabled, .btn.is-disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+  .btn .spin {
+    width: 13px; height: 13px; border: 2px solid currentColor; border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+  .panel-head {
+    padding: 15px var(--card-pad); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .panel-head h3 { font-size: 15px; }
+  .panel-head .sub { font-size: var(--fs-small); color: var(--muted-foreground); }
+
+  .input, .select, .textarea {
+    font: inherit; font-size: var(--fs-body); color: var(--foreground);
+    background: var(--background); border: 1px solid var(--input);
+    border-radius: var(--radius); padding: 9px 12px; width: 100%;
+    transition: border-color var(--duration) var(--ease);
+  }
+  .input:focus, .select:focus, .textarea:focus { outline: 2px solid var(--ring); outline-offset: 0; border-color: var(--ring); }
+  .input.is-error { border-color: var(--destructive); }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .label { font-size: var(--fs-small); font-weight: 600; }
+  .help { font-size: var(--fs-small); color: var(--muted-foreground); }
+  .error { font-size: var(--fs-small); color: var(--destructive); font-weight: 500; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600; padding: 3px 9px;
+    border-radius: 999px; border: 1px solid transparent; white-space: nowrap;
+  }
+  .badge.blue { background: var(--accent); color: var(--accent-foreground); }
+  .badge.green { background: color-mix(in oklch, var(--success) 14%, var(--card)); color: var(--success); }
+  .badge.amber { background: color-mix(in oklch, var(--warning) 16%, var(--card)); color: color-mix(in oklch, var(--warning) 75%, var(--foreground)); }
+  .badge.red { background: color-mix(in oklch, var(--destructive) 12%, var(--card)); color: var(--destructive); }
+  .badge.neutral { background: var(--muted); color: var(--muted-foreground); }
+  .badge.outline { background: transparent; border-color: var(--border); color: var(--muted-foreground); }
+
+  /* ---------- app shell ---------- */
+  .app { display: grid; grid-template-columns: 230px 1fr; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--card); min-height: 560px; }
+  .side { background: var(--sidebar); border-right: 1px solid var(--sidebar-border); padding: 16px 12px; display: flex; flex-direction: column; gap: 3px; }
+  .brand { display: flex; align-items: center; gap: 9px; padding: 6px 10px 18px; font-weight: 700; font-size: 15.5px; letter-spacing: -0.01em; }
+  .brand .mark {
+    width: 26px; height: 26px; border-radius: var(--radius); background: var(--sidebar-primary);
+    display: grid; place-items: center; color: var(--primary-foreground);
+  }
+  .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; color: var(--muted-foreground); text-transform: uppercase; padding: 14px 10px 5px; }
+  .nav a {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    font-size: var(--fs-body); color: var(--sidebar-foreground); border-radius: var(--radius);
+    transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+  }
+  .nav a:hover { background: var(--muted); text-decoration: none; color: var(--foreground); }
+  .nav a.on { background: var(--accent); color: var(--accent-foreground); font-weight: 600; }
+  .nav a svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .main { padding: 24px var(--card-pad) 28px; min-width: 0; }
+  .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
+  .page-head p { color: var(--muted-foreground); font-size: var(--fs-body); margin-top: 4px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+  .kpi .v { font-family: var(--font-mono); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .kpi .l { font-size: var(--fs-small); color: var(--muted-foreground); margin-top: 3px; }
+  .kpi .d { font-size: 11px; font-weight: 600; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .kpi .d.up { color: var(--success); } .kpi .d.down { color: var(--destructive); } .kpi .d.flat { color: var(--muted-foreground); }
+
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-body); }
+  th {
+    text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--muted-foreground); padding: 11px 14px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  th .sort { cursor: pointer; user-select: none; }
+  th .sort::after { content: " ↕"; color: var(--muted-foreground); }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); height: var(--row-h); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr { transition: background var(--duration) var(--ease); }
+  tbody tr:hover { background: var(--muted); }
+  tbody tr.selected { background: var(--accent); }
+  td .co { font-weight: 600; }
+  td .sub { color: var(--muted-foreground); font-size: var(--fs-small); }
+  td.num { font-family: var(--font-mono); font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
+  .table-wrap { overflow-x: auto; }
+  .pager { display: flex; align-items: center; justify-content: space-between; padding: 12px var(--card-pad); font-size: var(--fs-small); color: var(--muted-foreground); }
+  .pager .pages { display: flex; gap: 5px; }
+  .pager .pages button { font: inherit; min-width: 28px; height: 28px; border: 1px solid var(--border); background: var(--card); border-radius: var(--radius); cursor: pointer; color: var(--foreground); }
+  .pager .pages button.on { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+  /* ---------- hero ---------- */
+  .hero { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 64px 56px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .hero h1 { font-size: 46px; letter-spacing: -0.035em; }
+  .hero .sub { font-size: 16.5px; color: var(--muted-foreground); margin: 16px 0 30px; max-width: 46ch; }
+  .hero .cta { display: flex; gap: 12px; }
+  .hero-visual { border: 1px solid var(--border); border-radius: var(--radius); background: var(--background); padding: 16px; }
+  .hero-visual .search-band { display: flex; gap: 8px; margin-bottom: 14px; }
+  .hero-visual .search-band .input { flex: 1; }
+  .hero-visual .mini-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin-bottom: 8px; font-size: var(--fs-small); }
+  .hero-visual .mini-row .co { font-weight: 600; }
+  .hero-visual .mini-row span { color: var(--muted-foreground); }
+
+  /* ---------- typography ---------- */
+  .type-col { max-width: 68ch; display: flex; flex-direction: column; gap: 16px; }
+  .caption { font-size: var(--fs-small); color: var(--muted-foreground); }
+  blockquote { border-left: 3px solid var(--primary); padding: 6px 0 6px 18px; color: var(--muted-foreground); font-style: italic; }
+
+  /* ---------- buttons sec ---------- */
+  .btn-grid { display: flex; flex-direction: column; gap: 20px; }
+  .btn-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn-row .tag { font-size: var(--fs-small); color: var(--muted-foreground); width: 84px; flex-shrink: 0; }
+
+  /* ---------- form ---------- */
+  .form-card { max-width: 580px; display: flex; flex-direction: column; gap: 18px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .check, .radio-opt { display: flex; align-items: center; gap: 9px; font-size: var(--fs-body); }
+  .check input, .radio-opt input { accent-color: var(--primary); width: 16px; height: 16px; }
+  .radio-group { display: flex; gap: 16px; }
+  .switch { display: flex; align-items: center; gap: 10px; font-size: var(--fs-body); }
+  .switch .track { width: 38px; height: 22px; border-radius: 999px; background: var(--primary); position: relative; transition: background var(--duration) var(--ease); }
+  .switch .track::after { content: ""; position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary-foreground); transition: transform var(--duration) var(--ease); }
+  .switch.off .track { background: var(--input); }
+  .switch.off .track::after { right: auto; left: 2px; background: var(--card); }
+
+  /* ---------- overlays ---------- */
+  .overlays { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .dialog { max-width: 420px; padding: 22px; box-shadow: var(--shadow-lg); }
+  .dialog h3 { margin-bottom: 8px; }
+  .dialog p { font-size: var(--fs-body); color: var(--muted-foreground); margin-bottom: 20px; }
+  .dialog .acts { display: flex; justify-content: flex-end; gap: 8px; }
+  .menu { width: 210px; padding: 6px; box-shadow: var(--shadow-md); }
+  .menu .mi { display: flex; align-items: center; gap: 9px; padding: 8px 10px; font-size: var(--fs-body); border-radius: var(--radius); cursor: pointer; }
+  .menu .mi:hover { background: var(--muted); }
+  .menu .mi.on { background: var(--accent); color: var(--accent-foreground); font-weight: 600; }
+  .menu hr { border: 0; border-top: 1px solid var(--border); margin: 6px 0; }
+  .menu .mi svg { width: 15px; height: 15px; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tabs .tab { padding: 11px 16px; font-size: var(--fs-body); font-weight: 500; color: var(--muted-foreground); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
+  .tabs .tab.on { color: var(--foreground); font-weight: 650; border-bottom-color: var(--primary); }
+  .tab-body { padding: 16px var(--card-pad); font-size: var(--fs-body); color: var(--muted-foreground); }
+  .toast { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--popover); box-shadow: var(--shadow-md); font-size: var(--fs-body); }
+  .toast .ic { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; }
+  .toast.ok .ic { color: var(--success); }
+  .toast.err .ic { color: var(--destructive); }
+  .toast .t { font-weight: 650; } .toast .m { color: var(--muted-foreground); font-size: var(--fs-small); }
+  .alert { display: flex; gap: 10px; padding: 14px 16px; border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--radius); background: var(--card); font-size: var(--fs-body); }
+  .alert.info { border-left-color: var(--info); }
+  .alert.warn { border-left-color: var(--warning); }
+  .alert .ic { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; }
+  .alert.info .ic { color: var(--info); } .alert.warn .ic { color: var(--warning); }
+  .tooltip { display: inline-block; background: var(--foreground); color: var(--background); font-size: var(--fs-small); padding: 6px 10px; border-radius: var(--radius); position: relative; }
+  .tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--foreground); }
+
+  /* ---------- states ---------- */
+  .states { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 18px; align-items: start; }
+  .skel-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--border); height: var(--row-h); }
+  .skel { background: var(--muted); border-radius: var(--radius); animation: pulse 1.6s var(--ease) infinite; height: 12px; }
+  @keyframes pulse { 50% { opacity: 0.5; } }
+  .empty, .err-state { padding: 36px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .empty .ic, .err-state .ic { width: 32px; height: 32px; color: var(--muted-foreground); margin-bottom: 4px; }
+  .err-state .ic { color: var(--destructive); }
+  .empty h4, .err-state h4 { font-size: 15px; }
+  .empty p, .err-state p { font-size: var(--fs-small); color: var(--muted-foreground); max-width: 36ch; }
+
+  /* ---------- misc ---------- */
+  .misc { display: flex; flex-direction: column; gap: 20px; max-width: 580px; }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .avatars { display: flex; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--secondary); border: 2px solid var(--card); display: grid; place-items: center; font-size: 11px; font-weight: 650; color: var(--secondary-foreground); margin-left: -9px; }
+  .avatar:first-child { margin-left: 0; }
+  .progress { height: 8px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+  .progress > div { height: 100%; width: 68%; background: var(--primary); border-radius: 999px; }
+  .progress-label { font-size: var(--fs-small); color: var(--muted-foreground); margin-bottom: 7px; }
+  hr.div { border: 0; border-top: 1px solid var(--border); }
+
+  footer { text-align: center; padding: 24px; font: 11px system-ui, sans-serif; color: #888; }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .side { flex-direction: row; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--sidebar-border); padding: 10px; }
+    .brand { padding: 4px 8px; }
+    .nav-label { display: none; }
+    .nav { display: flex; gap: 3px; }
+    .nav a { white-space: nowrap; padding: 7px 10px; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .hero { grid-template-columns: 1fr; padding: 36px 24px; }
+    .hero h1 { font-size: 32px; }
+    .overlays, .states { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-head { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spec-bar">
+  <strong>B — Strumento chiaro</strong>
+  <span class="dials">densità bilanciata · radius 8 · contrasto medio · un blu chiaro · Inter Tight + JetBrains Mono · bordi + ombre solo per i volanti · motion lieve · light-first</span>
+  <button id="tt" type="button">Chiaro / scuro</button>
+</div>
+
+<!-- ============ 1 · APP SHELL ============ -->
+<section class="preview-sec">
+  <div class="sec-title">App shell</div>
+  <div class="app">
+    <aside class="side">
+      <div class="brand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Scout</div>
+      <div class="nav-label">Menu</div>
+      <nav class="nav">
+        <a href="#" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Panoramica</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Cerca aziende</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Cerca offerte</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>Archivio</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account</a>
+      </nav>
+    </aside>
+    <div class="main">
+      <header class="page-head">
+        <div>
+          <h1>Panoramica</h1>
+          <p>La situazione del prospecting oggi, 6 novembre.</p>
+        </div>
+        <button class="btn primary">Nuova ricerca</button>
+      </header>
+      <div class="kpis">
+        <div class="kpi"><div class="v">23</div><div class="l">Aziende trovate oggi</div><div class="d up">+5 vs ieri</div></div>
+        <div class="kpi"><div class="v">47</div><div class="l">Offerte aperte nel raggio</div><div class="d up">+12 vs ieri</div></div>
+        <div class="kpi"><div class="v">12</div><div class="l">Prospect salvati</div><div class="d up">+2 questa settimana</div></div>
+        <div class="kpi"><div class="v">19</div><div class="l">Con telefono diretto</div><div class="d flat">82% del totale</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Ultimi prospect</h3><span class="sub">Brescia e provincia · aggiornato 5 min fa</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th><span class="sort">Ragione sociale</span></th><th>Settore</th><th>Città</th><th>Telefono</th><th>Stato</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><div class="co">Officine Bresciane S.r.l.</div><div class="sub">Via Trieste 14</div></td><td>Carpenteria</td><td>Brescia</td><td class="num">030 2204411</td><td><span class="badge blue">Nuova</span></td></tr>
+              <tr class="selected"><td><div class="co">Fonderia Alpi S.p.A.</div><div class="sub">Via Industrie 8</div></td><td>Fonderia</td><td>Rovato</td><td class="num">030 7721090</td><td><span class="badge green">Contattata</span></td></tr>
+              <tr><td><div class="co">Serramenti Veneto S.r.l.</div><div class="sub">Via Garda 31</div></td><td>Serramenti</td><td>Desenzano</td><td class="num">030 9912844</td><td><span class="badge amber">Da valutare</span></td></tr>
+              <tr><td><div class="co">Autotrasporti Garda S.a.s.</div><div class="sub">Via Roveggia 55</div></td><td>Logistica</td><td>Lonato</td><td class="num">030 9130221</td><td><span class="badge blue">Nuova</span></td></tr>
+              <tr><td><div class="co">Termoidraulica Brixia S.r.l.</div><div class="sub">Via Milano 97</div></td><td>Impianti</td><td>Brescia</td><td class="num">030 3756648</td><td><span class="badge green">Contattata</span></td></tr>
+              <tr><td><div class="co">Plastica Lombarda S.p.A.</div><div class="sub">Via XIV Maggio 2</div></td><td>Stampaggio</td><td>Ghedi</td><td class="num">030 9031577</td><td><span class="badge amber">Da valutare</span></td></tr>
+              <tr><td><div class="co">Edilcostruzioni Martinelli</div><div class="sub">Via Cerchiara 19</div></td><td>Costruzioni</td><td>Montichiari</td><td class="num">030 9961243</td><td><span class="badge blue">Nuova</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span>7 di 23 aziende</span>
+          <div class="pages"><button type="button">‹</button><button type="button" class="on">1</button><button type="button">2</button><button type="button">3</button><button type="button">›</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · HERO ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Marketing hero</div>
+  <div class="hero">
+    <div>
+      <h1>Il radar dei recruiter.</h1>
+      <p class="sub">Trova aziende da contattare e offerte dove proporre candidati, organizzate per territorio. Da una sola schermata, in pochi minuti.</p>
+      <div class="cta"><button class="btn primary lg">Inizia a cercare</button><button class="btn lg outline">Vedi come funziona</button></div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="search-band"><input class="input" value="Logistica — Brescia" readonly><button class="btn primary sm">Cerca</button></div>
+      <div class="mini-row"><span class="co">Autotrasporti Garda S.a.s.</span><span>Lonato · 030 9130221</span></div>
+      <div class="mini-row"><span class="co">Corriere Express BS</span><span>Brescia · 030 2207780</span></div>
+      <div class="mini-row"><span class="co">Logistica Benacense S.r.l.</span><span>Desenzano · 030 9142093</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · TYPOGRAPHY ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Tipografia</div>
+  <div class="type-col">
+    <h1>Il radar dei recruiter</h1>
+    <h2>Prospect a Brescia e provincia</h2>
+    <h3>Officine Bresciane S.r.l.</h3>
+    <h4>Dettagli azienda</h4>
+    <p>Ogni mattina il team apre Scout e imposta settore e zona. I risultati arrivano con telefono, sito e posizione già visibili: si valuta, si salva in archivio, si contatta. Nessun passaggio nascosto, nessuna schermata da imparare.</p>
+    <p class="caption">Aggiornato 5 minuti fa · Fonte SerpApi</p>
+    <p>Vedi la <a href="#">scheda completa dell'azienda</a> oppure filtra con <code>settore=metalmeccanico</code>.</p>
+    <blockquote>«Ogni prospect è una voce: la valuti, la salvi, la contatti.»</blockquote>
+  </div>
+</section>
+
+<!-- ============ 4 · BUTTONS ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Bottoni</div>
+  <div class="btn-grid">
+    <div class="btn-row"><span class="tag">Varianti</span><button class="btn primary">Cerca</button><button class="btn secondary">Salva ricerca</button><button class="btn outline">Esporta</button><button class="btn ghost">Nascondi</button><button class="btn destructive">Elimina</button><button class="btn link">Vedi scheda</button></div>
+    <div class="btn-row"><span class="tag">Misure</span><button class="btn primary sm">Piccolo</button><button class="btn primary">Medio</button><button class="btn primary lg">Grande</button></div>
+    <div class="btn-row"><span class="tag">Stati</span><button class="btn primary">Default</button><button class="btn primary is-hover">Hover</button><button class="btn primary is-active">Active</button><button class="btn primary is-focus">Focus</button><button class="btn primary" disabled>Disabilitato</button><button class="btn primary"><span class="spin"></span>Cerco…</button></div>
+  </div>
+</section>
+
+<!-- ============ 5 · FORM ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Form</div>
+  <div class="panel" style="padding: var(--card-pad)">
+    <div class="form-card">
+      <div class="form-row">
+        <div class="field"><label class="label" for="f1">Settore o ruolo</label><input class="input" id="f1" value="Logistica"></div>
+        <div class="field"><label class="label" for="f2">Provincia</label><select class="select" id="f2"><option>Brescia</option><option>Bergamo</option><option>Milano</option><option>Verona</option></select></div>
+      </div>
+      <div class="field"><label class="label" for="f3">Note sul prospect</label><textarea class="textarea" id="f3" rows="3">Referente: sig. Ratti (ufficio acquisti). Richiamare dopo le 15.</textarea><span class="help">Visibili solo all'interno dell'agenzia.</span></div>
+      <div class="form-row">
+        <div class="field"><label class="label" for="f4">CAP</label><input class="input is-error" id="f4" value="25"><span class="error">CAP non valido — servono 5 cifre (es. 25122).</span></div>
+        <div class="field"><label class="label" for="f5">Telefono</label><input class="input" id="f5" value="030 2204411"><span class="help">La ricerca copre la provincia selezionata.</span></div>
+      </div>
+      <div class="check"><input type="checkbox" id="c1" checked><label for="c1">Solo aziende con telefono diretto</label></div>
+      <div class="field"><span class="label">Raggio di ricerca</span>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="r" checked>10 km</label>
+          <label class="radio-opt"><input type="radio" name="r">25 km</label>
+          <label class="radio-opt"><input type="radio" name="r">50 km</label>
+        </div>
+      </div>
+      <div class="switch"><span class="track"></span>Solo aziende verificate</div>
+      <div style="display:flex;gap:8px;margin-top:4px"><button class="btn primary">Salva prospect</button><button class="btn ghost">Annulla</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · OVERLAYS ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Feedback e overlay</div>
+  <div class="overlays">
+    <div class="panel dialog">
+      <h3>Eliminare il prospect?</h3>
+      <p>«Officine Bresciane S.r.l.» verrà rimossa dall'archivio. L'azione non si può annullare.</p>
+      <div class="acts"><button class="btn ghost">Annulla</button><button class="btn destructive">Elimina prospect</button></div>
+    </div>
+    <div class="panel menu">
+      <div class="mi on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Aziende</div>
+      <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Offerte di lavoro</div>
+      <hr>
+      <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Importa CSV</div>
+    </div>
+    <div class="panel">
+      <div class="tabs"><span class="tab on">Aziende (23)</span><span class="tab">Offerte (47)</span><span class="tab">Archivio (12)</span></div>
+      <div class="tab-body">23 aziende trovate a Brescia e provincia per «logistica».</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="toast ok"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><div class="t">Prospect salvato</div><div class="m">«Fonderia Alpi S.p.A.» è ora in archivio.</div></div></div>
+      <div class="toast err"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg><div><div class="t">Ricerca non riuscita</div><div class="m">Controlla la zona inserita e riprova.</div></div></div>
+    </div>
+    <div class="alert info"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><div>I dati si aggiornano ogni 24 ore. Ultima sincronizzazione: stamattina alle 06:00.</div></div>
+    <div class="alert warn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.7 18.3-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-2.7Z"/><path d="M12 9v4M12 17h.01"/></svg><div>3 prospect senza partita IVA — completa la qualifica prima di contattarli.</div></div>
+    <div><button class="btn sm outline">Copia numero</button> <span class="tooltip">Numero copiato</span></div>
+  </div>
+</section>
+
+<!-- ============ 7 · STATES ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Stati</div>
+  <div class="states">
+    <div class="panel">
+      <div class="panel-head"><h3>Caricamento</h3></div>
+      <div class="skel-row"><div class="skel" style="width:38%"></div><div class="skel" style="width:18%"></div><div class="skel" style="width:14%"></div><div class="skel" style="width:16%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:44%"></div><div class="skel" style="width:14%"></div><div class="skel" style="width:18%"></div><div class="skel" style="width:12%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:35%"></div><div class="skel" style="width:20%"></div><div class="skel" style="width:12%"></div><div class="skel" style="width:18%"></div></div>
+      <div class="skel-row"><div class="skel" style="width:41%"></div><div class="skel" style="width:16%"></div><div class="skel" style="width:15%"></div><div class="skel" style="width:14%"></div></div>
+    </div>
+    <div class="panel empty">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+      <h4>Nessun prospect salvato</h4>
+      <p>Cerca aziende per iniziare a riempire l'archivio condiviso.</p>
+      <button class="btn primary sm">Cerca aziende</button>
+    </div>
+    <div class="panel err-state">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <h4>Caricamento non riuscito</h4>
+      <p>La ricerca «logistica — Brescia» non è andata a buon fine. Riprova.</p>
+      <button class="btn sm outline">Riprova</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · MISC ============ -->
+<section class="preview-sec">
+  <div class="sec-title">Badge e vari</div>
+  <div class="misc">
+    <div class="badge-row">
+      <span class="badge blue">Nuova</span><span class="badge green">Contattata</span><span class="badge amber">Da valutare</span><span class="badge red">Scartata</span><span class="badge neutral">Archivio</span><span class="badge outline">Bozza</span>
+    </div>
+    <div class="avatars"><span class="avatar">MR</span><span class="avatar">GA</span><span class="avatar">SB</span><span class="avatar">+4</span></div>
+    <div><div class="progress-label">Prospect qualificati — 68%</div><div class="progress"><div></div></div></div>
+    <hr class="div">
+    <p class="caption">Separatore orizzontale sopra questa riga.</p>
+  </div>
+</section>
+
+<footer>Preview B — solo valutazione visiva, markup identico alle varianti A e C.</footer>
+<script>document.getElementById('tt').onclick=()=>document.documentElement.classList.toggle('dark')</script>
+</body>
+</html>
