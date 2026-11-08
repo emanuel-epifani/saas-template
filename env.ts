@@ -22,6 +22,9 @@ export const env = createEnv({
     OPENAPI_TOKEN: z.string().optional(),
     // "false" = production (charges per record). Missing/unset = sandbox ON.
     OPENAPI_SANDBOX: z.enum(["true", "false"]).default("true"),
+    // Google Places API (New) — optional while experimenting; required to
+    // use the /companies-google comparison screen.
+    API_KEY_GOOGLE_PLACES: z.string().optional(),
   },
   client: {},
   runtimeEnv: {
@@ -34,6 +37,7 @@ export const env = createEnv({
     SERPAPI_MOCK: process.env.SERPAPI_MOCK,
     OPENAPI_TOKEN: process.env.OPENAPI_TOKEN,
     OPENAPI_SANDBOX: process.env.OPENAPI_SANDBOX,
+    API_KEY_GOOGLE_PLACES: process.env.API_KEY_GOOGLE_PLACES,
   },
   emptyStringAsUndefined: true,
 });

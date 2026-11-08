@@ -161,6 +161,24 @@ export const texts = {
   detailWebsiteLabel: "Sito",
   detailSocialLabel: "Social",
 
+  // Ricerca aziende via Google Places — 1 query per comune, tag per comune
+  navPlacesCompanies: "Aziende Places",
+  placesCompaniesTitle: "Aziende da Google Places",
+  placesCompaniesSubtitle:
+    "Cerca per attività e comuni: una query per comune, solo i comuni richiesti.",
+  placesComuniLabel: "Comuni",
+  comuniPlaceholder: "Cerca un comune…",
+  comuniMinChars: "Digita almeno 2 lettere",
+  comuniNoResults: "Nessun comune trovato",
+  comuniRemove: "Rimuovi",
+  comuniRequired: "Seleziona almeno un comune",
+  placesFilterAll: "Tutti",
+  placesTotalLabel: "totali",
+  placesTypesLabel: "Categorie",
+  placesStatusLabel: "Stato",
+  placesTruncatedHint:
+    "Alcuni comuni hanno più risultati di quelli mostrati. Prova un termine più specifico.",
+
   selectAllAction: "Seleziona tutto",
   clearSelectionAction: "Annulla",
   selectedSuffix: "selezionati",

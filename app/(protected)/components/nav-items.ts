@@ -4,6 +4,7 @@ import {
   Building2,
   Landmark,
   LayoutDashboard,
+  MapPin,
 } from "lucide-react";
 
 import type { NavGroup } from "@/app/models";
@@ -33,6 +34,11 @@ export const navGroups: readonly NavGroup[] = [
         href: "/companies-openapi",
         label: texts.navRegistryCompanies,
         icon: Landmark,
+      },
+      {
+        href: "/companies-google",
+        label: texts.navPlacesCompanies,
+        icon: MapPin,
       },
     ],
   },

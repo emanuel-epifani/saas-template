@@ -107,6 +107,19 @@ export const openApiCompanyIdInputSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
+// Search inputs (Google Places) — 1 query per comune, filtro stretto.
+// ---------------------------------------------------------------------------
+
+export const placesCompanySearchInputSchema = z.object({
+  /** Tipo azienda libero ("torneria") → textQuery */
+  term: z.string().trim().min(1),
+  /** Comuni (nomi o codici catastali) — 1 query per comune */
+  comuni: z.array(z.string().trim().min(1)).min(1).max(20),
+  /** Pagine max per comune (1-3 → fino a 60 risultati) */
+  maxPages: z.number().int().min(1).max(3).default(3),
+});
+
+// ---------------------------------------------------------------------------
 // Saved domain (archivio utente)
 // ---------------------------------------------------------------------------
 

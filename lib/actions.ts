@@ -19,6 +19,7 @@ import {
   searchCompaniesOpenApi,
 } from "./companies/openapi";
 import * as repo from "./db/queries";
+import { searchCompanyPlaces } from "./google-places";
 import { searchCompany, searchJobOffer } from "./serpapi";
 import {
   addColumnInputSchema,
@@ -29,6 +30,7 @@ import {
   myListsInputSchema,
   openApiCompanyIdInputSchema,
   openApiCompanySearchInputSchema,
+  placesCompanySearchInputSchema,
   renameListInputSchema,
   saveItemsInputSchema,
   updateItemInputSchema,
@@ -45,6 +47,13 @@ export async function findJobOffers(input: unknown) {
   //todo: why I don't see any date of publish of job offer? deep dive payload
   await requireSession();
   return searchJobOffer(jobOfferSearchInputSchema.parse(input));
+}
+
+// -- Search (Google Places) — parallelo a SerpApi, per confronto ------------
+
+export async function findCompaniesPlaces(input: unknown) {
+  await requireSession();
+  return searchCompanyPlaces(placesCompanySearchInputSchema.parse(input));
 }
 
 // -- Search (OpenApi Company) — dryRun gratis, poi fetch a pagamento ---------

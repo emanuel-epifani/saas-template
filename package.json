@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "db+fe": "npm run db:start && npm run db:migrate && { npm run db:studio & next dev & wait; }",
+    "prebuild": "node scripts/gen-comuni-txt.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "biome lint .",
