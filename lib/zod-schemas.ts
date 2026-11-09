@@ -16,15 +16,6 @@ import { z } from "zod";
 // spendere crediti sulle call esterne.
 // ---------------------------------------------------------------------------
 
-export const companySearchInputSchema = z.object({
-  /** Tipo azienda libero ("pizzeria") → q */
-  term: z.string().min(1),
-  /** Città libera ("Grugliasco") → concatenata in q */
-  city: z.string().min(1),
-  /** Offset per il load more (0, 20, 40…) → start */
-  start: z.number().int().min(0).default(0),
-});
-
 export const jobOfferSearchInputSchema = z.object({
   /** Ruolo libero ("pizzaiolo") → q */
   term: z.string().min(1),
@@ -134,16 +125,18 @@ export const extraColumnSchema = z.object({
 });
 export type ExtraColumn = z.infer<typeof extraColumnSchema>;
 
-// Snapshot azienda salvata — specchio di CompanyResult (lib/serpapi).
+// Snapshot azienda salvata — specchio di PlacesCompanyResult (lib/google-places).
 export const savedCompanyItemSchema = z.object({
   externalId: z.string().min(1),
   name: z.string().min(1),
   type: z.string().min(1),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  website: z.string().optional(),
+  comune: z.string().min(1),
+  address: z.string().min(1),
   lat: z.number(),
   lon: z.number(),
+  province: z.string().optional(),
+  phone: z.string().optional(),
+  website: z.string().optional(),
 });
 export type SavedCompanyItem = z.infer<typeof savedCompanyItemSchema>;
 

@@ -1,8 +1,6 @@
 import {
   Archive,
   Briefcase,
-  Building2,
-  Landmark,
   LayoutDashboard,
   MapPin,
 } from "lucide-react";
@@ -21,24 +19,14 @@ export const navGroups: readonly NavGroup[] = [
     label: texts.navGroupProspecting,
     items: [
       {
-        href: "/companies",
+        href: "/companies-google",
         label: texts.navSearchCompanies,
-        icon: Building2,
+        icon: MapPin,
       },
       {
         href: "/job-offers",
         label: texts.navSearchJobs,
         icon: Briefcase,
-      },
-      {
-        href: "/companies-openapi",
-        label: texts.navRegistryCompanies,
-        icon: Landmark,
-      },
-      {
-        href: "/companies-google",
-        label: texts.navPlacesCompanies,
-        icon: MapPin,
       },
     ],
   },

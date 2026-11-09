@@ -1,4 +1,4 @@
-import { Archive, Briefcase, Building2 } from "lucide-react";
+import { Archive, Briefcase, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -45,10 +45,10 @@ async function SavedLists() {
         <EmptyContent>
           <div className="flex gap-2">
             <Link
-              href="/companies"
+              href="/companies-google"
               className={buttonVariants({ variant: "outline" })}
             >
-              <Building2 />
+              <MapPin />
               {texts.navSearchCompanies}
             </Link>
             <Link

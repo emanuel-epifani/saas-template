@@ -19,7 +19,7 @@ export * from "./auth-schema";
 
 // Archivio dell'utente (modello B: salvataggio esplicito da ricerca esterna).
 // Una lista = una "tipologia di ricerca" ("pizzerie grugliasco"); gli item
-// sono snapshot dei risultati SerpApi + note + campi custom utente (extra).
+// sono snapshot dei risultati Google Places + note + campi custom utente (extra).
 
 export const savedList = pgTable(
   "saved_list",
@@ -58,7 +58,9 @@ export const savedCompany = pgTable(
     externalId: text("external_id").notNull(),
     name: text("name").notNull(),
     type: text("type").notNull(),
-    address: text("address"),
+    comune: text("comune").notNull(),
+    address: text("address").notNull(),
+    province: text("province"),
     phone: text("phone"),
     website: text("website"),
     lat: doublePrecision("lat").notNull(),

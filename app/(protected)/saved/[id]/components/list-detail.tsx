@@ -51,7 +51,7 @@ export function ListDetail(props: ListDetailProps) {
   } | null>(null);
   const [, startTransition] = useTransition();
 
-  const baseColCount = kind === "company" ? 5 : 5;
+  const baseColCount = kind === "company" ? 7 : 5;
   const totalCols = baseColCount + list.columns.length + 2;
 
   function mutate(action: Promise<unknown>) {
@@ -113,6 +113,8 @@ export function ListDetail(props: ListDetailProps) {
                 <>
                   <Th>{texts.colName}</Th>
                   <Th>{texts.colType}</Th>
+                  <Th>{texts.colComune}</Th>
+                  <Th>{texts.colProvince}</Th>
                   <Th>{texts.colAddress}</Th>
                   <Th>{texts.colPhone}</Th>
                   <Th>{texts.colWebsite}</Th>
@@ -152,22 +154,24 @@ export function ListDetail(props: ListDetailProps) {
                   <Td className="text-muted-foreground" title={it.type}>
                     {it.type}
                   </Td>
-                  <Td title={it.address ?? undefined}>
-                    {it.address ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setMapTarget({
-                            name: it.name,
-                            address: it.address ?? "",
-                          })
-                        }
-                        className="text-primary flex w-full items-center gap-1 hover:underline"
-                      >
-                        <MapPin className="size-3.5 shrink-0" />
-                        <span className="truncate">{it.address}</span>
-                      </button>
-                    ) : null}
+                  <Td title={it.comune}>{it.comune}</Td>
+                  <Td
+                    className="text-muted-foreground"
+                    title={it.province ?? undefined}
+                  >
+                    {it.province}
+                  </Td>
+                  <Td title={it.address}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setMapTarget({ name: it.name, address: it.address })
+                      }
+                      className="text-primary flex w-full items-center gap-1 hover:underline"
+                    >
+                      <MapPin className="size-3.5 shrink-0" />
+                      <span className="truncate">{it.address}</span>
+                    </button>
                   </Td>
                   <Td title={it.phone ?? undefined}>
                     {it.phone ? (

@@ -6,16 +6,16 @@ import { z } from "zod";
 import { env } from "@/env";
 
 /*
- * SerpApi provider — client condiviso + repo di ricerca (companies, job offers):
+ * SerpApi provider — client condiviso + repo di ricerca (job offers):
  *   - querySerpApi:                  call reale o fixture (SERPAPI_MOCK), parse zod
- *   - searchCompany/searchJobOffer:  params + normalize per engine
+ *   - searchJobOffer:                params + normalize per engine
  *   - dedupe:                        helper di deduplicazione generico
  *
  * MOCK: finché env.SERPAPI_MOCK !== "false" le call esterne non partono.
  * Ogni engine legge UN file json qui in lib/ (serpapi.<engine>.mock.json),
  * con la STESSA forma del payload reale salvato da una call live — tracciati in git.
  *
- * Tipi esportati (CompanyResult, JobOfferResult, …): firma delle action in
+ * Tipi esportati (JobOfferResult, …): firma delle action in
  * lib/actions.ts, importabili via `import type` dai client component.
  */
 
@@ -27,26 +27,6 @@ const USE_MOCK = env.SERPAPI_MOCK !== "false";
 // Zod scarta i campi non dichiarati → il parse seleziona solo ciò che serve
 // e lancia subito se SerpApi cambia formato. Privati: internals del provider.
 // ---------------------------------------------------------------------------
-
-// Campi required = strutturali di un local_result (identità, nome, pin,
-// classificazione Google): se mancano SerpApi ha cambiato formato → il
-// parse deve lanciare. Optional = metadati di contatto che i thin listing
-// non hanno davvero (es. service-area business senza via/telefono:
-// verificato live — su aree sparse ~metà dei risultati li omette).
-const serpLocalResultSchema = z.object({
-  /** Google Place ID — sempre presente nei local_results, chiave dedupe. */
-  place_id: z.string(),
-  title: z.string(),
-  /** Categoria Google localizzata ("Lavorazione dei metalli"). */
-  type: z.string(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  website: z.string().optional(),
-  gps_coordinates: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-  }),
-});
 
 const serpJobResultSchema = z.object({
   job_id: z.string(),
@@ -62,16 +42,8 @@ const serpJobResultSchema = z.object({
   ),
 });
 
-// Due schemi standalone, uno per engine — condividono solo `error`.
-// google_maps pagina a offset (`start`): `next` è solo un link alla
-// pagina successiva, usato come flag "c'è altro". google_jobs pagina a
-// token opaco: `next_page_token` va rimandato indietro com'è.
-const serpMapsResponseSchema = z.object({
-  local_results: z.array(serpLocalResultSchema).optional(),
-  serpapi_pagination: z.object({ next: z.string().optional() }).optional(),
-  error: z.string().optional(),
-});
-
+// google_jobs pagina a token opaco: `next_page_token` va rimandato
+// indietro com'è.
 const serpJobsResponseSchema = z.object({
   jobs_results: z.array(serpJobResultSchema).optional(),
   serpapi_pagination: z
@@ -83,9 +55,7 @@ const serpJobsResponseSchema = z.object({
   error: z.string().optional(),
 });
 
-export type SerpLocalResult = z.infer<typeof serpLocalResultSchema>;
 export type SerpJobResult = z.infer<typeof serpJobResultSchema>;
-export type SerpMapsResponse = z.infer<typeof serpMapsResponseSchema>;
 export type SerpJobsResponse = z.infer<typeof serpJobsResponseSchema>;
 
 // ---------------------------------------------------------------------------
@@ -101,12 +71,6 @@ export type SerpJobsResponse = z.infer<typeof serpJobsResponseSchema>;
 // ---------------------------------------------------------------------------
 
 const engines = {
-  google_maps: {
-    schema: serpMapsResponseSchema,
-    mockFile: join("lib", "serpapi.companies.mock.json"),
-    restrictor:
-      "error, serpapi_pagination.next, local_results[].{place_id, title, address, type, phone, website, gps_coordinates.latitude, gps_coordinates.longitude}",
-  },
   google_jobs: {
     schema: serpJobsResponseSchema,
     mockFile: join("lib", "serpapi.jobs.mock.json"),
@@ -147,15 +111,9 @@ function readMockFile(file: string): unknown {
   ).response;
 }
 
-export function querySerpApi(
-  params: Record<string, string> & { engine: "google_maps" },
-): Promise<SerpMapsResponse>;
-export function querySerpApi(
-  params: Record<string, string> & { engine: "google_jobs" },
-): Promise<SerpJobsResponse>;
 export async function querySerpApi(
   params: Record<string, string> & { engine: Engine },
-): Promise<SerpMapsResponse | SerpJobsResponse> {
+): Promise<SerpJobsResponse> {
   const { schema, mockFile, restrictor } = engines[params.engine];
   const raw = USE_MOCK
     ? readMockFile(mockFile)
@@ -210,73 +168,6 @@ export const dedupe = <T>(items: T[], key: (x: T) => string): T[] => {
 // Repos — params + normalize per engine. Sopra c'è solo plumbing; qui la
 // forma pubblica dei risultati (firma delle action, tipi per il client).
 // ---------------------------------------------------------------------------
-
-export interface CompanySearchInput {
-  /** Tipo azienda libero ("pizzeria") → q */
-  term: string;
-  /** Città libera ("Grugliasco") → concatenata in q, risolve Google */
-  city: string;
-  /** Offset per il load more (0, 20, 40…) → start */
-  start: number;
-}
-
-export interface CompanyResult {
-  /** Google Place ID — external_id su DB, chiave dedupe + key React. */
-  externalId: string;
-  name: string;
-  address?: string;
-  /** Categoria Google localizzata ("Lavorazione dei metalli") — filtro a DB. */
-  type: string;
-  phone?: string;
-  website?: string;
-  lat: number;
-  lon: number;
-}
-
-export interface CompanySearchResult {
-  companies: CompanyResult[];
-  /** true se SerpApi espone una pagina successiva */
-  hasMore: boolean;
-}
-
-/** Aziende per tipo + città → google_maps */
-export async function searchCompany({
-  term,
-  city,
-  start,
-}: CompanySearchInput): Promise<CompanySearchResult> {
-  const params: Record<string, string> & { engine: "google_maps" } = {
-    engine: "google_maps",
-    // q libera "cosa dove": Google risolve tutto (geocoding + ranking).
-    // Limite noto e accettato: senza anchor `ll` la coda dei risultati può
-    // derivare fuori zona su ricerche oscure — se torna il problema,
-    // l'anchor va ripresa (comuni dataset o autocomplete lato FE).
-    q: `${term} ${city}`,
-    start: String(start),
-    type: "search",
-    hl: "it",
-    gl: "it",
-  };
-  const response = await querySerpApi(params);
-
-  const companies = (response.local_results ?? []).map(
-    (p): CompanyResult => ({
-      externalId: p.place_id,
-      name: p.title,
-      address: p.address,
-      type: p.type,
-      phone: p.phone,
-      website: p.website,
-      lat: p.gps_coordinates.latitude,
-      lon: p.gps_coordinates.longitude,
-    }),
-  );
-
-  return {
-    companies: dedupe(companies, (c) => c.externalId),
-    hasMore: Boolean(response.serpapi_pagination?.next),
-  };
-}
 
 export interface JobOfferSearchInput {
   /** Ruolo libero ("pizzaiolo") → q */

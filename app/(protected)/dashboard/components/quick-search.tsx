@@ -4,7 +4,6 @@ import { Briefcase, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { companiesSearchHref } from "@/app/(protected)/companies/lib/search-params";
 import { jobOffersSearchHref } from "@/app/(protected)/job-offers/lib/search-params";
 import { markSearchIntent } from "@/app/(protected)/lib/search-intent";
 import { SearchBar } from "@/components/search-bar";
@@ -22,7 +21,7 @@ export function QuickSearch() {
   function onSubmit() {
     const href =
       mode === "companies"
-        ? companiesSearchHref({ term, city })
+        ? companiesPlacesHref({ term, city })
         : jobOffersSearchHref({ term, city });
     markSearchIntent(href);
     router.push(href);
@@ -74,4 +73,14 @@ export function QuickSearch() {
       />
     </section>
   );
+}
+
+// La ricerca aziende vive su /companies-google: `term` + un comune (il campo
+// "city" è un singolo comune, non una lista).
+function companiesPlacesHref({ term, city }: { term: string; city: string }) {
+  const params = new URLSearchParams();
+  if (term) params.set("term", term);
+  if (city) params.set("comuni", city);
+  const qs = params.toString();
+  return qs ? `/companies-google?${qs}` : "/companies-google";
 }

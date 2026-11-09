@@ -211,6 +211,8 @@ export const texts = {
 
   colName: "Nome",
   colType: "Tipo",
+  colComune: "Comune",
+  colProvince: "Provincia",
   colAddress: "Indirizzo",
   colPhone: "Telefono",
   colWebsite: "Sito",

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight, Briefcase, Building2 } from "lucide-react";
+import { ArrowRight, Briefcase, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { requireUser } from "@/lib/auth/session";
@@ -11,8 +11,8 @@ import { QuickSearch } from "./components/quick-search";
 
 const modules = [
   {
-    href: "/companies",
-    icon: Building2,
+    href: "/companies-google",
+    icon: MapPin,
     title: texts.navSearchCompanies,
     desc: texts.dashboardCompaniesDesc,
   },

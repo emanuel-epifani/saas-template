@@ -20,10 +20,9 @@ import {
 } from "./companies/openapi";
 import * as repo from "./db/queries";
 import { searchCompanyPlaces } from "./google-places";
-import { searchCompany, searchJobOffer } from "./serpapi";
+import { searchJobOffer } from "./serpapi";
 import {
   addColumnInputSchema,
-  companySearchInputSchema,
   deleteItemInputSchema,
   jobOfferSearchInputSchema,
   listIdInputSchema,
@@ -37,11 +36,6 @@ import {
 } from "./zod-schemas";
 
 // -- Search (SerpApi) — sessione + zod prima di spendere crediti -----------
-
-export async function findCompanies(input: unknown) {
-  await requireSession();
-  return searchCompany(companySearchInputSchema.parse(input));
-}
 
 export async function findJobOffers(input: unknown) {
   //todo: why I don't see any date of publish of job offer? deep dive payload

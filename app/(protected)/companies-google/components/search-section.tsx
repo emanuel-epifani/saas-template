@@ -3,10 +3,14 @@
 import { cn } from "cn";
 import { Globe, LoaderCircle, MapPin, Phone } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { SaveDialog } from "@/components/save-dialog";
+import { SelectionBar } from "@/components/selection-bar";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { findCompaniesPlaces } from "@/lib/actions";
 import type { PlacesCompanyResult } from "@/lib/google-places";
@@ -35,12 +39,15 @@ function chipClass(active: boolean) {
 }
 
 export function SearchSection() {
-  const [term, setTerm] = useState("torneria");
-  const [comuni, setComuni] = useState<string[]>([
-    "COLLEGNO",
-    "RIVOLI",
-    "GRUGLIASCO",
-  ]);
+  const searchParams = useSearchParams();
+  const [term, setTerm] = useState(searchParams.get("term") ?? "torneria");
+  const [comuni, setComuni] = useState<string[]>(
+    searchParams.get("comuni")?.split(",").filter(Boolean) ?? [
+      "COLLEGNO",
+      "RIVOLI",
+      "GRUGLIASCO",
+    ],
+  );
   const [results, setResults] = useState<PlacesCompanyResult[]>([]);
   const [truncatedComuni, setTruncatedComuni] = useState<string[]>([]);
   const [searched, setSearched] = useState(false);
@@ -48,6 +55,8 @@ export function SearchSection() {
   const [filter, setFilter] = useState<ReadonlySet<string>>(new Set());
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [checked, setChecked] = useState<ReadonlySet<string>>(new Set());
+  const [saveOpen, setSaveOpen] = useState(false);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
 
   const perComune = useMemo(() => {
@@ -93,6 +102,7 @@ export function SearchSection() {
         setFilter(new Set());
         setSelectedIndex(null);
         setHoveredIndex(null);
+        setChecked(new Set());
       } catch (e) {
         toast.error(e instanceof Error ? e.message : texts.searchError);
       }
@@ -123,6 +133,30 @@ export function SearchSection() {
       block: "nearest",
     });
   }
+
+  function toggleChecked(id: string, on: boolean) {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
+  // Seleziona/toglie solo i risultati VISIBILI: i check fuori dal filtro
+  // corrente restano, così cambiare chip non perde la selezione.
+  function toggleAll(on: boolean) {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      for (const c of visible) {
+        if (on) next.add(c.externalId);
+        else next.delete(c.externalId);
+      }
+      return next;
+    });
+  }
+
+  const defaultListName = `${term} ${comuni.join(", ")}`.slice(0, 80).trim();
 
   return (
     <div className="flex flex-col gap-4">
@@ -221,7 +255,33 @@ export function SearchSection() {
               )}
             >
               <div className="scroll-list min-h-0 flex-1 overflow-y-auto">
-                <ul className="divide-border divide-y">
+                <div className="bg-card text-muted-foreground border-border sticky top-0 z-20 flex h-9 items-stretch border-b text-[10px] font-medium tracking-[0.08em] uppercase">
+                  <span className="border-border flex w-10 items-center justify-center border-r">
+                    {texts.registerIndexLabel}
+                  </span>
+                  <span className="flex flex-1 items-center gap-3 px-4 py-1.5">
+                    {texts.navCompanies}
+                    <span className="ml-auto normal-case">
+                      {texts.selectToSaveHint}
+                    </span>
+                  </span>
+                  <span className="flex w-10 items-center justify-center">
+                    <Checkbox
+                      checked={
+                        visible.length > 0 &&
+                        visible.every((c) => checked.has(c.externalId))
+                      }
+                      onCheckedChange={(v) => toggleAll(v === true)}
+                      aria-label={texts.selectAllAction}
+                    />
+                  </span>
+                </div>
+                <ul
+                  className={cn(
+                    "divide-border divide-y",
+                    checked.size > 0 && "pb-14",
+                  )}
+                >
                   {visible.map((c, i) => (
                     <li
                       key={c.externalId}
@@ -235,6 +295,7 @@ export function SearchSection() {
                           i === highlightedIndex
                             ? "bg-accent/60"
                             : "hover:bg-muted/50",
+                          checked.has(c.externalId) && "bg-primary/5",
                         )}
                       >
                         <span
@@ -301,11 +362,25 @@ export function SearchSection() {
                             ) : null}
                           </div>
                         </div>
+                        <span className="relative z-10 flex w-10 shrink-0 items-center justify-center">
+                          <Checkbox
+                            checked={checked.has(c.externalId)}
+                            onCheckedChange={(v) =>
+                              toggleChecked(c.externalId, v === true)
+                            }
+                            aria-label={`${texts.selCheckboxLabel} ${c.name}`}
+                          />
+                        </span>
                       </div>
                     </li>
                   ))}
                 </ul>
               </div>
+              <SelectionBar
+                count={checked.size}
+                onClear={() => toggleAll(false)}
+                onSave={() => setSaveOpen(true)}
+              />
             </div>
           </div>
 
@@ -322,6 +397,15 @@ export function SearchSection() {
           </div>
         </div>
       ) : null}
+
+      <SaveDialog
+        kind="company"
+        items={results.filter((c) => checked.has(c.externalId))}
+        defaultName={defaultListName}
+        open={saveOpen}
+        onOpenChange={setSaveOpen}
+        onSaved={() => setChecked(new Set())}
+      />
     </div>
   );
 }
